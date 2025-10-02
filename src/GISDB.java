@@ -3,7 +3,7 @@
  * Implementation of the GIS interface. This is what calls the BST and the
  * Bintree to do the work.
  *
- * @author {Your Name Here}
+ * @author benblucher, austink23
  * @version {Put Something Here}
  *
  */
