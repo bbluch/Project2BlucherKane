@@ -58,7 +58,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests an insert returns true with correct values.
      */
     public void testInsertValidCoordinates() {
         assertTrue(it.insert("Blacksburg", 100, 100));
@@ -67,7 +67,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests the case where coordinates are 0.
      */
     public void testInsertAtOrigin() {
         assertTrue(it.insert("Origin City", 0, 0));
@@ -76,7 +76,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests with max coordinates.
      */
     public void testInsertAtMaxCoordinates() {
         assertTrue(it.insert("Max City", GISDB.MAXCOORD, GISDB.MAXCOORD));
@@ -85,7 +85,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests with negative X coordinate.
      */
     public void testInsertWithNegativeX() {
         assertFalse(it.insert("West of Here", -1, 100));
@@ -94,7 +94,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests with negative Y coordinate.
      */
     public void testInsertWithNegativeY() {
         assertFalse(it.insert("South of Here", 100, -1));
@@ -103,7 +103,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests insert with too large of X value.
      */
     public void testInsertWithExcessiveX() {
         assertFalse(it.insert("East of Here", 100000, 100));
@@ -112,7 +112,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests insert with too large of Y value.
      */
     public void testInsertWithExcessiveY() {
         assertFalse(it.insert("North of Here", 100, 100000));
@@ -121,7 +121,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests insert with both coordinates being invalid.
      */
     public void testInsertWithBothInvalidCoordinates() {
         assertFalse(it.insert("Nowhere", -10, 100000));
@@ -130,7 +130,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests insert with null city name.
      */
     public void testInsertWithNullName() {
         assertFalse(it.insert(null, 50, 50));
@@ -139,7 +139,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests insert with empty city name.
      */
     public void testInsertWithEmptyName() {
         assertFalse(it.insert("", 50, 50));
@@ -148,7 +148,7 @@ public class GISTest extends TestCase {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Tests with blank city name.
      */
     public void testInsertWithWhitespaceName() {
         assertFalse(it.insert("   ", 50, 50));
