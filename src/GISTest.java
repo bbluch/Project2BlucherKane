@@ -56,35 +56,135 @@ public class GISTest extends TestCase {
     }
 
 
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertValidCoordinates() {
+        assertTrue(it.insert("Blacksburg", 100, 100));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertAtOrigin() {
+        assertTrue(it.insert("Origin City", 0, 0));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertAtMaxCoordinates() {
+        assertTrue(it.insert("Max City", GISDB.MAXCOORD, GISDB.MAXCOORD));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithNegativeX() {
+        assertFalse(it.insert("West of Here", -1, 100));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithNegativeY() {
+        assertFalse(it.insert("South of Here", 100, -1));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithExcessiveX() {
+        assertFalse(it.insert("East of Here", 100000, 100));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithExcessiveY() {
+        assertFalse(it.insert("North of Here", 100, 100000));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithBothInvalidCoordinates() {
+        assertFalse(it.insert("Nowhere", -10, 100000));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithNullName() {
+        assertFalse(it.insert(null, 50, 50));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithEmptyName() {
+        assertFalse(it.insert("", 50, 50));
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     */
+    public void testInsertWithWhitespaceName() {
+        assertFalse(it.insert("   ", 50, 50));
+    }
+
     /**
      * Insert some records and check output requirements for various commands
      * 
      * @throws IOException
      */
-    /*public void testRefOutput() throws IOException {
-        assertTrue(it.insert("Chicago", 100, 150));
-        assertTrue(it.insert("Atlanta", 10, 500));
-        assertTrue(it.insert("Tacoma", 1000, 100));
-        assertTrue(it.insert("Baltimore", 0, 300));
-        assertTrue(it.insert("Washington", 5, 350));
-        assertFalse(it.insert("X", 100, 150));
-        assertTrue(it.insert("L", 101, 150));
-        assertTrue(it.insert("L", 11, 500));
-        assertFuzzyEquals("1  Atlanta (10, 500)\n" + "2    Baltimore (0, 300)\n"
-            + "0Chicago (100, 150)\n" + "3      L (11, 500)\n"
-            + "2    L (101, 150)\n" + "1  Tacoma (1000, 100)\n"
-            + "2    Washington (5, 350)\n", it.print());
-        assertFuzzyEquals("2    Baltimore (0, 300)\n"
-            + "3      Washington (5, 350)\n" + "4        L (11, 500)\n"
-            + "1  Atlanta (10, 500)\n" + "0Chicago (100, 150)\n"
-            + "1  Tacoma (1000, 100)\n" + "2    L (101, 150)\n", it.debug());
-        assertFuzzyEquals("L (101, 150)\nL (11, 500)", it.info("L"));
-        assertFuzzyEquals("L", it.info(101, 150));
-        assertFuzzyEquals("Tacoma (1000, 100)", it.delete("Tacoma"));
-        assertFuzzyEquals("3\nChicago", it.delete(100, 150));
-        assertFuzzyEquals("L (101, 150)\n" + "Atlanta (10, 500)\n"
-            + "Baltimore (0, 300)\n" + "Washington (5, 350)\n"
-            + "L (11, 500)\n5", it.search(0, 0, 2000));
-        assertFuzzyEquals("Baltimore (0, 300)\n3", it.search(0, 300, 0));
-    }*/
+    /*
+     * public void testRefOutput() throws IOException {
+     * assertTrue(it.insert("Chicago", 100, 150));
+     * assertTrue(it.insert("Atlanta", 10, 500));
+     * assertTrue(it.insert("Tacoma", 1000, 100));
+     * assertTrue(it.insert("Baltimore", 0, 300));
+     * assertTrue(it.insert("Washington", 5, 350));
+     * assertFalse(it.insert("X", 100, 150));
+     * assertTrue(it.insert("L", 101, 150));
+     * assertTrue(it.insert("L", 11, 500));
+     * assertFuzzyEquals("1  Atlanta (10, 500)\n" + "2    Baltimore (0, 300)\n"
+     * + "0Chicago (100, 150)\n" + "3      L (11, 500)\n"
+     * + "2    L (101, 150)\n" + "1  Tacoma (1000, 100)\n"
+     * + "2    Washington (5, 350)\n", it.print());
+     * assertFuzzyEquals("2    Baltimore (0, 300)\n"
+     * + "3      Washington (5, 350)\n" + "4        L (11, 500)\n"
+     * + "1  Atlanta (10, 500)\n" + "0Chicago (100, 150)\n"
+     * + "1  Tacoma (1000, 100)\n" + "2    L (101, 150)\n", it.debug());
+     * assertFuzzyEquals("L (101, 150)\nL (11, 500)", it.info("L"));
+     * assertFuzzyEquals("L", it.info(101, 150));
+     * assertFuzzyEquals("Tacoma (1000, 100)", it.delete("Tacoma"));
+     * assertFuzzyEquals("3\nChicago", it.delete(100, 150));
+     * assertFuzzyEquals("L (101, 150)\n" + "Atlanta (10, 500)\n"
+     * + "Baltimore (0, 300)\n" + "Washington (5, 350)\n"
+     * + "L (11, 500)\n5", it.search(0, 0, 2000));
+     * assertFuzzyEquals("Baltimore (0, 300)\n3", it.search(0, 300, 0));
+     * }
+     */
 }
