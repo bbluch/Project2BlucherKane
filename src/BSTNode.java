@@ -6,64 +6,47 @@
  * 
  * @author benblucher, austink23
  * @version Oct 7, 2025
- * @param <K>
- * @param <V>
  */
-public class BSTNode<K, V> {
+public class BSTNode {
     // ~ Fields ................................................................
 
     // ~ Constructors ..........................................................
 
     // ~Public Methods ........................................................
-    private K key;
-    private V value;
-    private BSTNode<K, V> left;
-    private BSTNode<K, V> right;
+    private City city;
+    private BSTNode left;
+    private BSTNode right;
 
     /**
-     * Constructs a new BSTNode.
+     * Constructs a new GISNode.
      *
-     * @param key
-     *            The key of the node.
-     * @param value
-     *            The value of the node.
+     * @param city The city data for this node.
      */
-    public BSTNode(K key, V value) {
-        this.key = key;
-        this.value = value;
+    public BSTNode(City city) {
+        this.city = city;
         this.left = null;
         this.right = null;
     }
 
 
     /**
-     * Gets the key of the node.
+     * Gets the city object.
      *
-     * @return The key.
+     * @return The city.
      */
-    public K getKey() {
-        return key;
+    public City getCity() {
+        return city;
     }
 
 
     /**
-     * Gets the value of the node.
+     * Sets the city object.
      *
-     * @return The value.
+     * @param city
+     *            The new city.
      */
-    public V getValue() {
-        return value;
-    }
-
-
-    /**
-     * Sets the value of the node.
-     *
-     * @param value
-     *            The new value.
-     */
-    public void setValue(V value) {
-        this.value = value;
+    public void setCity(City city) {
+        this.city = city;
     }
 
 
@@ -72,7 +55,7 @@ public class BSTNode<K, V> {
      *
      * @return The left child.
      */
-    public BSTNode<K, V> getLeft() {
+    public BSTNode getLeft() {
         return left;
     }
 
@@ -83,7 +66,7 @@ public class BSTNode<K, V> {
      * @param left
      *            The new left child.
      */
-    public void setLeft(BSTNode<K, V> left) {
+    public void setLeft(BSTNode left) {
         this.left = left;
     }
 
@@ -93,7 +76,7 @@ public class BSTNode<K, V> {
      *
      * @return The right child.
      */
-    public BSTNode<K, V> getRight() {
+    public BSTNode getRight() {
         return right;
     }
 
@@ -104,17 +87,7 @@ public class BSTNode<K, V> {
      * @param right
      *            The new right child.
      */
-    public void setRight(BSTNode<K, V> right) {
+    public void setRight(BSTNode right) {
         this.right = right;
-    }
-
-
-    /**
-     * Checks if the node is a leaf node.
-     *
-     * @return True if the node is a leaf, false otherwise.
-     */
-    public boolean isLeaf() {
-        return (left == null) && (right == null);
     }
 }

@@ -6,16 +6,14 @@
  * 
  * @author benblucher, austink23
  * @version Oct 8, 2025
- * @param <K>
- * @param <V>
  */
-public class BST<K extends Comparable<K>, V> {
+public class BST {
     // ~ Fields ................................................................
 
     // ~ Constructors ..........................................................
 
     // ~Public Methods ........................................................
-    private BSTNode<K, V> root;
+    private BSTNode root;
     private int nodeCount;
 
     /**
@@ -37,30 +35,28 @@ public class BST<K extends Comparable<K>, V> {
 
 
     /**
-     * Inserts a key-value pair into the BST.
+     * Inserts a city into the BST.
      *
-     * @param key
-     *            The key to insert.
-     * @param value
-     *            The value to insert.
+     * @param city
+     *            The city to insert.
      */
-    public void insert(K key, V value) {
-        root = insertHelp(root, key, value);
+    public void insert(City city) {
+        root = insertHelp(root, city);
         nodeCount++;
     }
 
 
     /**
-     * Removes a key from the BST.
+     * Removes a city with the given name from the BST.
      *
-     * @param key
-     *            The key to remove.
-     * @return The value of the removed key, or null if not found.
+     * @param name
+     *            The name of the city to remove.
+     * @return The City object of the removed node, or null if not found.
      */
-    public V remove(K key) {
-        V temp = findHelp(root, key);
+    public City remove(String name) {
+        City temp = find(name);
         if (temp != null) {
-            root = removeHelp(root, key);
+            root = removeHelp(root, name);
             nodeCount--;
         }
         return temp;
@@ -68,14 +64,14 @@ public class BST<K extends Comparable<K>, V> {
 
 
     /**
-     * Finds the value associated with a given key.
+     * Finds a city by its name.
      *
-     * @param key
-     *            The key to find.
-     * @return The value associated with the key, or null if not found.
+     * @param name
+     *            The name of the city to find.
+     * @return The City object if found, otherwise null.
      */
-    public V find(K key) {
-        return findHelp(root, key);
+    public City find(String name) {
+        return findHelp(root, name);
     }
 
 
@@ -89,45 +85,48 @@ public class BST<K extends Comparable<K>, V> {
     }
 
 
-    private V findHelp(BSTNode<K, V> rt, K key) {
+    private City findHelp(BSTNode rt, String name) {
         if (rt == null) {
             return null;
         }
-        if (rt.getKey().compareTo(key) > 0) {
-            return findHelp(rt.getLeft(), key);
+        if (rt.getCity().getName().compareTo(name) > 0) {
+            return findHelp(rt.getLeft(), name);
         }
-        else if (rt.getKey().compareTo(key) == 0) {
-            return rt.getValue();
+        else if (rt.getCity().getName().equals(name)) {
+            return rt.getCity();
         }
         else {
-            return findHelp(rt.getRight(), key);
+            return findHelp(rt.getRight(), name);
         }
     }
 
 
-    private BSTNode<K, V> insertHelp(BSTNode<K, V> rt, K key, V value) {
+    private BSTNode insertHelp(BSTNode rt, City city) {
         if (rt == null) {
-            return new BSTNode<>(key, value);
+            return new BSTNode(city);
         }
-        if (rt.getKey().compareTo(key) >= 0) { // Equal values go to the left
-            rt.setLeft(insertHelp(rt.getLeft(), key, value));
+        if (rt.getCity().getName().compareTo(city.getName()) >= 0) { // Equal
+                                                                     // values
+                                                                     // go to
+                                                                     // the left
+            rt.setLeft(insertHelp(rt.getLeft(), city));
         }
         else {
-            rt.setRight(insertHelp(rt.getRight(), key, value));
+            rt.setRight(insertHelp(rt.getRight(), city));
         }
         return rt;
     }
 
 
-    private BSTNode<K, V> removeHelp(BSTNode<K, V> rt, K key) {
+    private BSTNode removeHelp(BSTNode rt, String name) {
         if (rt == null) {
             return null;
         }
-        if (rt.getKey().compareTo(key) > 0) {
-            rt.setLeft(removeHelp(rt.getLeft(), key));
+        if (rt.getCity().getName().compareTo(name) > 0) {
+            rt.setLeft(removeHelp(rt.getLeft(), name));
         }
-        else if (rt.getKey().compareTo(key) < 0) {
-            rt.setRight(removeHelp(rt.getRight(), key));
+        else if (rt.getCity().getName().compareTo(name) < 0) {
+            rt.setRight(removeHelp(rt.getRight(), name));
         }
         else { // Found it
             if (rt.getLeft() == null) {
@@ -137,8 +136,8 @@ public class BST<K extends Comparable<K>, V> {
                 return rt.getLeft();
             }
             else { // Two children
-                BSTNode<K, V> temp = getMax(rt.getLeft());
-                rt.setValue(temp.getValue());
+                BSTNode temp = getMax(rt.getLeft());
+                rt.setCity(temp.getCity());
                 rt.setLeft(deleteMax(rt.getLeft()));
             }
         }
@@ -146,7 +145,7 @@ public class BST<K extends Comparable<K>, V> {
     }
 
 
-    private BSTNode<K, V> getMax(BSTNode<K, V> rt) {
+    private BSTNode getMax(BSTNode rt) {
         if (rt.getRight() == null) {
             return rt;
         }
@@ -154,7 +153,7 @@ public class BST<K extends Comparable<K>, V> {
     }
 
 
-    private BSTNode<K, V> deleteMax(BSTNode<K, V> rt) {
+    private BSTNode deleteMax(BSTNode rt) {
         if (rt.getRight() == null) {
             return rt.getLeft();
         }
