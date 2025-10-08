@@ -20,7 +20,8 @@ public class BSTNode {
     /**
      * Constructs a new GISNode.
      *
-     * @param city The city data for this node.
+     * @param city
+     *            The city data for this node.
      */
     public BSTNode(City city) {
         this.city = city;

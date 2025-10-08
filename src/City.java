@@ -4,7 +4,7 @@
  * Follow it with additional details about its purpose, what abstraction
  * it represents, and how to use it.
  * 
- * @author benblucher
+ * @author benblucher, austink23
  * @version Oct 8, 2025
  */
 public class City {
