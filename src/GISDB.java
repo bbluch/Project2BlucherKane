@@ -18,13 +18,15 @@ public class GISDB implements GIS {
      * Dimension of the points stored in the tree
      */
     public static final int DIMENSION = 2;
+    
+    private BST db;
 
     // ----------------------------------------------------------
     /**
      * Create a new MovieRaterDB object.
      */
     GISDB() {
-        // Put your code here
+        db = new BST();
     }
 
 
@@ -35,6 +37,7 @@ public class GISDB implements GIS {
      * @return True if the database has been cleared
      */
     public boolean clear() {
+        db = new BST();
         return true;
     }
 
@@ -116,7 +119,7 @@ public class GISDB implements GIS {
      * @return The city name if there is such a city, empty otherwise
      */
     public String info(int x, int y) {
-        return "";
+        return db.find(x, y).toString();
     }
 
 
@@ -130,7 +133,7 @@ public class GISDB implements GIS {
      *         empty if there are none.
      */
     public String info(String name) {
-        return "";
+        return db.find(name).toString();
     }
 
 

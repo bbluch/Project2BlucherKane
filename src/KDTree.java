@@ -256,9 +256,9 @@ public class KDTree {
         if (axis == 0) {
             return Integer.compare(c1.getX(), c2.getX());
         }
-        else {
-            return Integer.compare(c1.getY(), c2.getY());
-        }
+
+        return Integer.compare(c1.getY(), c2.getY());
+
     }
 
 
