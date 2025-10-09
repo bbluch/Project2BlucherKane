@@ -19,7 +19,7 @@ public class GISDB implements GIS {
      */
     public static final int DIMENSION = 2;
 
-    private BST db;
+    private BST bst;
     private KDTree kd;
 
     // ----------------------------------------------------------
@@ -27,7 +27,7 @@ public class GISDB implements GIS {
      * Create a new MovieRaterDB object.
      */
     GISDB() {
-        db = new BST();
+        bst = new BST();
         kd = new KDTree();
     }
 
@@ -39,7 +39,7 @@ public class GISDB implements GIS {
      * @return True if the database has been cleared
      */
     public boolean clear() {
-        db = new BST();
+        bst = new BST();
         return true;
     }
 
@@ -59,11 +59,20 @@ public class GISDB implements GIS {
      * @return True iff the city is successfully entered into the database
      */
     public boolean insert(String name, int x, int y) {
-        // Coordinates must be within the valid range [0, MAXCOORD]
         boolean xIsValid = (x >= 0 && x <= MAXCOORD);
         boolean yIsValid = (y >= 0 && y <= MAXCOORD);
+        if (!xIsValid || !yIsValid) {
+            return false;
+        }
 
-        return xIsValid && yIsValid;
+        if (kd.find(x, y) != null) {
+            return false;
+        }
+
+        City city = new City(name, x, y);
+        bst.insert(city);
+        kd.insert(city);
+        return true;
     }
 
 
