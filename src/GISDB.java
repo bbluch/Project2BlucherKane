@@ -145,8 +145,20 @@ public class GISDB implements GIS {
      *         empty if there are none.
      */
     public String info(String name) {
-        return "";
-        
+        City cities[] = bst.findAll(name);
+
+        if (cities.length == 0) {
+            return "";
+        }
+
+        String strFinal = "";
+
+        for (int i = 0; i < cities.length; i++) {
+            strFinal = strFinal + cities[i].getName() + " ";
+            strFinal = strFinal + "(" + cities[i].getX();
+            strFinal = strFinal + ", " + cities[i].getY() + ")\n";
+        }
+        return strFinal.trim();
     }
 
 
