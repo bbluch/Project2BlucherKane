@@ -146,6 +146,7 @@ public class GISDB implements GIS {
      */
     public String info(String name) {
         return "";
+        
     }
 
 
