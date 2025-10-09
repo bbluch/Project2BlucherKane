@@ -344,5 +344,116 @@ public class GISTest extends TestCase {
         // Search with a different case, should not find it
         assertFuzzyEquals("", it.info("richmond"));
     }
+    
+    /**
+     * Tests a bad radius input.
+     */
+    public void testSearchBadRadius() {
+        assertEquals("", it.search(0, 0, -1));
+    }
+    
+    /**
+     * Tests a search on an empty database.
+     */
+    public void testSearchEmpty() {
+        assertFuzzyEquals("", it.search(100, 100, 10));
+    }
+
+    /**
+     * Tests a search with a single city that is within the radius.
+     */
+    public void testSearchSingleCityFound() {
+        it.insert("Blacksburg", 100, 100);
+        String expected = "Blacksburg (100, 100)\n1";
+        assertEquals(expected, it.search(100, 100, 0));
+    }
+
+    /**
+     * Tests a search where the city is exactly on the radius boundary.
+     */
+    public void testSearchOnBoundary() {
+        it.insert("Boundary City", 103, 104);
+        String expected = "Boundary City (103, 104)\n1";
+        // Distance from (100, 100) to (103, 104) is sqrt((3^2) + (4^2)) = 5
+        assertEquals(expected, it.search(100, 100, 5));
+    }
+    
+    /**
+     * Tests a search where the city is just outside the radius.
+     */
+    public void testSearchJustOutsideBoundary() {
+        it.insert("Outside City", 104, 104);
+        // Distance from (100, 100) to (104, 104) is sqrt((4^2) + (4^2)) = 5.65...
+        assertFuzzyEquals("1", it.search(100, 100, 5));
+    }
+
+    /**
+     * Tests a search in a more complex tree with multiple nodes.
+     * This also tests that the `regionSearchHelp` helper function
+     * correctly prunes the tree and only visits necessary nodes.
+     */
+    public void testSearchComplexTree() {
+        // Build a complex KDTree
+        it.insert("A", 10, 8);
+        it.insert("B", 12, 1);
+        it.insert("C", 11, 15);
+        it.insert("D", 9, 13);
+        it.insert("E", 1, 10);
+        it.insert("F", 10, 5);
+        it.insert("G", 15, 10);
+        
+        // Search center (10, 10) with radius 3
+        // Cities within this radius:
+        // A (10, 8): dist=2, within
+        // B (12, 1): dist=~9.2, outside
+        // C (11, 15): dist=~5.1, outside
+        // D (9, 13): dist=~3.16, outside
+        // E (1, 10): dist=9, outside
+        // F (10, 5): dist=5, outside
+        // G (15, 10): dist=5, outside
+        // Only "A" should be found.
+        String expected = "A (10, 8)\n5";
+        assertFuzzyEquals(expected, it.search(10, 10, 3));
+    }
+
+    /**
+     * Tests a search with a radius that covers all points in the tree.
+     */
+    public void testSearchAllCities() {
+        it.insert("City1", 100, 100);
+        it.insert("City2", 200, 200);
+        it.insert("City3", 300, 300);
+        
+        // Search with a large radius to find all cities
+        String expected = "City1 (100, 100)\n"
+                        + "City2 (200, 200)\n"
+                        + "City3 (300, 300)\n"
+                        + "3";
+        assertEquals(expected, it.search(0, 0, 500));
+    }
+    
+    /**
+     * Tests that the correct number of nodes are visited during the search
+     * when some branches are pruned.
+     */
+    public void testNodeVisitCount() {
+        // Create a KDTree with a known structure
+        it.insert("A", 20, 30);
+        it.insert("B", 10, 25);
+        it.insert("C", 25, 35);
+        it.insert("D", 5, 20);
+        it.insert("E", 15, 28);
+        
+        // Search with center (10, 30) and radius 5
+        // A (20, 30) - dist=10, outside
+        // B (10, 25) - dist=5, within
+        // C (25, 35) - dist=~7.07, outside
+        // D (5, 20) - dist=~11.18, outside
+        // E (15, 28) - dist=~5.38, outside
+        // The search should visit A, B, and E.
+        // It should prune C and D's subtrees based on the radius.
+        String expected = "B (10, 25)\n3";
+        assertFuzzyEquals(expected, it.search(10, 30, 5));
+    }
 
 }
