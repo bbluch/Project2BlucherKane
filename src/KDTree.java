@@ -94,20 +94,20 @@ public class KDTree {
         int count = regionSearchHelp(root, x, y, radius, 0, results);
         String strFinal = "";
         City cities[] = results.getResults();
-        
-        if(count == 0) {
+
+        if (count == 0) {
             return strFinal;
         }
-        
-        for(int i = 0; i < cities.length; i++) {
+
+        for (int i = 0; i < cities.length; i++) {
             strFinal = strFinal + cities[i].getName();
             strFinal = strFinal + " (" + cities[i].getX();
             strFinal = strFinal + ", " + cities[i].getY() + ")\n";
         }
-        
+
         strFinal = strFinal + count;
         return strFinal;
-        
+
     }
 
 
@@ -182,7 +182,7 @@ public class KDTree {
 
         return findHelp(rt.getRight(), x, y, level + 1);
     }
-    
+
 
     /**
      * Helper method for remove logic.
@@ -329,7 +329,7 @@ public class KDTree {
         if (rt == null) {
             return 0;
         }
-        
+
         int count = 1;
         // Check if the current city is within the radius
         double distance = Math.sqrt(Math.pow(rt.getCity().getX() - x, 2) + Math
@@ -353,14 +353,16 @@ public class KDTree {
 
         // Recursively search the appropriate subtrees
         if (pointValue < axisValue) {
-            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1, results);
+            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
+                results);
             if (axisValue - pointValue <= radius) {
-                count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
-                    results);
+                count += regionSearchHelp(rt.getRight(), x, y, radius, level
+                    + 1, results);
             }
         }
         else {
-            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1, results);
+            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
+                results);
             if (pointValue - axisValue <= radius) {
                 count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
                     results);
