@@ -1,4 +1,7 @@
 // -------------------------------------------------------------------------
+
+
+
 /**
  * Contains the logic and implementation for the binary search tree.
  * 
@@ -73,6 +76,7 @@ public class BST {
     }
 
 
+    
     /**
      * Gets the number of nodes in the tree.
      *
@@ -80,6 +84,52 @@ public class BST {
      */
     public int size() {
         return nodeCount;
+    }
+    /**
+     * Finds all cities with the given name.
+     *
+     * @param name The name of the city to find.
+     * @return An array of all matching City objects. Returns an empty array if
+     * no matches are found.
+     */
+    public City[] findAll(String name) {
+        SearchResult results = new SearchResult();
+        findAllHelp(root, name, results);
+        return results.getResults();
+    }
+
+    /**
+     * Recursive helper method to find all cities with a given name.
+     *
+     * @param rt      The current node in the traversal.
+     * @param name    The name to search for.
+     * @param results The collection of matching cities.
+     */
+    private void findAllHelp(BSTNode rt, String name, SearchResult results) {
+        if (rt == null) {
+            return; // Base case: end of a branch
+        }
+
+        String currentName = rt.getCity().getName();
+        int compare = name.compareTo(currentName);
+
+        if (compare == 0) {
+            // We found a match! Add it to our results.
+            results.add(rt.getCity());
+            // Since duplicates are inserted to the left, we must
+            // continue searching the left subtree for more matches.
+            findAllHelp(rt.getLeft(), name, results);
+        }
+        else if (compare < 0) {
+            // The name we are looking for is smaller than the current node's name,
+            // so we only need to search the left subtree.
+            findAllHelp(rt.getLeft(), name, results);
+        }
+        else { // compare > 0
+            // The name we are looking for is larger, so we only need to search
+            // the right subtree.
+            findAllHelp(rt.getRight(), name, results);
+        }
     }
 
 

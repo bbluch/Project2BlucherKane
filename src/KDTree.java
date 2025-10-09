@@ -76,51 +76,6 @@ public class KDTree {
         return findHelp(root, x, y, 0);
     }
 
-    /**
-     * A helper class to manage the dynamic array for region search results.
-     */
-    private static class RegionSearchResult {
-        City[] cities;
-        int count;
-
-        /**
-         * Initializes necessary array.
-         */
-        RegionSearchResult() {
-            cities = new City[10]; // Initial capacity
-            count = 0;
-        }
-
-
-        /**
-         * Adds a city to the tree.
-         * 
-         * @param city
-         *            city being added.
-         */
-        void add(City city) {
-            if (count == cities.length) {
-                // Resize the array if it's full
-                City[] newCities = new City[cities.length * 2];
-                System.arraycopy(cities, 0, newCities, 0, cities.length);
-                cities = newCities;
-            }
-            cities[count++] = city;
-        }
-
-
-        /**
-         * Gets the array after operations.
-         * 
-         * @return the array needed.
-         */
-        City[] getResults() {
-            // Trim the array to the actual size
-            City[] trimmedCities = new City[count];
-            System.arraycopy(cities, 0, trimmedCities, 0, count);
-            return trimmedCities;
-        }
-    }
 
     /**
      * Performs a region search to find all cities within a given radius of a
@@ -135,7 +90,7 @@ public class KDTree {
      * @return An array of cities within the specified region.
      */
     public City[] regionSearch(int x, int y, int radius) {
-        RegionSearchResult results = new RegionSearchResult();
+        SearchResult results = new SearchResult();
         regionSearchHelp(root, x, y, radius, 0, results);
         return results.getResults();
     }
@@ -355,7 +310,7 @@ public class KDTree {
         int y,
         int radius,
         int level,
-        RegionSearchResult results) {
+        SearchResult results) {
         if (rt == null) {
             return;
         }
