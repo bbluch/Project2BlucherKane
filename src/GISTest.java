@@ -221,6 +221,56 @@ public class GISTest extends TestCase {
     public void testInsertYTooLarge() {
         assertFalse(it.insert("Invalid Y Max", 100, GISDB.MAXCOORD + 1));
     }
+    /**
+     * Tests that the clear method returns true even when the database is initially empty.
+     */
+    public void testClearEmpty() {
+        assertTrue(it.clear());
+        // Verify that the database is still empty after clearing
+        assertEquals("", it.info("CityName"));
+        assertEquals("", it.info(5, 5));
+    }
+
+    /**
+     * Tests that the clear method successfully removes all data from a non-empty database.
+     */
+    public void testClearNonEmpty() {
+        // Insert some data
+        assertTrue(it.insert("New York", 100, 200));
+        assertTrue(it.insert("Los Angeles", 300, 400));
+
+        // Verify data is present
+        assertEquals("New York", it.info(100, 200));
+        assertEquals("Los Angeles", it.info(300, 400));
+
+        // Clear the database
+        assertTrue(it.clear());
+
+        // Verify data is gone
+        assertEquals("", it.info(100, 200));
+        assertEquals("", it.info(300, 400));
+        assertEquals("", it.info("New York"));
+        assertEquals("", it.info("Los Angeles"));
+    }
+
+    /**
+     * Tests that the database remains functional after being cleared.
+     */
+    public void testClearAndReinsert() {
+        // Insert initial data
+        assertTrue(it.insert("Initial City", 50, 50));
+        assertTrue(it.info(50, 50).equals("Initial City"));
+
+        // Clear the database
+        assertTrue(it.clear());
+
+        // Insert new data
+        assertTrue(it.insert("Second City", 60, 60));
+
+        // Verify the new data is present and the old data is gone
+        assertEquals("Second City", it.info(60, 60));
+        assertEquals("", it.info(50, 50));
+    }
     
     
     
