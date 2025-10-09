@@ -458,7 +458,7 @@ public class GISTest extends TestCase {
         // E (15, 28) - dist=~5.38, outside
         // The search should visit A, B, and E.
         // It should prune C and D's subtrees based on the radius.
-        String expected = "B (10, 25)\n4";
+        String expected = "B (10, 25)\n3";
         assertFuzzyEquals(expected, it.search(10, 30, 5));
     }
 

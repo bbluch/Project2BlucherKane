@@ -351,7 +351,7 @@ public class KDTree {
         if (pointValue < axisValue) {
             count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
                 results);
-            if (axisValue - pointValue <= radius) {
+            if (axisValue - pointValue < radius) {
                 count += regionSearchHelp(rt.getRight(), x, y, radius, level
                     + 1, results);
             }
@@ -359,7 +359,7 @@ public class KDTree {
         else {
             count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
                 results);
-            if (pointValue - axisValue <= radius) {
+            if (pointValue - axisValue < radius) {
                 count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
                     results);
             }
