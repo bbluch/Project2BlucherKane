@@ -93,11 +93,7 @@ public class KDTree {
         SearchResult results = new SearchResult();
         int count = regionSearchHelp(root, x, y, radius, 0, results);
         String strFinal = "";
-        City cities[] = results.getResults();
-
-        if (count == 0) {
-            return strFinal;
-        }
+        City[] cities = results.getResults();
 
         for (int i = 0; i < cities.length; i++) {
             strFinal = strFinal + cities[i].getName();
