@@ -38,10 +38,9 @@ public class BST {
      * @param city
      *            The city to insert.
      */
-    public boolean insert(City city) {
+    public void insert(City city) {
         root = insertHelp(root, city);
         nodeCount++;
-        return true;
     }
 
 
