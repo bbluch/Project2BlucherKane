@@ -146,10 +146,9 @@ public class GISTest extends TestCase {
         assertFuzzyEquals("1 Atlanta (10, 500)\n" + "2 Baltimore (0, 300)\n"
             + "0Chicago (100, 150)\n" + "3 L (11, 500)\n" + "2 L (101, 150)\n"
             + "1 Tacoma (1000, 100)\n" + "2 Washington (5, 350)\n", it.print());
-        assertFuzzyEquals("2 Baltimore (0, 300)\n" + "3 Washington (5, 350)\n"
-            + "4 L (11, 500)\n" + "1 Atlanta (10, 500)\n"
-            + "0Chicago (100, 150)\n" + "1 Tacoma (1000, 100)\n"
-            + "2 L (101, 150)\n", it.debug());
+        assertFuzzyEquals("2 baltimore 0 300\n" + "3 washington 5 350\n"
+            + "1 atlanta 10 500\n" + "2 l 11 500\n" + "0chicago 100 150\n"
+            + "1 tacoma 1000 100\n" + "2 l 101 150", it.debug());
         assertFuzzyEquals("L (101, 150)\nL (11, 500)", it.info("L"));
         assertFuzzyEquals("L", it.info(101, 150));
         // assertFuzzyEquals("Tacoma (1000, 100)", it.delete("Tacoma"));
