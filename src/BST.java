@@ -121,10 +121,8 @@ public class BST {
         if (rt == null) {
             return new BSTNode(city);
         }
-        if (rt.getCity().getName().compareTo(city.getName()) >= 0) { // Equal
-                                                                     // values
-                                                                     // go to
-                                                                     // the left
+        if (rt.getCity().getName().compareTo(city.getName()) >= 0) {
+            //Equal values go to the left
             rt.setLeft(insertHelp(rt.getLeft(), city));
         }
         else {
