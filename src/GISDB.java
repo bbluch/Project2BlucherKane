@@ -182,6 +182,8 @@ public class GISDB implements GIS {
      *         If k-d tree is empty, the number of nodes visited is zero.
      */
     public String search(int x, int y, int radius) {
+        if (radius < 0)
+            return "";
         return kd.regionSearch(x, y, radius);
     }
 
