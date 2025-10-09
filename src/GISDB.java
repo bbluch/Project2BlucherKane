@@ -119,7 +119,11 @@ public class GISDB implements GIS {
      * @return The city name if there is such a city, empty otherwise
      */
     public String info(int x, int y) {
-        return db.find(x, y).toString();
+        City found = db.find(x, y);
+        if (found != null) {
+            return found.getName();
+        }
+        return "";
     }
 
 
