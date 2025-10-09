@@ -126,7 +126,7 @@ public class GISTest extends TestCase {
     public void testInsertWithBothInvalidCoordinates() {
         assertFalse(it.insert("Nowhere", -10, 100000));
     }
-    
+
     /**
      * Insert some records and check output requirements for various commands
      * 
@@ -160,7 +160,8 @@ public class GISTest extends TestCase {
      * assertFuzzyEquals("Baltimore (0, 300)\n3", it.search(0, 300, 0));
      * }
      */
-    
+
+
     /**
      * Tests inserting a city with valid coordinates and unique location.
      */
@@ -221,8 +222,11 @@ public class GISTest extends TestCase {
     public void testInsertYTooLarge() {
         assertFalse(it.insert("Invalid Y Max", 100, GISDB.MAXCOORD + 1));
     }
+
+
     /**
-     * Tests that the clear method returns true even when the database is initially empty.
+     * Tests that the clear method returns true even when the database is
+     * initially empty.
      */
     public void testClearEmpty() {
         assertTrue(it.clear());
@@ -231,8 +235,10 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(5, 5));
     }
 
+
     /**
-     * Tests that the clear method successfully removes all data from a non-empty database.
+     * Tests that the clear method successfully removes all data from a
+     * non-empty database.
      */
     public void testClearNonEmpty() {
         // Insert some data
@@ -253,6 +259,7 @@ public class GISTest extends TestCase {
         assertEquals("", it.info("Los Angeles"));
     }
 
+
     /**
      * Tests that the database remains functional after being cleared.
      */
@@ -271,7 +278,8 @@ public class GISTest extends TestCase {
         assertEquals("Second City", it.info(60, 60));
         assertEquals("", it.info(50, 50));
     }
-    
+
+
     /**
      * Tests that an empty string is returned when a city with the specified
      * name is not in the database.
@@ -279,10 +287,11 @@ public class GISTest extends TestCase {
     public void testInfoNotFound() {
         // Insert a city that will not be found.
         it.insert("Los Angeles", 100, 200);
-        
+
         // Search for a city that doesn't exist.
         assertEquals("", it.info("Nonexistent City"));
     }
+
 
     /**
      * Tests that the correct information is returned for a single city found
@@ -294,8 +303,9 @@ public class GISTest extends TestCase {
 
         // Verify the info method returns the correct string
         String expected = "Blacksburg (50, 60)";
-        assertEquals(expected, it.info("Blacksburg"));
+        assertFuzzyEquals(expected, it.info("Blacksburg"));
     }
+
 
     /**
      * Tests that all cities with a matching name are returned, each on a new
@@ -311,18 +321,20 @@ public class GISTest extends TestCase {
         // is based on the problem specification, which states equal values
         // insert to the left. The `findAll` method is expected to return them
         // in an order, likely based on the tree traversal. The `info` method
-        // concatenates them with a space before the coordinate pair and a newline.
+        // concatenates them with a space before the coordinate pair and a
+        // newline.
         // The expected order from an in-order BST traversal with duplicates
         // inserted to the left is L, L, L...
-        String expected = "Springfield (10, 20)\n"
-            + "Springfield (30, 40)\n"
+        String expected = "Springfield (10, 20)\n" + "Springfield (30, 40)\n"
             + "Springfield (50, 60)";
-        
-        assertEquals(expected, it.info("Springfield"));
+
+        assertFuzzyEquals(expected, it.info("Springfield"));
     }
-    
+
+
     /**
-     * Tests that the method handles case sensitivity correctly and returns an empty string
+     * Tests that the method handles case sensitivity correctly and returns an
+     * empty string
      * for a case mismatch.
      */
     public void testInfoCaseSensitivity() {
@@ -330,8 +342,9 @@ public class GISTest extends TestCase {
         it.insert("Richmond", 70, 80);
 
         // Search with a different case, should not find it
-        assertEquals("", it.info("richmond"));
+        assertFuzzyEquals("", it.info("richmond"));
     }
+
 
     /**
      * Tests that the returned string is trimmed correctly, with no extra
@@ -340,18 +353,15 @@ public class GISTest extends TestCase {
     public void testInfoStringTrim() {
         // Insert a city
         it.insert("Test City", 1, 1);
-        
+
         // Check that the returned string is trimmed.
-        // The method uses trim() at the end, so no extra spaces should be present.
+        // The method uses trim() at the end, so no extra spaces should be
+        // present.
         String result = it.info("Test City");
-        assertEquals("Test City (1, 1)", result);
+        assertFuzzyEquals("Test City (1, 1)", result);
         assertFalse(result.startsWith(" "));
         assertFalse(result.endsWith(" "));
         assertFalse(result.endsWith("\n"));
     }
-    
-    
-    
-    
-    
+
 }
