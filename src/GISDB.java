@@ -18,8 +18,9 @@ public class GISDB implements GIS {
      * Dimension of the points stored in the tree
      */
     public static final int DIMENSION = 2;
-    
+
     private BST db;
+    private KDTree kd;
 
     // ----------------------------------------------------------
     /**
@@ -27,6 +28,7 @@ public class GISDB implements GIS {
      */
     GISDB() {
         db = new BST();
+        kd = new KDTree();
     }
 
 
@@ -60,11 +62,11 @@ public class GISDB implements GIS {
         if (name == null || name.trim().isEmpty()) {
             return false;
         }
-        
+
         // Coordinates must be within the valid range [0, MAXCOORD]
         boolean xIsValid = (x >= 0 && x <= MAXCOORD);
         boolean yIsValid = (y >= 0 && y <= MAXCOORD);
-        
+
         return xIsValid && yIsValid;
     }
 
@@ -119,7 +121,7 @@ public class GISDB implements GIS {
      * @return The city name if there is such a city, empty otherwise
      */
     public String info(int x, int y) {
-        City found = db.find(x, y);
+        City found = kd.find(x, y);
         if (found != null) {
             return found.getName();
         }
@@ -137,7 +139,7 @@ public class GISDB implements GIS {
      *         empty if there are none.
      */
     public String info(String name) {
-        return db.find(name).toString();
+        return "";
     }
 
 

@@ -1,8 +1,6 @@
 // -------------------------------------------------------------------------
 /**
- * Write a one-sentence summary of your class here.
- * Follow it with additional details about its purpose, what abstraction
- * it represents, and how to use it.
+ * Contains the necessary info and implementation for each city.
  * 
  * @author benblucher, austink23
  * @version Oct 8, 2025

@@ -1,8 +1,6 @@
 // -------------------------------------------------------------------------
 /**
- * Write a one-sentence summary of your class here.
- * Follow it with additional details about its purpose, what abstraction
- * it represents, and how to use it.
+ * Contains logic and implementation for the KDTree.
  * 
  * @author benblucher, austink23
  * @version Oct 8, 2025
@@ -85,12 +83,21 @@ public class KDTree {
         City[] cities;
         int count;
 
+        /**
+         * Initializes necessary array.
+         */
         RegionSearchResult() {
             cities = new City[10]; // Initial capacity
             count = 0;
         }
 
 
+        /**
+         * Adds a city to the tree.
+         * 
+         * @param city
+         *            city being added.
+         */
         void add(City city) {
             if (count == cities.length) {
                 // Resize the array if it's full
@@ -102,6 +109,11 @@ public class KDTree {
         }
 
 
+        /**
+         * Gets the array after operations.
+         * 
+         * @return the array needed.
+         */
         City[] getResults() {
             // Trim the array to the actual size
             City[] trimmedCities = new City[count];
@@ -129,6 +141,17 @@ public class KDTree {
     }
 
 
+    /**
+     * Helper method for insert logic.
+     * 
+     * @param rt
+     *            root node
+     * @param city
+     *            The city being inserted
+     * @param level
+     *            The level of tree
+     * @return node being inserted
+     */
     private BSTNode insertHelp(BSTNode rt, City city, int level) {
         if (rt == null) {
             return new BSTNode(city);
@@ -155,6 +178,19 @@ public class KDTree {
     }
 
 
+    /**
+     * Helper method for find method.
+     * 
+     * @param rt
+     *            root node
+     * @param x
+     *            The x-coordinate of the city
+     * @param y
+     *            The y-coordinate of the city
+     * @param level
+     *            The level of the tree
+     * @return the city if found, null if not
+     */
     private City findHelp(BSTNode rt, int x, int y, int level) {
         if (rt == null) {
             return null;
@@ -178,6 +214,19 @@ public class KDTree {
     }
 
 
+    /**
+     * Helper method for remove logic.
+     * 
+     * @param rt
+     *            root node
+     * @param x
+     *            The x-coordinate for the city
+     * @param y
+     *            The y-coordnate for the city
+     * @param level
+     *            The level of the tree
+     * @return node being removed, null if not found
+     */
     private BSTNode removeHelp(BSTNode rt, int x, int y, int level) {
         if (rt == null) {
             return null;
@@ -224,6 +273,17 @@ public class KDTree {
     }
 
 
+    /**
+     * Finds the node with minimum value.
+     * 
+     * @param rt
+     *            root node
+     * @param axis
+     *            The determining count for comparison
+     * @param level
+     *            The level of the tree
+     * @return The city with minimum value
+     */
     private City findMin(BSTNode rt, int axis, int level) {
         if (rt == null) {
             return null;
@@ -252,6 +312,17 @@ public class KDTree {
     }
 
 
+    /**
+     * Compares two cities, returning based on KDTree logic.
+     * 
+     * @param c1
+     *            First city being compared.
+     * @param c2
+     *            Second city being compared.
+     * @param axis
+     *            The determining comparison count.
+     * @return result of comparison
+     */
     private int compareCities(City c1, City c2, int axis) {
         if (axis == 0) {
             return Integer.compare(c1.getX(), c2.getX());
@@ -262,6 +333,22 @@ public class KDTree {
     }
 
 
+    /**
+     * Helper method to search the KDTree.
+     * 
+     * @param rt
+     *            root node
+     * @param x
+     *            The x-coordinate of the city
+     * @param y
+     *            The y-coordinate of the city
+     * @param radius
+     *            The radius being examined
+     * @param level
+     *            The level of the tree
+     * @param results
+     *            The results of the region search
+     */
     private void regionSearchHelp(
         BSTNode rt,
         int x,

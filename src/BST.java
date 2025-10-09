@@ -1,8 +1,6 @@
 // -------------------------------------------------------------------------
 /**
- * Write a one-sentence summary of your class here.
- * Follow it with additional details about its purpose, what abstraction
- * it represents, and how to use it.
+ * Contains the logic and implementation for the binary search tree.
  * 
  * @author benblucher, austink23
  * @version Oct 8, 2025
@@ -75,15 +73,10 @@ public class BST {
     }
 
 
-    public City find(int x, int y) {
-        return findHelp(root, x, y);
-    }
-
-
     private City findHelp(BSTNode rt, int x, int y) {
         if (rt == null)
             return null;
-        
+
         // TODO Auto-generated method stub
         return null;
     }
@@ -99,6 +92,15 @@ public class BST {
     }
 
 
+    /**
+     * Private helper method to assist in find method.
+     * 
+     * @param rt
+     *            root node
+     * @param name
+     *            name of city
+     * @return city found
+     */
     private City findHelp(BSTNode rt, String name) {
         if (rt == null) {
             return null;
@@ -115,6 +117,15 @@ public class BST {
     }
 
 
+    /**
+     * Private helper method for the insert method.
+     * 
+     * @param rt
+     *            root node
+     * @param city
+     *            city being inserted
+     * @return node returned
+     */
     private BSTNode insertHelp(BSTNode rt, City city) {
         if (rt == null) {
             return new BSTNode(city);
@@ -132,6 +143,15 @@ public class BST {
     }
 
 
+    /**
+     * Private helper method for remove.
+     * 
+     * @param rt
+     *            root node
+     * @param name
+     *            name of city being removed
+     * @return node returned
+     */
     private BSTNode removeHelp(BSTNode rt, String name) {
         if (rt == null) {
             return null;
@@ -159,6 +179,13 @@ public class BST {
     }
 
 
+    /**
+     * Gets the node with max value.
+     * 
+     * @param rt
+     *            root node
+     * @return node with max
+     */
     private BSTNode getMax(BSTNode rt) {
         if (rt.getRight() == null) {
             return rt;
@@ -167,6 +194,13 @@ public class BST {
     }
 
 
+    /**
+     * Deletes the max node.
+     * 
+     * @param rt
+     *            root node
+     * @return node with max
+     */
     private BSTNode deleteMax(BSTNode rt) {
         if (rt.getRight() == null) {
             return rt.getLeft();
