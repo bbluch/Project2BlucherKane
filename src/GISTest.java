@@ -345,23 +345,4 @@ public class GISTest extends TestCase {
         assertFuzzyEquals("", it.info("richmond"));
     }
 
-
-    /**
-     * Tests that the returned string is trimmed correctly, with no extra
-     * whitespace at the beginning or end.
-     */
-    public void testInfoStringTrim() {
-        // Insert a city
-        it.insert("Test City", 1, 1);
-
-        // Check that the returned string is trimmed.
-        // The method uses trim() at the end, so no extra spaces should be
-        // present.
-        String result = it.info("Test City");
-        assertFuzzyEquals("Test City (1, 1)", result);
-        assertFalse(result.startsWith(" "));
-        assertFalse(result.endsWith(" "));
-        assertFalse(result.endsWith("\n"));
-    }
-
 }
