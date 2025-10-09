@@ -145,7 +145,7 @@ public class GISDB implements GIS {
      *         empty if there are none.
      */
     public String info(String name) {
-        City cities[] = bst.findAll(name);
+        City[] cities = bst.findAll(name);
 
         if (cities.length == 0) {
             return "";
