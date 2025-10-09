@@ -182,7 +182,7 @@ public class KDTree {
 
         return findHelp(rt.getRight(), x, y, level + 1);
     }
-
+    
 
     /**
      * Helper method for remove logic.
