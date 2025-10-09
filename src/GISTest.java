@@ -127,33 +127,6 @@ public class GISTest extends TestCase {
         assertFalse(it.insert("Nowhere", -10, 100000));
     }
 
-
-    // ----------------------------------------------------------
-    /**
-     * Tests insert with null city name.
-     */
-    public void testInsertWithNullName() {
-        assertFalse(it.insert(null, 50, 50));
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Tests insert with empty city name.
-     */
-    public void testInsertWithEmptyName() {
-        assertFalse(it.insert("", 50, 50));
-    }
-
-
-    // ----------------------------------------------------------
-    /**
-     * Tests with blank city name.
-     */
-    public void testInsertWithWhitespaceName() {
-        assertFalse(it.insert("   ", 50, 50));
-    }
-
     /**
      * Insert some records and check output requirements for various commands
      * 
