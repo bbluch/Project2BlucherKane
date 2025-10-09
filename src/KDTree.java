@@ -304,7 +304,7 @@ public class KDTree {
      * @param results
      *            The results of the region search
      */
-    private void regionSearchHelp(
+    private int regionSearchHelp(
         BSTNode rt,
         int x,
         int y,
@@ -312,9 +312,10 @@ public class KDTree {
         int level,
         SearchResult results) {
         if (rt == null) {
-            return;
+            return 0;
         }
-
+        
+        int count = 1;
         // Check if the current city is within the radius
         double distance = Math.sqrt(Math.pow(rt.getCity().getX() - x, 2) + Math
             .pow(rt.getCity().getY() - y, 2));
@@ -337,18 +338,19 @@ public class KDTree {
 
         // Recursively search the appropriate subtrees
         if (pointValue < axisValue) {
-            regionSearchHelp(rt.getLeft(), x, y, radius, level + 1, results);
+            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1, results);
             if (axisValue - pointValue <= radius) {
-                regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
+                count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
                     results);
             }
         }
         else {
-            regionSearchHelp(rt.getRight(), x, y, radius, level + 1, results);
+            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1, results);
             if (pointValue - axisValue <= radius) {
-                regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
+                count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
                     results);
             }
         }
+        return count;
     }
 }
