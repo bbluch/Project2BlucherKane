@@ -343,23 +343,20 @@ public class GISTest extends TestCase {
         // Search with a different case, should not find it
         assertFuzzyEquals("", it.info("richmond"));
     }
-
-
+    
     /**
      * Tests a bad radius input.
      */
     public void testSearchBadRadius() {
         assertEquals("", it.search(0, 0, -1));
     }
-
-
+    
     /**
      * Tests a search on an empty database.
      */
     public void testSearchEmpty() {
         assertFuzzyEquals("", it.search(100, 100, 10));
     }
-
 
     /**
      * Tests a search with a single city that is within the radius.
@@ -370,7 +367,6 @@ public class GISTest extends TestCase {
         assertEquals(expected, it.search(100, 100, 0));
     }
 
-
     /**
      * Tests a search where the city is exactly on the radius boundary.
      */
@@ -380,18 +376,15 @@ public class GISTest extends TestCase {
         // Distance from (100, 100) to (103, 104) is sqrt((3^2) + (4^2)) = 5
         assertEquals(expected, it.search(100, 100, 5));
     }
-
-
+    
     /**
      * Tests a search where the city is just outside the radius.
      */
     public void testSearchJustOutsideBoundary() {
         it.insert("Outside City", 104, 104);
-        // Distance from (100, 100) to (104, 104) is sqrt((4^2) + (4^2)) =
-        // 5.65...
+        // Distance from (100, 100) to (104, 104) is sqrt((4^2) + (4^2)) = 5.65...
         assertFuzzyEquals("1", it.search(100, 100, 5));
     }
-
 
     /**
      * Tests a search in a more complex tree with multiple nodes.
@@ -407,7 +400,7 @@ public class GISTest extends TestCase {
         it.insert("E", 1, 10);
         it.insert("F", 10, 5);
         it.insert("G", 15, 10);
-
+        
         // Search center (10, 10) with radius 3
         // Cities within this radius:
         // A (10, 8): dist=2, within
@@ -422,7 +415,6 @@ public class GISTest extends TestCase {
         assertFuzzyEquals(expected, it.search(10, 10, 3));
     }
 
-
     /**
      * Tests a search with a radius that covers all points in the tree.
      */
@@ -430,14 +422,15 @@ public class GISTest extends TestCase {
         it.insert("City1", 100, 100);
         it.insert("City2", 200, 200);
         it.insert("City3", 300, 300);
-
+        
         // Search with a large radius to find all cities
-        String expected = "City1 (100, 100)\n" + "City2 (200, 200)\n"
-            + "City3 (300, 300)\n" + "3";
+        String expected = "City1 (100, 100)\n"
+                        + "City2 (200, 200)\n"
+                        + "City3 (300, 300)\n"
+                        + "3";
         assertEquals(expected, it.search(0, 0, 500));
     }
-
-
+    
     /**
      * Tests that the correct number of nodes are visited during the search
      * when some branches are pruned.
@@ -449,7 +442,7 @@ public class GISTest extends TestCase {
         it.insert("C", 25, 35);
         it.insert("D", 5, 20);
         it.insert("E", 15, 28);
-
+        
         // Search with center (10, 30) and radius 5
         // A (20, 30) - dist=10, outside
         // B (10, 25) - dist=5, within
