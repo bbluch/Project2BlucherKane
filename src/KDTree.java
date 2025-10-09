@@ -19,7 +19,7 @@ public class KDTree {
      */
     public KDTree() {
         root = null;
-        nodeCount = 0;
+        setNodeCount(0);
     }
 
 
@@ -28,7 +28,7 @@ public class KDTree {
      */
     public void clear() {
         root = null;
-        nodeCount = 0;
+        setNodeCount(0);
     }
 
 
@@ -40,7 +40,7 @@ public class KDTree {
      */
     public void insert(City city) {
         root = insertHelp(root, city, 0);
-        nodeCount++;
+        setNodeCount(size() + 1);
     }
 
 
@@ -57,7 +57,7 @@ public class KDTree {
         City temp = find(x, y);
         if (temp != null) {
             root = removeHelp(root, x, y, 0);
-            nodeCount--;
+            setNodeCount(size() - 1);
         }
         return temp;
     }
@@ -365,5 +365,72 @@ public class KDTree {
             }
         }
         return count;
+    }
+
+    // Add this inside your KDTree.java class
+
+
+    /**
+     * Returns a string representation of the KD-Tree via an in-order traversal.
+     * 
+     * @return The formatted string.
+     */
+    public String getInOrderTraversal() {
+        StringBuilder sb = new StringBuilder();
+        inOrderHelp(root, 0, sb);
+        return sb.toString();
+    }
+
+
+    /**
+     * Recursive helper for the in-order traversal.
+     * 
+     * @param rt
+     *            The current node.
+     * @param level
+     *            The current level in the tree.
+     * @param sb
+     *            The StringBuilder to append to.
+     */
+    private void inOrderHelp(BSTNode rt, int level, StringBuilder sb) {
+        if (rt == null) {
+            return;
+        }
+        // In-order: Left, Root, Right
+        inOrderHelp(rt.getLeft(), level + 1, sb);
+
+        // Append level and indentation
+        sb.append(level);
+        for (int i = 0; i < level * 2; i++) {
+            sb.append(" ");
+        }
+
+        // Append city info and a newline
+        sb.append(rt.getCity().toString()).append("\n");
+
+        inOrderHelp(rt.getRight(), level + 1, sb);
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Get the current value of nodeCount.
+     * 
+     * @return The value of nodeCount for this object.
+     */
+    public int size() {
+        return nodeCount;
+    }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Set the value of nodeCount for this object.
+     * 
+     * @param nodeCount
+     *            The new value for nodeCount.
+     */
+    public void setNodeCount(int nodeCount) {
+        this.nodeCount = nodeCount;
     }
 }

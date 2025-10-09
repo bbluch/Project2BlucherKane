@@ -198,7 +198,9 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String debug() {
-        return "";
+        if (kd.size() == 0)
+            return "";
+        return kd.getInOrderTraversal();
     }
 
 
@@ -214,6 +216,8 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String print() {
-        return "";
+        if (bst.size() == 0)
+            return "";
+        return bst.getInOrderTraversal();
     }
 }

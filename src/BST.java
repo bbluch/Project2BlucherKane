@@ -63,6 +63,48 @@ public class BST {
 
 
     /**
+     * Returns a string representation of the BST via an in-order traversal.
+     * 
+     * @return The formatted string.
+     */
+    public String getInOrderTraversal() {
+        StringBuilder sb = new StringBuilder();
+        inOrderHelp(root, 0, sb);
+        return sb.toString();
+    }
+
+
+    /**
+     * Recursive helper for the in-order traversal.
+     * 
+     * @param rt
+     *            The current node.
+     * @param level
+     *            The current level in the tree.
+     * @param sb
+     *            The StringBuilder to append to.
+     */
+    private void inOrderHelp(BSTNode rt, int level, StringBuilder sb) {
+        if (rt == null) {
+            return;
+        }
+        // In-order: Left, Root, Right
+        inOrderHelp(rt.getLeft(), level + 1, sb);
+
+        // Append level and indentation
+        sb.append(level);
+        for (int i = 0; i < level * 2; i++) {
+            sb.append(" ");
+        }
+
+        // Append city info and a newline
+        sb.append(rt.getCity().toString()).append("\n");
+
+        inOrderHelp(rt.getRight(), level + 1, sb);
+    }
+
+
+    /**
      * Finds a city by its name.
      *
      * @param name

@@ -462,4 +462,70 @@ public class GISTest extends TestCase {
         assertFuzzyEquals(expected, it.search(10, 30, 5));
     }
 
+
+    /**
+     * Tests the insertion of a single city and finding it with info(x, y).
+     * Also tests that inserting a city with duplicate coordinates fails.
+     */
+    public void testInsertAndInfoByCoord() {
+        assertTrue(it.insert("Blacksburg", 10, 10));
+        assertEquals("Blacksburg", it.info(10, 10));
+        // Attempt to insert a city with the same coordinates
+        assertFalse(it.insert("Christiansburg", 10, 10));
+        // Verify the original city is still there
+        assertEquals("Blacksburg", it.info(10, 10));
+        // Check for a city that doesn't exist
+        assertEquals("", it.info(20, 20));
+    }
+
+
+    /**
+     * Tests the info(String name) method, especially handling multiple
+     * cities with the same name.
+     */
+    public void testInfoByName() {
+        it.insert("Springfield", 70, 10);
+        it.insert("Springfield", 20, 50);
+        it.insert("Shelbyville", 90, 30);
+
+        String expected = "(20, 50)\n(70, 10)";
+        // The order may vary depending on BST implementation,
+        // so we check for both possibilities.
+        String alternativeExpected = "(70, 10)\n(20, 50)";
+
+        String actual = it.info("Springfield");
+        assertTrue("The output for info(\"Springfield\") was not correct.",
+            actual.equals(expected) || actual.equals(alternativeExpected));
+
+        // Test for a name that does not exist
+        assertEquals("", it.info("Ogdenville"));
+    }
+
+
+    /**
+     * Tests the print() and debug() methods for correct formatting and
+     * ordering.
+     */
+    public void testPrintAndDebug() {
+        // Test on an empty database first
+        assertEquals("", it.print());
+        assertEquals("", it.debug());
+
+        it.insert("C", 30, 40);
+        it.insert("A", 10, 20);
+        it.insert("E", 50, 60);
+        it.insert("B", 25, 35);
+        it.insert("D", 45, 55);
+
+        // Expected BST output (alphabetical order)
+        String expectedPrint = "1  A (10, 20)\n" + "2    B (25, 35)\n"
+            + "0C (30, 40)\n" + "2    D (45, 55)\n" + "1  E (50, 60)\n";
+        assertFuzzyEquals(expectedPrint, it.print());
+
+        // Expected KD-Tree output (in-order traversal based on coordinates)
+        String expectedDebug = "2    B (25, 35)\n" + "1  A (10, 20)\n"
+            + "3      D (45, 55)\n" + "2    E (50, 60)\n" + "0C (30, 40)\n";
+        assertFuzzyEquals(expectedDebug, it.debug());
+    }
+
 }
