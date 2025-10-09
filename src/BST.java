@@ -44,22 +44,21 @@ public class BST {
         nodeCount++;
     }
 
-
-    /**
-     * Removes a city with the given name from the BST.
-     *
-     * @param name
-     *            The name of the city to remove.
-     * @return The City object of the removed node, or null if not found.
-     */
-    public City remove(String name) {
-        City temp = find(name);
-        if (temp != null) {
-            root = removeHelp(root, name);
-            nodeCount--;
-        }
-        return temp;
-    }
+// /**
+// * Removes a city with the given name from the BST.
+// *
+// * @param name
+// * The name of the city to remove.
+// * @return The City object of the removed node, or null if not found.
+// */
+// public City remove(String name) {
+// City temp = find(name);
+// if (temp != null) {
+// root = removeHelp(root, name);
+// nodeCount--;
+// }
+// return temp;
+// }
 
 
     /**
@@ -229,70 +228,69 @@ public class BST {
         return rt;
     }
 
-
-    /**
-     * Private helper method for remove.
-     * 
-     * @param rt
-     *            root node
-     * @param name
-     *            name of city being removed
-     * @return node returned
-     */
-    private BSTNode removeHelp(BSTNode rt, String name) {
-        if (rt == null) {
-            return null;
-        }
-        if (rt.getCity().getName().compareTo(name) > 0) {
-            rt.setLeft(removeHelp(rt.getLeft(), name));
-        }
-        else if (rt.getCity().getName().compareTo(name) < 0) {
-            rt.setRight(removeHelp(rt.getRight(), name));
-        }
-        else { // Found it
-            if (rt.getLeft() == null) {
-                return rt.getRight();
-            }
-            else if (rt.getRight() == null) {
-                return rt.getLeft();
-            }
-            else { // Two children
-                BSTNode temp = getMax(rt.getLeft());
-                rt.setCity(temp.getCity());
-                rt.setLeft(deleteMax(rt.getLeft()));
-            }
-        }
-        return rt;
-    }
-
-
-    /**
-     * Gets the node with max value.
-     * 
-     * @param rt
-     *            root node
-     * @return node with max
-     */
-    private BSTNode getMax(BSTNode rt) {
-        if (rt.getRight() == null) {
-            return rt;
-        }
-        return getMax(rt.getRight());
-    }
-
-
-    /**
-     * Deletes the max node.
-     * 
-     * @param rt
-     *            root node
-     * @return node with max
-     */
-    private BSTNode deleteMax(BSTNode rt) {
-        if (rt.getRight() == null) {
-            return rt.getLeft();
-        }
-        rt.setRight(deleteMax(rt.getRight()));
-        return rt;
-    }
+// /**
+// * Private helper method for remove.
+// *
+// * @param rt
+// * root node
+// * @param name
+// * name of city being removed
+// * @return node returned
+// */
+// private BSTNode removeHelp(BSTNode rt, String name) {
+// if (rt == null) {
+// return null;
+// }
+// if (rt.getCity().getName().compareTo(name) > 0) {
+// rt.setLeft(removeHelp(rt.getLeft(), name));
+// }
+// else if (rt.getCity().getName().compareTo(name) < 0) {
+// rt.setRight(removeHelp(rt.getRight(), name));
+// }
+// else { // Found it
+// if (rt.getLeft() == null) {
+// return rt.getRight();
+// }
+// else if (rt.getRight() == null) {
+// return rt.getLeft();
+// }
+// else { // Two children
+// BSTNode temp = getMax(rt.getLeft());
+// rt.setCity(temp.getCity());
+// rt.setLeft(deleteMax(rt.getLeft()));
+// }
+// }
+// return rt;
+// }
+//
+//
+// /**
+// * Gets the node with max value.
+// *
+// * @param rt
+// * root node
+// * @return node with max
+// */
+// private BSTNode getMax(BSTNode rt) {
+// if (rt.getRight() == null) {
+// return rt;
+// }
+// return getMax(rt.getRight());
+// }
+//
+//
+// /**
+// * Deletes the max node.
+// *
+// * @param rt
+// * root node
+// * @return node with max
+// */
+// private BSTNode deleteMax(BSTNode rt) {
+// if (rt.getRight() == null) {
+// return rt.getLeft();
+// }
+// rt.setRight(deleteMax(rt.getRight()));
+// return rt;
+// }
 }
