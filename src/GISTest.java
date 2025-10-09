@@ -126,7 +126,7 @@ public class GISTest extends TestCase {
     public void testInsertWithBothInvalidCoordinates() {
         assertFalse(it.insert("Nowhere", -10, 100000));
     }
-
+    
     /**
      * Insert some records and check output requirements for various commands
      * 
@@ -160,4 +160,70 @@ public class GISTest extends TestCase {
      * assertFuzzyEquals("Baltimore (0, 300)\n3", it.search(0, 300, 0));
      * }
      */
+    
+    /**
+     * Tests inserting a city with valid coordinates and unique location.
+     */
+    public void testInsertValidAndUnique() {
+        assertTrue(it.insert("New York", 100, 200));
+        assertTrue(it.info(100, 200).equals("New York"));
+    }
+
+
+    /**
+     * Tests inserting a city with a name that already exists but with a new
+     * location.
+     */
+    public void testInsertExistingNameNewLocation() {
+        assertTrue(it.insert("Blacksburg", 500, 500));
+        assertTrue(it.insert("Blacksburg", 501, 501));
+        assertTrue(it.info(500, 500).equals("Blacksburg"));
+        assertTrue(it.info(501, 501).equals("Blacksburg"));
+    }
+
+
+    /**
+     * Tests inserting a city with a duplicate location, which should fail.
+     */
+    public void testInsertDuplicateLocation() {
+        assertTrue(it.insert("Richmond", 300, 400));
+        assertFalse(it.insert("Not Richmond", 300, 400));
+    }
+
+
+    /**
+     * Tests inserting a city with a negative x-coordinate.
+     */
+    public void testInsertNegativeX() {
+        assertFalse(it.insert("Invalid X", -1, 100));
+    }
+
+
+    /**
+     * Tests inserting a city with a negative y-coordinate.
+     */
+    public void testInsertNegativeY() {
+        assertFalse(it.insert("Invalid Y", 100, -1));
+    }
+
+
+    /**
+     * Tests inserting a city with an x-coordinate greater than MAXCOORD.
+     */
+    public void testInsertXTooLarge() {
+        assertFalse(it.insert("Invalid X Max", GISDB.MAXCOORD + 1, 100));
+    }
+
+
+    /**
+     * Tests inserting a city with a y-coordinate greater than MAXCOORD.
+     */
+    public void testInsertYTooLarge() {
+        assertFalse(it.insert("Invalid Y Max", 100, GISDB.MAXCOORD + 1));
+    }
+    
+    
+    
+    
+    
 }
