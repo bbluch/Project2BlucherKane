@@ -272,6 +272,84 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(50, 50));
     }
     
+    /**
+     * Tests that an empty string is returned when a city with the specified
+     * name is not in the database.
+     */
+    public void testInfoNotFound() {
+        // Insert a city that will not be found.
+        it.insert("Los Angeles", 100, 200);
+        
+        // Search for a city that doesn't exist.
+        assertEquals("", it.info("Nonexistent City"));
+    }
+
+    /**
+     * Tests that the correct information is returned for a single city found
+     * by name.
+     */
+    public void testInfoSingleCityFound() {
+        // Insert a single city
+        it.insert("Blacksburg", 50, 60);
+
+        // Verify the info method returns the correct string
+        String expected = "Blacksburg (50, 60)";
+        assertEquals(expected, it.info("Blacksburg"));
+    }
+
+    /**
+     * Tests that all cities with a matching name are returned, each on a new
+     * line, and the string is properly formatted.
+     */
+    public void testInfoMultipleCitiesFound() {
+        // Insert multiple cities with the same name
+        it.insert("Springfield", 10, 20);
+        it.insert("Springfield", 30, 40);
+        it.insert("Springfield", 50, 60);
+
+        // The order of insertion into the BST (and therefore traversal)
+        // is based on the problem specification, which states equal values
+        // insert to the left. The `findAll` method is expected to return them
+        // in an order, likely based on the tree traversal. The `info` method
+        // concatenates them with a space before the coordinate pair and a newline.
+        // The expected order from an in-order BST traversal with duplicates
+        // inserted to the left is L, L, L...
+        String expected = "Springfield (10, 20)\n"
+            + "Springfield (30, 40)\n"
+            + "Springfield (50, 60)";
+        
+        assertEquals(expected, it.info("Springfield"));
+    }
+    
+    /**
+     * Tests that the method handles case sensitivity correctly and returns an empty string
+     * for a case mismatch.
+     */
+    public void testInfoCaseSensitivity() {
+        // Insert a city with a specific case
+        it.insert("Richmond", 70, 80);
+
+        // Search with a different case, should not find it
+        assertEquals("", it.info("richmond"));
+    }
+
+    /**
+     * Tests that the returned string is trimmed correctly, with no extra
+     * whitespace at the beginning or end.
+     */
+    public void testInfoStringTrim() {
+        // Insert a city
+        it.insert("Test City", 1, 1);
+        
+        // Check that the returned string is trimmed.
+        // The method uses trim() at the end, so no extra spaces should be present.
+        String result = it.info("Test City");
+        assertEquals("Test City (1, 1)", result);
+        assertFalse(result.startsWith(" "));
+        assertFalse(result.endsWith(" "));
+        assertFalse(result.endsWith("\n"));
+    }
+    
     
     
     
