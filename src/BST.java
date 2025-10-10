@@ -41,7 +41,7 @@ public class BST {
      */
     public void insert(City city) {
         root = insertHelp(root, city);
-        nodeCount++;
+        // nodeCount++;
     }
 
 // /**
@@ -102,17 +102,16 @@ public class BST {
         inOrderHelp(rt.getRight(), level + 1, sb);
     }
 
-
-    /**
-     * Finds a city by its name.
-     *
-     * @param name
-     *            The name of the city to find.
-     * @return The City object if found, otherwise null.
-     */
-    public City find(String name) {
-        return findHelp(root, name);
-    }
+// /**
+// * Finds a city by its name.
+// *
+// * @param name
+// * The name of the city to find.
+// * @return The City object if found, otherwise null.
+// */
+// public City find(String name) {
+// return findHelp(root, name);
+// }
 
 
     /**
@@ -179,30 +178,29 @@ public class BST {
         }
     }
 
-
-    /**
-     * Private helper method to assist in find method.
-     * 
-     * @param rt
-     *            root node
-     * @param name
-     *            name of city
-     * @return city found
-     */
-    private City findHelp(BSTNode rt, String name) {
-        if (rt == null) {
-            return null;
-        }
-        if (rt.getCity().getName().compareTo(name) > 0) {
-            return findHelp(rt.getLeft(), name);
-        }
-        else if (rt.getCity().getName().equals(name)) {
-            return rt.getCity();
-        }
-        else {
-            return findHelp(rt.getRight(), name);
-        }
-    }
+// /**
+// * Private helper method to assist in find method.
+// *
+// * @param rt
+// * root node
+// * @param name
+// * name of city
+// * @return city found
+// */
+// private City findHelp(BSTNode rt, String name) {
+// if (rt == null) {
+// return null;
+// }
+// if (rt.getCity().getName().compareTo(name) > 0) {
+// return findHelp(rt.getLeft(), name);
+// }
+// else if (rt.getCity().getName().equals(name)) {
+// return rt.getCity();
+// }
+// else {
+// return findHelp(rt.getRight(), name);
+// }
+// }
 
 
     /**

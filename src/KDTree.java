@@ -122,8 +122,8 @@ public class KDTree {
             return new BSTNode(city);
         }
 
-        int axis = level % 2;
-        if (axis == 0) { // Compare x-coordinates
+// int axis = level % 2;
+        if (level % 2 == 0) { // Compare x-coordinates
             if (city.getX() < rt.getCity().getX()) {
                 rt.setLeft(insertHelp(rt.getLeft(), city, level + 1));
             }

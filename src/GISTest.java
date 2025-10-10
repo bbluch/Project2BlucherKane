@@ -467,6 +467,7 @@ public class GISTest extends TestCase {
      * Also tests that inserting a city with duplicate coordinates fails.
      */
     public void testInsertAndInfoByCoord() {
+        assertFuzzyEquals("", it.debug());
         assertTrue(it.insert("Blacksburg", 10, 10));
         assertEquals("Blacksburg", it.info(10, 10));
         // Attempt to insert a city with the same coordinates
@@ -476,6 +477,7 @@ public class GISTest extends TestCase {
         // Check for a city that doesn't exist
         assertEquals("", it.info(20, 20));
     }
+
 
 // /**
 // * Tests the info(String name) method, especially handling multiple
@@ -525,5 +527,89 @@ public class GISTest extends TestCase {
 // + "3 D (45, 55)\n" + "2 E (50, 60)\n" + "0C (30, 40)\n";
 // assertFuzzyEquals(expectedDebug, it.debug());
 // }
+    /**
+     * Tests the find method's behavior at a level 0 (x-axis) split
+     * when the search coordinate is equal to the node's coordinate.
+     */
+    public void testFindOnXBoundary() {
+        // Root at (50, 50)
+        it.insert("Root", 50, 50);
+        // Left child (level 1, y-split)
+        it.insert("Left", 25, 75);
+        // Right child (level 1, y-split)
+        it.insert("Right", 75, 25);
+        // This city has the same X as the root, so it should be in the right
+        // subtree.
+        it.insert("Right-Target", 50, 60);
+
+        // A correct implementation will go right at the root when x=50.
+        // A mutant like `x <= rt.getCity().getX()` might go left and fail.
+        assertEquals("Right-Target", it.info(50, 60));
+    }
+
+
+    /**
+     * Tests the find method's behavior at a level 1 (y-axis) split
+     * when the search coordinate is equal to the node's coordinate.
+     */
+    public void testFindOnYBoundary() {
+        // Root at (50, 50)
+        it.insert("Root", 50, 50);
+        // Left child (level 1, y-split)
+        it.insert("Left", 25, 75);
+        // This city has the same Y as the left child, so it should be in its
+        // right subtree.
+        it.insert("Left-Right-Target", 20, 75);
+
+        // At the root (50,50), search for (20,75) goes LEFT.
+        // At node "Left" (25,75), it's a y-split. Since 75 == 75, it should go
+        // RIGHT.
+        // A mutant `y <= rt.getCity().getY()` might go left and fail.
+        assertEquals("Left-Right-Target", it.info(20, 75));
+    }
+
+
+    /**
+     * Tests finding a leaf node that is deep in the left side of the tree,
+     * forcing multiple "less than" comparisons.
+     */
+    public void testFindDeepLeftNode() {
+        it.insert("Root", 100, 100);
+        it.insert("L1", 50, 150); // Left of root (x-split)
+        it.insert("L2", 25, 125); // Left of L1 (y-split)
+        it.insert("L3-Target", 10, 175); // Left of L2 (x-split)
+
+        assertEquals("L3-Target", it.info(10, 175));
+    }
+
+
+    /**
+     * Tests finding a leaf node that is deep in the right side of the tree,
+     * forcing multiple "greater than or equal to" comparisons.
+     */
+    public void testFindDeepRightNode() {
+        it.insert("Root", 100, 100);
+        it.insert("R1", 150, 50); // Right of root (x-split)
+        it.insert("R2", 125, 75); // Right of R1 (y-split)
+        it.insert("R3-Target", 175, 25); // Right of R2 (x-split)
+
+        assertEquals("R3-Target", it.info(175, 25));
+    }
+
+
+    /**
+     * Tests searching for a city that does not exist but follows a valid path.
+     * This ensures the method correctly returns null at the end of a branch.
+     */
+    public void testFindNonExistentCity() {
+        it.insert("A", 100, 100);
+        it.insert("B", 50, 150);
+        it.insert("C", 150, 50);
+
+        // This path exists (left, then right), but the city is not there.
+        assertEquals("", it.info(75, 125));
+        // This path also exists (right, then left)
+        assertEquals("", it.info(125, 25));
+    }
 
 }

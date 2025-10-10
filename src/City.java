@@ -72,23 +72,22 @@ public class City {
         return name + " (" + x + ", " + y + ")";
     }
 
-
-    /**
-     * Checks if this city is equal to another object.
-     *
-     * @param obj
-     *            The object to compare with.
-     * @return True if the objects are equal, false otherwise.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        City city = (City)obj;
-        return x == city.x && y == city.y && name.equals(city.name);
-    }
+// /**
+// * Checks if this city is equal to another object.
+// *
+// * @param obj
+// * The object to compare with.
+// * @return True if the objects are equal, false otherwise.
+// */
+// @Override
+// public boolean equals(Object obj) {
+// if (this == obj) {
+// return true;
+// }
+// if (obj == null || getClass() != obj.getClass()) {
+// return false;
+// }
+// City city = (City)obj;
+// return x == city.x && y == city.y && name.equals(city.name);
+// }
 }

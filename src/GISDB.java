@@ -147,9 +147,9 @@ public class GISDB implements GIS {
     public String info(String name) {
         City[] cities = bst.findAll(name);
 
-        if (cities.length == 0) {
-            return "";
-        }
+// if (cities.length == 0) {
+// return "";
+// }
 
         String strFinal = "";
 
@@ -198,8 +198,8 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String debug() {
-        if (kd.size() == 0)
-            return "";
+//        if (kd.size() == 0)
+//            return "";
         return kd.getInOrderTraversal();
     }
 
@@ -216,8 +216,8 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String print() {
-        if (bst.size() == 0)
-            return "";
+// if (bst.size() == 0)
+// return "";
         return bst.getInOrderTraversal();
     }
 }
