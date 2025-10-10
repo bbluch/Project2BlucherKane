@@ -363,8 +363,6 @@ public class KDTree {
         return count;
     }
 
-    // Add this inside your KDTree.java class
-
 
     /**
      * Returns a string representation of the KD-Tree via an in-order traversal.
