@@ -344,34 +344,34 @@ public class KDTree {
         }
 
         // Recursively search the appropriate subtrees
-        if (pointValue < axisValue) {
-            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
-                results);
-            if (Math.abs(axisValue - pointValue) < radius) {
-                count += regionSearchHelp(rt.getRight(), x, y, radius, level
-                    + 1, results);
-            }
-        }
-        else {
-            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
-                results);
-            if (Math.abs(axisValue - pointValue) < radius) {
-                count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
-                    results);
-            }
-        }
-        
-//        if (pointValue - radius <= axisValue) {
+//        if (pointValue < axisValue) {
 //            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
 //                results);
+//            if (Math.abs(axisValue - pointValue) < radius) {
+//                count += regionSearchHelp(rt.getRight(), x, y, radius, level
+//                    + 1, results);
+//            }
 //        }
-//        
-//        // Check the right subtree
-//        if (pointValue + radius >= axisValue) {
+//        else {
 //            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
 //                results);
+//            if (Math.abs(axisValue - pointValue) < radius) {
+//                count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
+//                    results);
+//            }
 //        }
-//
+        
+        if (pointValue - radius < axisValue) {
+            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
+                results);
+        }
+        
+        // Check the right subtree
+        if (pointValue + radius >= axisValue) {
+            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
+                results);
+        }
+
         return count;
     }
 
