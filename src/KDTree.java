@@ -53,13 +53,18 @@ public class KDTree {
      *            The y-coordinate of the city to remove.
      * @return The removed city, or null if not found.
      */
-    public City remove(int x, int y) {
-        City temp = find(x, y);
-        if (temp != null) {
-            root = removeHelp(root, x, y, 0);
-            setNodeCount(size() - 1);
+    public SearchResult remove(int x, int y) {
+        SearchResult sr = new SearchResult();
+        root = removeHelp(root, x, y, 0, sr);
+        if (sr.getResults().length > 0) {
+            nodeCount--;
         }
-        return temp;
+// City temp = find(x, y);
+// if (temp != null) {
+// root = removeHelp(root, x, y, 0);
+// setNodeCount(size() - 1);
+// }
+        return sr;
     }
 
 
@@ -89,21 +94,27 @@ public class KDTree {
      *            The radius of the search circle.
      * @return An array of cities within the specified region.
      */
-    public String regionSearch(int x, int y, int radius) {
-        SearchResult results = new SearchResult();
-        int count = regionSearchHelp(root, x, y, radius, 0, results);
-        String strFinal = "";
-        City[] cities = results.getResults();
+// public String regionSearch(int x, int y, int radius) {
+// SearchResult results = new SearchResult();
+// int count = regionSearchHelp(root, x, y, radius, 0, results);
+// String strFinal = "";
+// City[] cities = results.getResults();
+//
+// for (int i = 0; i < cities.length; i++) {
+// strFinal = strFinal + cities[i].getName();
+// strFinal = strFinal + " (" + cities[i].getX();
+// strFinal = strFinal + ", " + cities[i].getY() + ")\n";
+// }
+//
+// strFinal = strFinal + count;
+// return strFinal;
+//
+// }
 
-        for (int i = 0; i < cities.length; i++) {
-            strFinal = strFinal + cities[i].getName();
-            strFinal = strFinal + " (" + cities[i].getX();
-            strFinal = strFinal + ", " + cities[i].getY() + ")\n";
-        }
-
-        strFinal = strFinal + count;
-        return strFinal;
-
+    public SearchResult regionSearch(int x, int y, int radius) {
+        SearchResult result = new SearchResult();
+        regionSearchHelp(root, x, y, radius, 0, result);
+        return result;
     }
 
 
@@ -121,12 +132,12 @@ public class KDTree {
      */
     public String regionSearch2(int x, int y) {
         SearchResult results = new SearchResult();
-        int count = regionSearchHelp(root, x, y, 0, 0, results);
+        regionSearchHelp(root, x, y, 0, 0, results);
         String strFinal = "";
         City[] cities = results.getResults();
         // count++;
 
-        strFinal = strFinal + count + "\n" + cities[0].getName() + "\n";
+        strFinal = strFinal + results.count + "\n" + cities[0].getName() + "\n";
 // for (int i = 0; i < cities.length; i++) {
 // strFinal = strFinal + cities[i].getName() + "\n";
 // }
@@ -147,27 +158,42 @@ public class KDTree {
      *            The level of tree
      * @return node being inserted
      */
-    private BSTNode insertHelp(BSTNode rt, City city, int level) {
-        if (rt == null) {
-            return new BSTNode(city);
-        }
+// private BSTNode insertHelp(BSTNode rt, City city, int level) {
+// if (rt == null) {
+// return new BSTNode(city);
+// }
+//
+//// int axis = level % 2;
+// if (level % 2 == 0) { // Compare x-coordinates
+// if (city.getX() < rt.getCity().getX()) {
+// rt.setLeft(insertHelp(rt.getLeft(), city, level + 1));
+// }
+// else {
+// rt.setRight(insertHelp(rt.getRight(), city, level + 1));
+// }
+// }
+// else { // Compare y-coordinates
+// if (city.getY() < rt.getCity().getY()) {
+// rt.setLeft(insertHelp(rt.getLeft(), city, level + 1));
+// }
+// else {
+// rt.setRight(insertHelp(rt.getRight(), city, level + 1));
+// }
+// }
+// return rt;
+// }
 
-// int axis = level % 2;
-        if (level % 2 == 0) { // Compare x-coordinates
-            if (city.getX() < rt.getCity().getX()) {
-                rt.setLeft(insertHelp(rt.getLeft(), city, level + 1));
-            }
-            else {
-                rt.setRight(insertHelp(rt.getRight(), city, level + 1));
-            }
+    private BSTNode insertHelp(BSTNode rt, City city, int level) {
+        if (rt == null)
+            return new BSTNode(city);
+        int axis = level % 2;
+        int cityCoord = (axis == 0) ? city.getX() : city.getY();
+        int nodeCoord = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
+        if (cityCoord < nodeCoord) {
+            rt.setLeft(insertHelp(rt.getLeft(), city, level + 1));
         }
-        else { // Compare y-coordinates
-            if (city.getY() < rt.getCity().getY()) {
-                rt.setLeft(insertHelp(rt.getLeft(), city, level + 1));
-            }
-            else {
-                rt.setRight(insertHelp(rt.getRight(), city, level + 1));
-            }
+        else {
+            rt.setRight(insertHelp(rt.getRight(), city, level + 1));
         }
         return rt;
     }
@@ -186,25 +212,39 @@ public class KDTree {
      *            The level of the tree
      * @return the city if found, null if not
      */
-    private City findHelp(BSTNode rt, int x, int y, int level) {
-        if (rt == null) {
-            return null;
-        }
-        if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
-            return rt.getCity();
-        }
+// private City findHelp(BSTNode rt, int x, int y, int level) {
+// if (rt == null) {
+// return null;
+// }
+// if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
+// return rt.getCity();
+// }
+//
+// int axis = level % 2;
+// if (axis == 0) { // Compare x-coordinates
+// if (x < rt.getCity().getX()) {
+// return findHelp(rt.getLeft(), x, y, level + 1);
+// }
+// return findHelp(rt.getRight(), x, y, level + 1);
+// } // Compare y-coordinates
+// if (y < rt.getCity().getY()) {
+// return findHelp(rt.getLeft(), x, y, level + 1);
+// }
+//
+// return findHelp(rt.getRight(), x, y, level + 1);
+// }
 
+    private City findHelp(BSTNode rt, int x, int y, int level) {
+        if (rt == null)
+            return null;
+        if (rt.getCity().getX() == x && rt.getCity().getY() == y)
+            return rt.getCity();
         int axis = level % 2;
-        if (axis == 0) { // Compare x-coordinates
-            if (x < rt.getCity().getX()) {
-                return findHelp(rt.getLeft(), x, y, level + 1);
-            }
-            return findHelp(rt.getRight(), x, y, level + 1);
-        } // Compare y-coordinates
-        if (y < rt.getCity().getY()) {
+        int pointCoord = (axis == 0) ? x : y;
+        int nodeCoord = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
+        if (pointCoord < nodeCoord) {
             return findHelp(rt.getLeft(), x, y, level + 1);
         }
-
         return findHelp(rt.getRight(), x, y, level + 1);
     }
 
@@ -222,47 +262,97 @@ public class KDTree {
      *            The level of the tree
      * @return node being removed, null if not found
      */
-    private BSTNode removeHelp(BSTNode rt, int x, int y, int level) {
-        if (rt == null) {
+// private BSTNode removeHelp(BSTNode rt, int x, int y, int level) {
+// if (rt == null) {
+// return null;
+// }
+// int axis = level % 2;
+// int compare;
+// SearchResult sr = new SearchResult();
+//
+// if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
+// if (rt.getRight() != null) {
+// City min = findMin(rt.getRight(), axis, level + 1);
+// rt.setCity(min);
+// rt.setRight(removeHelp(rt.getRight(), min.getX(), min.getY(),
+// level + 1));
+// }
+// else if (rt.getLeft() != null) {
+// City min = findMin(rt.getLeft(), axis, level + 1);
+// rt.setCity(min);
+// rt.setRight(removeHelp(rt.getLeft(), min.getX(), min.getY(),
+// level + 1));
+// rt.setLeft(null); // The left subtree is now empty
+// }
+// else { // Leaf node
+// return null;
+// }
+// return rt;
+// }
+//
+// if (axis == 0) {
+// compare = x - rt.getCity().getX();
+// }
+// else {
+// compare = y - rt.getCity().getY();
+// }
+//
+// if (compare < 0) {
+// rt.setLeft(removeHelp(rt.getLeft(), x, y, level + 1));
+//
+// }
+// else {
+// rt.setRight(removeHelp(rt.getRight(), x, y, level + 1));
+// }
+//
+// return rt;
+// }
+
+    private BSTNode removeHelp(
+        BSTNode rt,
+        int x,
+        int y,
+        int level,
+        SearchResult result) {
+        if (rt == null)
             return null;
-        }
+        result.count++;
+
         int axis = level % 2;
-        int compare;
 
         if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
+            result.add(rt.getCity());
             if (rt.getRight() != null) {
-                City min = findMin(rt.getRight(), axis, level + 1);
-                rt.setCity(min);
-                rt.setRight(removeHelp(rt.getRight(), min.getX(), min.getY(),
-                    level + 1));
+                BSTNode minNode = findMin(rt.getRight(), axis, level + 1,
+                    result);
+                rt.setCity(minNode.getCity());
+                rt.setRight(removeHelp(rt.getRight(), minNode.getCity().getX(),
+                    minNode.getCity().getY(), level + 1, result));
             }
             else if (rt.getLeft() != null) {
-                City min = findMin(rt.getLeft(), axis, level + 1);
-                rt.setCity(min);
-                rt.setRight(removeHelp(rt.getLeft(), min.getX(), min.getY(),
-                    level + 1));
-                rt.setLeft(null); // The left subtree is now empty
+                BSTNode minNode = findMin(rt.getLeft(), axis, level + 1,
+                    result);
+                rt.setCity(minNode.getCity());
+                rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
+                    minNode.getCity().getY(), level + 1, result));
+                rt.setLeft(null);
             }
-            else { // Leaf node
+            else {
                 return null;
             }
-            return rt;
-        }
-
-        if (axis == 0) {
-            compare = x - rt.getCity().getX();
         }
         else {
-            compare = y - rt.getCity().getY();
+            int pointCoord = (axis == 0) ? x : y;
+            int nodeCoord = (axis == 0)
+                ? rt.getCity().getX()
+                : rt.getCity().getY();
+            if (pointCoord < nodeCoord) {
+                rt.setLeft(removeHelp(rt.getLeft(), x, y, level + 1, result));
+            }
+            else {
+                rt.setRight(removeHelp(rt.getRight(), x, y, level + 1, result));
+            }
         }
-
-        if (compare < 0) {
-            rt.setLeft(removeHelp(rt.getLeft(), x, y, level + 1));
-        }
-        else {
-            rt.setRight(removeHelp(rt.getRight(), x, y, level + 1));
-        }
-
         return rt;
     }
 
@@ -278,30 +368,29 @@ public class KDTree {
      *            The level of the tree
      * @return The city with minimum value
      */
-    private City findMin(BSTNode rt, int axis, int level) {
-        if (rt == null) {
+    private BSTNode findMin(
+        BSTNode rt,
+        int axis,
+        int level,
+        SearchResult result) {
+        if (rt == null)
             return null;
-        }
-
+        result.count++;
         int currentAxis = level % 2;
-
         if (currentAxis == axis) {
-            if (rt.getLeft() == null) {
-                return rt.getCity();
-            }
-            return findMin(rt.getLeft(), axis, level + 1);
+            return (rt.getLeft() == null)
+                ? rt
+                : findMin(rt.getLeft(), axis, level + 1, result);
         }
-        City leftMin = findMin(rt.getLeft(), axis, level + 1);
-        City rightMin = findMin(rt.getRight(), axis, level + 1);
-        City rootCity = rt.getCity();
-
-        City min = rootCity;
-        if (leftMin != null && compareCities(leftMin, min, axis) < 0) {
+        BSTNode leftMin = findMin(rt.getLeft(), axis, level + 1, result);
+        BSTNode rightMin = findMin(rt.getRight(), axis, level + 1, result);
+        BSTNode min = rt;
+        if (leftMin != null && compareCities(leftMin.getCity(), min.getCity(),
+            axis) < 0)
             min = leftMin;
-        }
-        if (rightMin != null && compareCities(rightMin, min, axis) < 0) {
+        if (rightMin != null && compareCities(rightMin.getCity(), min.getCity(),
+            axis) < 0)
             min = rightMin;
-        }
         return min;
     }
 
@@ -434,79 +523,72 @@ public class KDTree {
      * @return int
      *         number of nodes visited
      */
-    private int regionSearchHelp(
+// private int regionSearchHelp(
+// BSTNode rt,
+// int x,
+// int y,
+// int radius,
+// int level,
+// SearchResult results) {
+// if (rt == null) {
+// return 0;
+// }
+//
+// int count = 1;
+// // Check if the current city is within the radius
+// double distance = Math.sqrt(Math.pow(rt.getCity().getX() - x, 2) + Math
+// .pow(rt.getCity().getY() - y, 2));
+// if (distance <= radius) {
+// results.add(rt.getCity());
+// }
+// int axis = level % 2;
+// int pointValue = (axis == 0) ? x : y;
+// int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
+//
+// // Check if the search circle intersects with the "left" (or "lower")
+// // subtree region.
+// // The circle intersects if the search point's coordinate is within the
+// // radius of the
+// // splitting plane on the left side.
+// if (pointValue < axisValue + radius) {
+// count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
+// results);
+// }
+//
+// // Check if the search circle intersects with the "right" (or "upper")
+// // subtree region.
+// // The circle intersects if the search point's coordinate is within the
+// // radius of the
+// // splitting plane on the right side.
+// if (pointValue > axisValue - radius) {
+// count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
+// results);
+// }
+//
+// return count;
+
+    private void regionSearchHelp(
         BSTNode rt,
         int x,
         int y,
         int radius,
         int level,
-        SearchResult results) {
-        if (rt == null) {
-            return 0;
-        }
-
-        int count = 1;
-        // Check if the current city is within the radius
+        SearchResult result) {
+        if (rt == null)
+            return;
+        result.count++;
         double distance = Math.sqrt(Math.pow(rt.getCity().getX() - x, 2) + Math
             .pow(rt.getCity().getY() - y, 2));
-        if (distance <= radius) {
-            results.add(rt.getCity());
-        }
+        if (distance <= radius)
+            result.add(rt.getCity());
         int axis = level % 2;
         int pointValue = (axis == 0) ? x : y;
         int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
-
-        // Check if the search circle intersects with the "left" (or "lower")
-        // subtree region.
-        // The circle intersects if the search point's coordinate is within the
-        // radius of the
-        // splitting plane on the left side.
-        if (pointValue < axisValue + radius) {
-            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
-                results);
-        }
-
-        // Check if the search circle intersects with the "right" (or "upper")
-        // subtree region.
-        // The circle intersects if the search point's coordinate is within the
-        // radius of the
-        // splitting plane on the right side.
-        if (pointValue > axisValue - radius) {
-            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
-                results);
-        }
-
-        return count;
-
-// int axis = level % 2;
-// int axisValue;
-// int pointValue;
-//
-// if (axis == 0) {
-// axisValue = rt.getCity().getX();
-// pointValue = x;
-// }
-// else {
-// axisValue = rt.getCity().getY();
-// pointValue = y;
-// }
-//
-//
-// if (pointValue - radius < axisValue) {
-// count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
-// results);
-// }
-//
-// // Check the right subtree
-// if (pointValue + radius >= axisValue) {
-// count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
-// results);
-// }
-//
-//
-// return count;
+        if (pointValue < axisValue + radius)
+            regionSearchHelp(rt.getLeft(), x, y, radius, level + 1, result);
+        if (pointValue > axisValue - radius)
+            regionSearchHelp(rt.getRight(), x, y, radius, level + 1, result);
     }
-
 
     /**
      * Returns a string representation of the KD-Tree via an in-order traversal.

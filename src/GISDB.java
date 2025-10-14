@@ -93,13 +93,24 @@ public class GISDB implements GIS {
      *         was deleted).
      */
     public String delete(int x, int y) {
-        City found = kd.find(x, y);
-        if (found == null)
+// City found = kd.find(x, y);
+// if (found == null)
+// return "";
+// String str = kd.regionSearch2(x, y);
+// bst.remove(found.getName());
+// kd.remove(x, y);
+// return str;
+        if (x < 0 || x > MAXCOORD || y < 0 || y > MAXCOORD) {
             return "";
-        String str = kd.regionSearch2(x, y);
-        bst.remove(found.getName());
-        kd.remove(x, y);
-        return str;
+        }
+        SearchResult result = kd.remove(x, y);
+        City[] removedCities = result.getResults();
+
+        if (removedCities.length > 0) {
+            bst.remove(removedCities[0].getName());
+            return result.count + "\n" + removedCities[0].getName();
+        }
+        return "";
     }
 
 
@@ -197,9 +208,23 @@ public class GISDB implements GIS {
      *         If k-d tree is empty, the number of nodes visited is zero.
      */
     public String search(int x, int y, int radius) {
-        if (radius < 0)
+// if (radius < 0)
+// return "";
+// return kd.regionSearch(x, y, radius);
+        if (radius < 0) {
             return "";
-        return kd.regionSearch(x, y, radius);
+        }
+        if (kd.size() == 0) {
+            return "0";
+        }
+        SearchResult result = kd.regionSearch(x, y, radius);
+        StringBuilder sb = new StringBuilder();
+        City[] cities = result.getResults();
+        for (City city : cities) {
+            sb.append(city.toString()).append("\n");
+        }
+        sb.append(result.count);
+        return sb.toString();
     }
 
 
