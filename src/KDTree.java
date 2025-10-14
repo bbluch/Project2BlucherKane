@@ -313,6 +313,8 @@ public class KDTree {
      *            The level of the tree
      * @param results
      *            The results of the region search
+     * @return int
+     *         number of nodes visited
      */
     private int regionSearchHelp(
         BSTNode rt,
