@@ -13,14 +13,12 @@ public class BST {
 
     // ~Public Methods ........................................................
     private BSTNode root;
-    private int nodeCount;
 
     /**
      * Constructs an empty BST.
      */
     public BST() {
         root = null;
-        nodeCount = 0;
     }
 
 
@@ -29,7 +27,6 @@ public class BST {
      */
     public void clear() {
         root = null;
-        nodeCount = 0;
     }
 
 
@@ -76,9 +73,6 @@ public class BST {
         }
         City[] removed = new City[1];
         root = removeHelp(root, city.getName());
-        if (removed[0] != null) {
-            nodeCount--;
-        }
         return removed[0];
     }
     
@@ -120,13 +114,12 @@ public class BST {
     
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
-     * @param city
+     * Insert a city into the BST.
+     * @param city The city being inserted
      */
     // Make sure your nodeCount is updated in insert()
     public void insert(City city) {
         root = insertHelp(root, city);
-        nodeCount++; // Ensure this line is active
     }
 
     /**
@@ -140,7 +133,6 @@ public class BST {
         City temp = find(name);
         if (temp != null) {
             root = removeHelp(root, name);
-            nodeCount--;
         }
         return temp;
     }
@@ -199,15 +191,6 @@ public class BST {
         return findHelp(root, name);
     }
 
-
-    /**
-     * Gets the number of nodes in the tree.
-     *
-     * @return The node count.
-     */
-    public int size() {
-        return nodeCount;
-    }
 
 
     /**

@@ -8,10 +8,10 @@
 public class SearchResult {
     // ~ Fields ................................................................
     private City[] cities;
+    private int count;
     /**
-     * Count for nodes visited.
+     * Count for Nodes Visited.
      */
-    public int count;
     public int nodesVisited;
 
     // ~ Constructors ..........................................................

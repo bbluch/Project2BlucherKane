@@ -152,11 +152,11 @@ public class GISTest extends TestCase {
         assertFuzzyEquals("L (101, 150)\nL (11, 500)", it.info("L"));
         assertFuzzyEquals("L", it.info(101, 150));
         assertFuzzyEquals("Tacoma (1000, 100)", it.delete("Tacoma"));
-        //assertFuzzyEquals("3\nChicago", it.delete(100, 150));
-//        assertFuzzyEquals("L (101, 150)\n" + "Atlanta (10, 500)\n"
-//            + "Baltimore (0, 300)\n" + "Washington (5, 350)\n"
-//            + "L (11, 500)\n5", it.search(0, 0, 2000));
-        //assertFuzzyEquals("Baltimore (0, 300)\n4", it.search(0, 300, 0));
+        assertFuzzyEquals("3\nChicago", it.delete(100, 150));
+        assertFuzzyEquals("L (101, 150)\n" + "Atlanta (10, 500)\n"
+            + "Baltimore (0, 300)\n" + "Washington (5, 350)\n"
+            + "L (11, 500)\n5", it.search(0, 0, 2000));
+        assertFuzzyEquals("Baltimore (0, 300)\n3", it.search(0, 300, 0));
     }
 
 
@@ -478,55 +478,6 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(20, 20));
     }
 
-// /**
-// * Tests the info(String name) method, especially handling multiple
-// * cities with the same name.
-// */
-// public void testInfoByName() {
-// it.insert("Springfield", 70, 10);
-// it.insert("Springfield", 20, 50);
-// it.insert("Shelbyville", 90, 30);
-//
-// String expected = "(20, 50)\n(70, 10)";
-// // The order may vary depending on BST implementation,
-// // so we check for both possibilities.
-// String alternativeExpected = "(70, 10)\n(20, 50)";
-//
-// String actual = it.info("Springfield");
-// assertTrue("The output for info(\"Springfield\") was not correct.",
-// actual.equals(expected) || actual.equals(alternativeExpected));
-//
-// // Test for a name that does not exist
-// assertEquals("", it.info("Ogdenville"));
-// }
-//
-//
-// /**
-// * Tests the print() and debug() methods for correct formatting and
-// * ordering.
-// */
-// public void testPrintAndDebug() {
-// // Test on an empty database first
-// assertEquals("", it.print());
-// assertEquals("", it.debug());
-//
-// it.insert("C", 30, 40);
-// it.insert("A", 10, 20);
-// it.insert("E", 50, 60);
-// it.insert("B", 25, 35);
-// it.insert("D", 45, 55);
-//
-// // Expected BST output (alphabetical order)
-// String expectedPrint = "1 A (10, 20)\n" + "2 B (25, 35)\n"
-// + "0C (30, 40)\n" + "2 D (45, 55)\n" + "1 E (50, 60)\n";
-// assertFuzzyEquals(expectedPrint, it.print());
-//
-// // Expected KD-Tree output (in-order traversal based on coordinates)
-// String expectedDebug = "2 B (25, 35)\n" + "1 A (10, 20)\n"
-// + "3 D (45, 55)\n" + "2 E (50, 60)\n" + "0C (30, 40)\n";
-// assertFuzzyEquals(expectedDebug, it.debug());
-// }
-
 
     /**
      * Tests the find method's behavior at a level 0 (x-axis) split
@@ -639,7 +590,7 @@ public class GISTest extends TestCase {
 
         // Verify the node is gone from both trees.
         assertEquals("", it.info(25, 75));
-        //assertNull(it.bst.find("LeafToDelete"));
+        // assertNull(it.bst.find("LeafToDelete"));
     }
 
 
@@ -647,24 +598,25 @@ public class GISTest extends TestCase {
      * Tests deleting the root node from the KD-Tree, which has two children.
      * This is a complex case that tests the findMin and replacement logic.
      */
-//    public void testDeleteByCoordRootNode() {
-//        it.insert("Root", 100, 100);
-//        it.insert("LeftChild", 50, 150);
-//        it.insert("RightChild", 150, 50);
-//        it.insert("Successor", 120, 70); // This should become the new root.
-//
-//        String result = it.delete(100, 100);
-//        assertFuzzyEquals("5\nRoot", result);
-//
-//        // Verify the root is gone and its replacement is in place.
-//        assertEquals("", it.info(100, 100));
-//        assertEquals("Successor", it.info(120, 70));
-//
-//        // Check the BST to ensure the original root was removed.
-//        // We expect to find other cities with the name "Root" if they existed,
-//        // but in this case, it was the only one.
-//        //assertNull(it.bst.find("Root"));
-//    }
+    public void testDeleteByCoordRootNode() {
+        it.insert("Root", 100, 100);
+        it.insert("LeftChild", 50, 150);
+        it.insert("RightChild", 150, 50);
+        it.insert("Successor", 120, 70); // This should become the new root.
+
+        String result = it.delete(100, 100);
+        assertFuzzyEquals("5\nRoot", result);
+
+        // Verify the root is gone and its replacement is in place.
+        assertEquals("", it.info(100, 100));
+        assertEquals("Successor", it.info(120, 70));
+
+        // Check the BST to ensure the original root was removed.
+        // We expect to find other cities with the name
+        // Root if they existed,
+        // but in this case, it was the only one.
+        // assertNull(it.bst.find("Root"));
+    }
 
 
     /**
@@ -688,7 +640,7 @@ public class GISTest extends TestCase {
 
         // Verify the city is gone from both data structures.
         assertEquals("", it.info(55, 66));
-        //assertNull(it.bst.find("ToDelete"));
+        // assertNull(it.bst.find("ToDelete"));
         // Ensure the other city remains.
         assertEquals("AnotherCity", it.info(1, 1));
     }
@@ -721,7 +673,7 @@ public class GISTest extends TestCase {
         assertEquals("Other", it.info(50, 50));
 
         // Verify no cities named "Duplicate" remain in the BST.
-        //assertNull(it.bst.find("Duplicate"));
+        // assertNull(it.bst.find("Duplicate"));
     }
 
 }

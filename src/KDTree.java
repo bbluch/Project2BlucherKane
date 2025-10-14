@@ -137,7 +137,7 @@ public class KDTree {
         City[] cities = results.getResults();
         // count++;
 
-        strFinal = strFinal + results.count + "\n" + cities[0].getName() + "\n";
+        strFinal = strFinal + results.nodesVisited + "\n" + cities[0].getName() + "\n";
 // for (int i = 0; i < cities.length; i++) {
 // strFinal = strFinal + cities[i].getName() + "\n";
 // }
