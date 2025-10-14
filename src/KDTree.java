@@ -589,7 +589,7 @@ public class KDTree {
         int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
         if (pointValue < axisValue + radius)
             regionSearchHelp(rt.getLeft(), x, y, radius, level + 1, result);
-        if (pointValue > axisValue - radius)
+        if (pointValue >= axisValue - radius)
             regionSearchHelp(rt.getRight(), x, y, radius, level + 1, result);
     }
 
