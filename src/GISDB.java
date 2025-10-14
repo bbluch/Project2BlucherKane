@@ -94,9 +94,11 @@ public class GISDB implements GIS {
      */
     public String delete(int x, int y) {
         City found = kd.find(x, y);
+        String str = kd.regionSearch2(x, y);
         if (found != null) {
             bst.remove(found.getName());
             kd.remove(x, y);
+            return str;
         }
         return "";
     }
@@ -125,7 +127,8 @@ public class GISDB implements GIS {
             strFinal = strFinal + cities[i].getName() + " ";
             strFinal = strFinal + "(" + cities[i].getX();
             strFinal = strFinal + ", " + cities[i].getY() + ")\n";
-            bst.remove(cities[i].getName());        
+            bst.remove(cities[i].getName()); 
+            kd.remove(cities[i].getX(), cities[i].getY());
         }
         return strFinal.trim();
     }

@@ -105,6 +105,35 @@ public class KDTree {
         return strFinal;
 
     }
+    
+    /**
+     * Performs a region search to find all cities within a given radius of a
+     * point.
+     *
+     * @param x
+     *            The x-coordinate of the center of the search circle.
+     * @param y
+     *            The y-coordinate of the center of the search circle.
+     * @param radius
+     *            The radius of the search circle.
+     * @return An array of cities within the specified region.
+     */
+    public String regionSearch2(int x, int y) {
+        SearchResult results = new SearchResult();
+        int count = regionSearchHelp(root, x, y, 0, 0, results);
+        String strFinal = "";
+        City[] cities = results.getResults();
+
+        strFinal = strFinal + count;
+        for (int i = 0; i < cities.length; i++) {
+            strFinal = strFinal + cities[i].getName();
+            strFinal = strFinal + " (" + cities[i].getX();
+            strFinal = strFinal + ", " + cities[i].getY() + ")\n";
+        }
+
+        return strFinal;
+
+    }
 
 
     /**
