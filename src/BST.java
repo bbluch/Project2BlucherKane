@@ -70,17 +70,17 @@ public class BST {
      * @param city The city to remove.
      * @return The removed City object, or null if not found.
      */
-//    public City remove(City city) {
-//        if (city == null) {
-//            return null;
-//        }
-//        City[] removed = new City[1];
-//        root = removeHelp(root, city, removed);
-//        if (removed[0] != null) {
-//            nodeCount--;
-//        }
-//        return removed[0];
-//    }
+    public City remove(City city) {
+        if (city == null) {
+            return null;
+        }
+        City[] removed = new City[1];
+        root = removeHelp(root, city.getName());
+        if (removed[0] != null) {
+            nodeCount--;
+        }
+        return removed[0];
+    }
     
     // Add this new helper method to BST.java
 //    private BSTNode removeHelp(BSTNode rt, City city, City[] removed) {

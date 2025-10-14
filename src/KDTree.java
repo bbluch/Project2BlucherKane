@@ -58,14 +58,13 @@ public class KDTree {
         root = removeHelp(root, x, y, 0, sr);
         if (sr.getResults().length > 0) {
             nodeCount--;
-            return sr;
         }
 // City temp = find(x, y);
 // if (temp != null) {
 // root = removeHelp(root, x, y, 0);
 // setNodeCount(size() - 1);
 // }
-        return null;
+        return sr;
     }
 
 
@@ -317,21 +316,21 @@ public class KDTree {
         SearchResult result) {
         if (rt == null)
             return null;
-        result.count++;
+        result.nodesVisited++;
 
         int axis = level % 2;
 
         if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
             result.add(rt.getCity());
             if (rt.getRight() != null) {
-                BSTNode minNode = findMin(rt.getRight(), axis, level + 1,
+                BSTNode minNode = findMinNode(rt.getRight(), axis, level + 1,
                     result);
                 rt.setCity(minNode.getCity());
                 rt.setRight(removeHelp(rt.getRight(), minNode.getCity().getX(),
                     minNode.getCity().getY(), level + 1, result));
             }
             else if (rt.getLeft() != null) {
-                BSTNode minNode = findMin(rt.getLeft(), axis, level + 1,
+                BSTNode minNode = findMinNode(rt.getLeft(), axis, level + 1,
                     result);
                 rt.setCity(minNode.getCity());
                 rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
@@ -369,29 +368,34 @@ public class KDTree {
      *            The level of the tree
      * @return The city with minimum value
      */
-    private BSTNode findMin(
+    private BSTNode findMinNode(
         BSTNode rt,
         int axis,
         int level,
         SearchResult result) {
         if (rt == null)
             return null;
-        result.count++;
+        result.nodesVisited++; // Count node visit in findMin as well
+
         int currentAxis = level % 2;
         if (currentAxis == axis) {
             return (rt.getLeft() == null)
                 ? rt
-                : findMin(rt.getLeft(), axis, level + 1, result);
+                : findMinNode(rt.getLeft(), axis, level + 1, result);
         }
-        BSTNode leftMin = findMin(rt.getLeft(), axis, level + 1, result);
-        BSTNode rightMin = findMin(rt.getRight(), axis, level + 1, result);
+
+        BSTNode leftMin = findMinNode(rt.getLeft(), axis, level + 1, result);
+        BSTNode rightMin = findMinNode(rt.getRight(), axis, level + 1, result);
         BSTNode min = rt;
+
         if (leftMin != null && compareCities(leftMin.getCity(), min.getCity(),
-            axis) < 0)
+            axis) < 0) {
             min = leftMin;
+        }
         if (rightMin != null && compareCities(rightMin.getCity(), min.getCity(),
-            axis) < 0)
+            axis) < 0) {
             min = rightMin;
+        }
         return min;
     }
 
@@ -577,7 +581,7 @@ public class KDTree {
         SearchResult result) {
         if (rt == null)
             return;
-        result.count++;
+        result.nodesVisited++;
         double distance = Math.sqrt(Math.pow(rt.getCity().getX() - x, 2) + Math
             .pow(rt.getCity().getY() - y, 2));
         if (distance <= radius)
@@ -590,6 +594,7 @@ public class KDTree {
         if (pointValue > axisValue - radius)
             regionSearchHelp(rt.getRight(), x, y, radius, level + 1, result);
     }
+
 
     /**
      * Returns a string representation of the KD-Tree via an in-order traversal.

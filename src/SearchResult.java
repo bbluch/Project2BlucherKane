@@ -12,6 +12,7 @@ public class SearchResult {
      * Count for nodes visited.
      */
     public int count;
+    public int nodesVisited;
 
     // ~ Constructors ..........................................................
 
@@ -23,6 +24,7 @@ public class SearchResult {
     SearchResult() {
         cities = new City[10]; // Initial capacity
         count = 0;
+        nodesVisited = 0;
     }
 
 

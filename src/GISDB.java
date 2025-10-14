@@ -100,15 +100,29 @@ public class GISDB implements GIS {
 // bst.remove(found.getName());
 // kd.remove(x, y);
 // return str;
-        if (x < 0 || x > MAXCOORD || y < 0 || y > MAXCOORD) {
-            return "";
-        }
+// if (x < 0 || x > MAXCOORD || y < 0 || y > MAXCOORD) {
+// return "";
+// }
+// SearchResult result = kd.remove(x, y);
+// if (result != null) {
+// City[] removedCities = result.getResults();
+// bst.remove(removedCities[0].getName());
+// return result.count + "\n" + removedCities[0].getName();
+// }
+// return "";
+// if (x < 0 || x > MAXCOORD || y < 0 || y > MAXCOORD) {
+// return "";
+// }
         SearchResult result = kd.remove(x, y);
-        if (result != null) {
-            City[] removedCities = result.getResults();
-            bst.remove(removedCities[0].getName());
-            return result.count + "\n" + removedCities[0].getName();
+        City[] removedCities = result.getResults();
+
+        // This check prevents the NullPointerException
+        if (removedCities.length > 0) {
+            bst.remove(removedCities[0]);
+            return result.nodesVisited + "\n" + removedCities[0].getName();
         }
+        
+        // Return "" if nothing was deleted, as required by the test.
         return "";
     }
 
@@ -132,16 +146,24 @@ public class GISDB implements GIS {
         if (cities.length == 0)
             return "";
 
-        String strFinal = "";
-
-        for (int i = 0; i < cities.length; i++) {
-            strFinal = strFinal + cities[i].getName() + " ";
-            strFinal = strFinal + "(" + cities[i].getX();
-            strFinal = strFinal + ", " + cities[i].getY() + ")\n";
-            bst.remove(cities[i].getName());
-            kd.remove(cities[i].getX(), cities[i].getY());
+// String strFinal = "";
+//
+// for (int i = 0; i < cities.length; i++) {
+// strFinal = strFinal + cities[i].getName() + " ";
+// strFinal = strFinal + "(" + cities[i].getX();
+// strFinal = strFinal + ", " + cities[i].getY() + ")\n";
+// bst.remove(cities[i].getName());
+// kd.remove(cities[i].getX(), cities[i].getY());
+// }
+// return strFinal.trim();
+        StringBuilder sb = new StringBuilder();
+        for (City city : cities) {
+            // Remove from both trees
+            bst.remove(city);
+            kd.remove(city.getX(), city.getY());
+            sb.append(city.toString()).append("\n");
         }
-        return strFinal.trim();
+        return sb.toString().trim();
     }
 
 
