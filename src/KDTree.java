@@ -58,13 +58,14 @@ public class KDTree {
         root = removeHelp(root, x, y, 0, sr);
         if (sr.getResults().length > 0) {
             nodeCount--;
+            return sr;
         }
 // City temp = find(x, y);
 // if (temp != null) {
 // root = removeHelp(root, x, y, 0);
 // setNodeCount(size() - 1);
 // }
-        return sr;
+        return null;
     }
 
 

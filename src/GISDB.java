@@ -104,9 +104,8 @@ public class GISDB implements GIS {
             return "";
         }
         SearchResult result = kd.remove(x, y);
-        City[] removedCities = result.getResults();
-
-        if (removedCities.length > 0) {
+        if (result != null) {
+            City[] removedCities = result.getResults();
             bst.remove(removedCities[0].getName());
             return result.count + "\n" + removedCities[0].getName();
         }
