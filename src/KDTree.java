@@ -126,8 +126,6 @@ public class KDTree {
      *            The x-coordinate of the center of the search circle.
      * @param y
      *            The y-coordinate of the center of the search circle.
-     * @param radius
-     *            The radius of the search circle.
      * @return An array of cities within the specified region.
      */
     public String regionSearch2(int x, int y) {
@@ -137,7 +135,7 @@ public class KDTree {
         City[] cities = results.getResults();
         // count++;
 
-        strFinal = strFinal + results.nodesVisited + "\n" + cities[0].getName() + "\n";
+        strFinal += results.nodesVisited + "\n" + cities[0].getName() + "\n";
 // for (int i = 0; i < cities.length; i++) {
 // strFinal = strFinal + cities[i].getName() + "\n";
 // }
