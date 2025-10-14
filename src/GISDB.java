@@ -198,8 +198,8 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String debug() {
-//        if (kd.size() == 0)
-//            return "";
+// if (kd.size() == 0)
+// return "";
         return kd.getInOrderTraversal();
     }
 
