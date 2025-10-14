@@ -359,42 +359,42 @@ public class KDTree {
 //    }
 
 
-    private BSTNode findMinNode(BSTNode rt, int axis, int level) {
-        if (rt == null)
-            return null;
-
-        int currentAxis = level % 2;
-        if (currentAxis == axis) {
-            if (rt.getLeft() == null)
-                return rt;
-            return findMinNode(rt.getLeft(), axis, level + 1);
-        }
-
-        BSTNode leftMin = findMinNode(rt.getLeft(), axis, level + 1);
-        BSTNode rightMin = findMinNode(rt.getRight(), axis, level + 1);
-        BSTNode min = rt;
-
-        int minVal = (axis == 0) ? min.getCity().getX() : min.getCity().getY();
-
-        if (leftMin != null) {
-            int leftVal = (axis == 0)
-                ? leftMin.getCity().getX()
-                : leftMin.getCity().getY();
-            if (leftVal < minVal) {
-                min = leftMin;
-                minVal = leftVal;
-            }
-        }
-        if (rightMin != null) {
-            int rightVal = (axis == 0)
-                ? rightMin.getCity().getX()
-                : rightMin.getCity().getY();
-            if (rightVal < minVal) {
-                min = rightMin;
-            }
-        }
-        return min;
-    }
+//    private BSTNode findMinNode(BSTNode rt, int axis, int level) {
+//        if (rt == null)
+//            return null;
+//
+//        int currentAxis = level % 2;
+//        if (currentAxis == axis) {
+//            if (rt.getLeft() == null)
+//                return rt;
+//            return findMinNode(rt.getLeft(), axis, level + 1);
+//        }
+//
+//        BSTNode leftMin = findMinNode(rt.getLeft(), axis, level + 1);
+//        BSTNode rightMin = findMinNode(rt.getRight(), axis, level + 1);
+//        BSTNode min = rt;
+//
+//        int minVal = (axis == 0) ? min.getCity().getX() : min.getCity().getY();
+//
+//        if (leftMin != null) {
+//            int leftVal = (axis == 0)
+//                ? leftMin.getCity().getX()
+//                : leftMin.getCity().getY();
+//            if (leftVal < minVal) {
+//                min = leftMin;
+//                minVal = leftVal;
+//            }
+//        }
+//        if (rightMin != null) {
+//            int rightVal = (axis == 0)
+//                ? rightMin.getCity().getX()
+//                : rightMin.getCity().getY();
+//            if (rightVal < minVal) {
+//                min = rightMin;
+//            }
+//        }
+//        return min;
+//    }
 
 
     /**
