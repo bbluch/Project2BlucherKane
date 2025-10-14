@@ -96,7 +96,7 @@ public class GISDB implements GIS {
         City found = kd.find(x, y);
         if (found != null) {
             bst.remove(found.getName());
-            kd.remove(x, y);  
+            kd.remove(x, y);
         }
         return "";
     }
@@ -117,7 +117,16 @@ public class GISDB implements GIS {
      *         Print the empty string if no cites match.
      */
     public String delete(String name) {
-        return "";
+        City[] cities = bst.findAll(name);
+
+        String strFinal = "";
+
+        for (int i = 0; i < cities.length; i++) {
+            strFinal = strFinal + cities[i].getName() + " ";
+            strFinal = strFinal + "(" + cities[i].getX();
+            strFinal = strFinal + ", " + cities[i].getY() + ")\n";
+        }
+        return strFinal.trim();
     }
 
 
@@ -151,10 +160,6 @@ public class GISDB implements GIS {
      */
     public String info(String name) {
         City[] cities = bst.findAll(name);
-
-// if (cities.length == 0) {
-// return "";
-// }
 
         String strFinal = "";
 
@@ -203,8 +208,6 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String debug() {
-// if (kd.size() == 0)
-// return "";
         return kd.getInOrderTraversal();
     }
 
@@ -221,8 +224,6 @@ public class GISDB implements GIS {
      * @return String listing the cities as specified.
      */
     public String print() {
-// if (bst.size() == 0)
-// return "";
         return bst.getInOrderTraversal();
     }
 }
