@@ -306,57 +306,57 @@ public class KDTree {
     }
 
 
-    private BSTNode removeHelp(
-        BSTNode rt,
-        int x,
-        int y,
-        int level,
-        int[] visitedCount,
-        City[] removedCity) {
-        if (rt == null) {
-            return null;
-        }
-
-        visitedCount[0]++; // Count every node we visit.
-        int axis = level % 2;
-
-        if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
-            removedCity[0] = rt.getCity();
-            if (rt.getRight() != null) {
-                BSTNode minNode = findMinNode(rt.getRight(), axis, level + 1);
-                rt.setCity(minNode.getCity());
-                rt.setRight(removeHelp(rt.getRight(), minNode.getCity().getX(),
-                    minNode.getCity().getY(), level + 1, visitedCount,
-                    new City[1]));
-            }
-            else if (rt.getLeft() != null) {
-                BSTNode minNode = findMinNode(rt.getLeft(), axis, level + 1);
-                rt.setCity(minNode.getCity());
-                rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
-                    minNode.getCity().getY(), level + 1, visitedCount,
-                    new City[1]));
-                rt.setLeft(null);
-            }
-            else {
-                return null;
-            }
-        }
-        else {
-            int pointCoord = (axis == 0) ? x : y;
-            int nodeCoord = (axis == 0)
-                ? rt.getCity().getX()
-                : rt.getCity().getY();
-            if (pointCoord < nodeCoord) {
-                rt.setLeft(removeHelp(rt.getLeft(), x, y, level + 1,
-                    visitedCount, removedCity));
-            }
-            else {
-                rt.setRight(removeHelp(rt.getRight(), x, y, level + 1,
-                    visitedCount, removedCity));
-            }
-        }
-        return rt;
-    }
+//    private BSTNode removeHelp(
+//        BSTNode rt,
+//        int x,
+//        int y,
+//        int level,
+//        int[] visitedCount,
+//        City[] removedCity) {
+//        if (rt == null) {
+//            return null;
+//        }
+//
+//        visitedCount[0]++; // Count every node we visit.
+//        int axis = level % 2;
+//
+//        if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
+//            removedCity[0] = rt.getCity();
+//            if (rt.getRight() != null) {
+//                BSTNode minNode = findMinNode(rt.getRight(), axis, level + 1);
+//                rt.setCity(minNode.getCity());
+//                rt.setRight(removeHelp(rt.getRight(), minNode.getCity().getX(),
+//                    minNode.getCity().getY(), level + 1, visitedCount,
+//                    new City[1]));
+//            }
+//            else if (rt.getLeft() != null) {
+//                BSTNode minNode = findMinNode(rt.getLeft(), axis, level + 1);
+//                rt.setCity(minNode.getCity());
+//                rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
+//                    minNode.getCity().getY(), level + 1, visitedCount,
+//                    new City[1]));
+//                rt.setLeft(null);
+//            }
+//            else {
+//                return null;
+//            }
+//        }
+//        else {
+//            int pointCoord = (axis == 0) ? x : y;
+//            int nodeCoord = (axis == 0)
+//                ? rt.getCity().getX()
+//                : rt.getCity().getY();
+//            if (pointCoord < nodeCoord) {
+//                rt.setLeft(removeHelp(rt.getLeft(), x, y, level + 1,
+//                    visitedCount, removedCity));
+//            }
+//            else {
+//                rt.setRight(removeHelp(rt.getRight(), x, y, level + 1,
+//                    visitedCount, removedCity));
+//            }
+//        }
+//        return rt;
+//    }
 
 
     private BSTNode findMinNode(BSTNode rt, int axis, int level) {
