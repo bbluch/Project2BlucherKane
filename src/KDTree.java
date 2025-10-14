@@ -363,34 +363,55 @@ public class KDTree {
         if (distance <= radius) {
             results.add(rt.getCity());
         }
-
         int axis = level % 2;
-        int axisValue;
-        int pointValue;
+        int pointValue = (axis == 0) ? x : y;
+        int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
 
-        if (axis == 0) {
-            axisValue = rt.getCity().getX();
-            pointValue = x;
-        }
-        else {
-            axisValue = rt.getCity().getY();
-            pointValue = y;
-        }
-
-        
-        if (pointValue - radius < axisValue) {
+        // Check if the search circle intersects with the "left" (or "lower") subtree region.
+        // The circle intersects if the search point's coordinate is within the radius of the
+        // splitting plane on the left side.
+        if (pointValue < axisValue + radius) {
             count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
                 results);
         }
-        
-        // Check the right subtree
-        if (pointValue + radius >= axisValue) {
+
+        // Check if the search circle intersects with the "right" (or "upper") subtree region.
+        // The circle intersects if the search point's coordinate is within the radius of the
+        // splitting plane on the right side.
+        if (pointValue > axisValue - radius) {
             count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
                 results);
         }
 
-
         return count;
+
+//        int axis = level % 2;
+//        int axisValue;
+//        int pointValue;
+//
+//        if (axis == 0) {
+//            axisValue = rt.getCity().getX();
+//            pointValue = x;
+//        }
+//        else {
+//            axisValue = rt.getCity().getY();
+//            pointValue = y;
+//        }
+//
+//        
+//        if (pointValue - radius < axisValue) {
+//            count += regionSearchHelp(rt.getLeft(), x, y, radius, level + 1,
+//                results);
+//        }
+//        
+//        // Check the right subtree
+//        if (pointValue + radius >= axisValue) {
+//            count += regionSearchHelp(rt.getRight(), x, y, radius, level + 1,
+//                results);
+//        }
+//
+//
+//        return count;
     }
 
 
