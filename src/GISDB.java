@@ -93,6 +93,9 @@ public class GISDB implements GIS {
      *         was deleted).
      */
     public String delete(int x, int y) {
+        City city = kd.find(x, y);
+        bst.remove(city.getName());
+        kd.remove(x, y);
         return "";
     }
 
