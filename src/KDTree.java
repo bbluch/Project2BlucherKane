@@ -124,8 +124,9 @@ public class KDTree {
         int count = regionSearchHelp(root, x, y, 0, 0, results);
         String strFinal = "";
         City[] cities = results.getResults();
+        count++;
 
-        strFinal = strFinal + count + cities[0].getName() + "\n";
+        strFinal = strFinal + count + "\n" + cities[0].getName() + "\n";
 // for (int i = 0; i < cities.length; i++) {
 // strFinal = strFinal + cities[i].getName() + "\n";
 // }
