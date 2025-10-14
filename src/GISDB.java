@@ -244,7 +244,7 @@ public class GISDB implements GIS {
         for (City city : cities) {
             sb.append(city.toString()).append("\n");
         }
-        sb.append(result.count);
+        sb.append(result.nodesVisited);
         return sb.toString();
     }
 
