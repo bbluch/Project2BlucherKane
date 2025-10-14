@@ -197,9 +197,30 @@ public class GISDB implements GIS {
      *         If k-d tree is empty, the number of nodes visited is zero.
      */
     public String search(int x, int y, int radius) {
-        if (radius < 0)
+//        if (radius < 0)
+//            return "";
+//        return kd.regionSearch(x, y, radius);
+        if (radius < 0) {
             return "";
-        return kd.regionSearch(x, y, radius);
+        }
+
+        // As per requirements, if the tree is empty, the count is 0.
+        if (kd.size() == 0) {
+            return "0";
+        }
+
+        // Call the updated regionSearch which returns the KDSearchResult
+        // object.
+        KDTree.KDSearchResult result = kd.regionSearch(x, y, radius);
+
+        // Build the final output string from the results.
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < result.cities.length; i++) {
+            sb.append(result.cities[i].toString()).append("\n");
+        }
+        sb.append(result.nodesVisited);
+
+        return sb.toString();
     }
 
 

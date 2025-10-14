@@ -39,11 +39,95 @@ public class BST {
      * @param city
      *            The city to insert.
      */
+//    public void insert(City city) {
+//        root = insertHelp(root, city);
+//        nodeCount++;
+//    }
+
+    /**
+     * Removes a city with the given name from the BST.
+     * Note: This will remove only the first occurrence found.
+     *
+     * @param name The name of the city to remove.
+     * @return The City object of the removed node, or null if not found.
+     */
+//    public City remove(String name) {
+//        City temp = find(name);
+//        if (temp != null) {
+//            City[] removed = new City[1];
+//            root = removeHelp(root, temp, removed);
+//            if (removed[0] != null) {
+//                nodeCount--;
+//            }
+//        }
+//        return temp;
+//    }
+
+    /**
+     * Removes a specific city from the BST. This is more precise than
+     * removing by name, as it targets an exact city object.
+     *
+     * @param city The city to remove.
+     * @return The removed City object, or null if not found.
+     */
+//    public City remove(City city) {
+//        if (city == null) {
+//            return null;
+//        }
+//        City[] removed = new City[1];
+//        root = removeHelp(root, city, removed);
+//        if (removed[0] != null) {
+//            nodeCount--;
+//        }
+//        return removed[0];
+//    }
+    
+    // Add this new helper method to BST.java
+//    private BSTNode removeHelp(BSTNode rt, City city, City[] removed) {
+//        if (rt == null) {
+//            return null;
+//        }
+//
+//        int compare = city.getName().compareTo(rt.getCity().getName());
+//
+//        if (compare < 0) {
+//            rt.setLeft(removeHelp(rt.getLeft(), city, removed));
+//        }
+//        else if (compare > 0) {
+//            rt.setRight(removeHelp(rt.getRight(), city, removed));
+//        }
+//        else { // Names match, now check if it's the exact city
+//            if (rt.getCity().equals(city)) {
+//                removed[0] = rt.getCity();
+//                if (rt.getLeft() == null) {
+//                    return rt.getRight();
+//                }
+//                else if (rt.getRight() == null) {
+//                    return rt.getLeft();
+//                }
+//                else {
+//                    BSTNode temp = getMax(rt.getLeft());
+//                    rt.setCity(temp.getCity());
+//                    rt.setLeft(deleteMax(rt.getLeft()));
+//                }
+//            }
+//            else {
+//                rt.setLeft(removeHelp(rt.getLeft(), city, removed));
+//            }
+//        }
+//        return rt;
+//    }
+    
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     * @param city
+     */
+    // Make sure your nodeCount is updated in insert()
     public void insert(City city) {
         root = insertHelp(root, city);
-        // nodeCount++;
+        nodeCount++; // Ensure this line is active
     }
-
 
     /**
      * Removes a city with the given name from the BST.

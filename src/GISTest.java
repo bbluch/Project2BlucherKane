@@ -478,55 +478,54 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(20, 20));
     }
 
-
-//    /**
-//     * Tests the info(String name) method, especially handling multiple
-//     * cities with the same name.
-//     */
-//    public void testInfoByName() {
-//        it.insert("Springfield", 70, 10);
-//        it.insert("Springfield", 20, 50);
-//        it.insert("Shelbyville", 90, 30);
+// /**
+// * Tests the info(String name) method, especially handling multiple
+// * cities with the same name.
+// */
+// public void testInfoByName() {
+// it.insert("Springfield", 70, 10);
+// it.insert("Springfield", 20, 50);
+// it.insert("Shelbyville", 90, 30);
 //
-//        String expected = "(20, 50)\n(70, 10)";
-//        // The order may vary depending on BST implementation,
-//        // so we check for both possibilities.
-//        String alternativeExpected = "(70, 10)\n(20, 50)";
+// String expected = "(20, 50)\n(70, 10)";
+// // The order may vary depending on BST implementation,
+// // so we check for both possibilities.
+// String alternativeExpected = "(70, 10)\n(20, 50)";
 //
-//        String actual = it.info("Springfield");
-//        assertTrue("The output for info(\"Springfield\") was not correct.",
-//            actual.equals(expected) || actual.equals(alternativeExpected));
+// String actual = it.info("Springfield");
+// assertTrue("The output for info(\"Springfield\") was not correct.",
+// actual.equals(expected) || actual.equals(alternativeExpected));
 //
-//        // Test for a name that does not exist
-//        assertEquals("", it.info("Ogdenville"));
-//    }
+// // Test for a name that does not exist
+// assertEquals("", it.info("Ogdenville"));
+// }
 //
 //
-//    /**
-//     * Tests the print() and debug() methods for correct formatting and
-//     * ordering.
-//     */
-//    public void testPrintAndDebug() {
-//        // Test on an empty database first
-//        assertEquals("", it.print());
-//        assertEquals("", it.debug());
+// /**
+// * Tests the print() and debug() methods for correct formatting and
+// * ordering.
+// */
+// public void testPrintAndDebug() {
+// // Test on an empty database first
+// assertEquals("", it.print());
+// assertEquals("", it.debug());
 //
-//        it.insert("C", 30, 40);
-//        it.insert("A", 10, 20);
-//        it.insert("E", 50, 60);
-//        it.insert("B", 25, 35);
-//        it.insert("D", 45, 55);
+// it.insert("C", 30, 40);
+// it.insert("A", 10, 20);
+// it.insert("E", 50, 60);
+// it.insert("B", 25, 35);
+// it.insert("D", 45, 55);
 //
-//        // Expected BST output (alphabetical order)
-//        String expectedPrint = "1 A (10, 20)\n" + "2 B (25, 35)\n"
-//            + "0C (30, 40)\n" + "2 D (45, 55)\n" + "1 E (50, 60)\n";
-//        assertFuzzyEquals(expectedPrint, it.print());
+// // Expected BST output (alphabetical order)
+// String expectedPrint = "1 A (10, 20)\n" + "2 B (25, 35)\n"
+// + "0C (30, 40)\n" + "2 D (45, 55)\n" + "1 E (50, 60)\n";
+// assertFuzzyEquals(expectedPrint, it.print());
 //
-//        // Expected KD-Tree output (in-order traversal based on coordinates)
-//        String expectedDebug = "2 B (25, 35)\n" + "1 A (10, 20)\n"
-//            + "3 D (45, 55)\n" + "2 E (50, 60)\n" + "0C (30, 40)\n";
-//        assertFuzzyEquals(expectedDebug, it.debug());
-//    }
+// // Expected KD-Tree output (in-order traversal based on coordinates)
+// String expectedDebug = "2 B (25, 35)\n" + "1 A (10, 20)\n"
+// + "3 D (45, 55)\n" + "2 E (50, 60)\n" + "0C (30, 40)\n";
+// assertFuzzyEquals(expectedDebug, it.debug());
+// }
 
 
     /**
@@ -612,6 +611,117 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(75, 125));
         // This path also exists (right, then left)
         assertEquals("", it.info(125, 25));
+    }
+
+
+    /**
+     * Tests deleting a city by its coordinates that does not exist.
+     */
+    public void testDeleteByCoordNotFound() {
+        it.insert("A", 10, 10);
+        // Attempt to delete a city at a location that doesn't exist.
+        assertEquals("", it.delete(20, 20));
+        // Ensure the original city is still there.
+        assertEquals("A", it.info(10, 10));
+    }
+
+
+    /**
+     * Tests deleting a leaf node from the KD-Tree.
+     */
+    public void testDeleteByCoordLeafNode() {
+        it.insert("Root", 50, 50);
+        it.insert("LeafToDelete", 25, 75);
+
+        // Deleting a leaf node should be straightforward.
+        String result = it.delete(25, 75);
+        assertFuzzyEquals("2\nLeafToDelete", result);
+
+        // Verify the node is gone from both trees.
+        assertEquals("", it.info(25, 75));
+        //assertNull(it.bst.find("LeafToDelete"));
+    }
+
+
+    /**
+     * Tests deleting the root node from the KD-Tree, which has two children.
+     * This is a complex case that tests the findMin and replacement logic.
+     */
+    public void testDeleteByCoordRootNode() {
+        it.insert("Root", 100, 100);
+        it.insert("LeftChild", 50, 150);
+        it.insert("RightChild", 150, 50);
+        it.insert("Successor", 120, 70); // This should become the new root.
+
+        String result = it.delete(100, 100);
+        assertFuzzyEquals("1\nRoot", result);
+
+        // Verify the root is gone and its replacement is in place.
+        assertEquals("", it.info(100, 100));
+        assertEquals("Successor", it.info(120, 70));
+
+        // Check the BST to ensure the original root was removed.
+        // We expect to find other cities with the name "Root" if they existed,
+        // but in this case, it was the only one.
+        //assertNull(it.bst.find("Root"));
+    }
+
+
+    /**
+     * Tests deleting a city by a name that does not exist in the database.
+     */
+    public void testDeleteByNameNotFound() {
+        it.insert("A", 10, 10);
+        assertEquals("", it.delete("NonExistentName"));
+    }
+
+
+    /**
+     * Tests deleting a single city by its name.
+     */
+    public void testDeleteByNameSingle() {
+        it.insert("ToDelete", 55, 66);
+        it.insert("AnotherCity", 1, 1);
+
+        String expected = "ToDelete (55, 66)";
+        assertFuzzyEquals(expected, it.delete("ToDelete"));
+
+        // Verify the city is gone from both data structures.
+        assertEquals("", it.info(55, 66));
+        //assertNull(it.bst.find("ToDelete"));
+        // Ensure the other city remains.
+        assertEquals("AnotherCity", it.info(1, 1));
+    }
+
+
+    /**
+     * Tests deleting multiple cities that share the same name.
+     * According to the spec, all cities with that name must be removed.
+     */
+    public void testDeleteByNameMultiple() {
+        it.insert("Duplicate", 10, 10);
+        it.insert("Other", 50, 50);
+        it.insert("Duplicate", 20, 20);
+        it.insert("Duplicate", 30, 30);
+
+        String result = it.delete("Duplicate");
+
+        // The order of deletion depends on the BST traversal.
+        // We need to check if all coordinates are present in the output.
+        assertTrue(result.contains("Duplicate (10, 10)"));
+        assertTrue(result.contains("Duplicate (20, 20)"));
+        assertTrue(result.contains("Duplicate (30, 30)"));
+
+        // Verify all duplicates are gone from the kd-tree.
+        assertEquals("", it.info(10, 10));
+        assertEquals("", it.info(20, 20));
+        assertEquals("", it.info(30, 30));
+
+        // Verify the other city is still present.
+        assertEquals("Other", it.info(50, 50));
+
+        // Verify no cities named "Duplicate" remain in the BST.
+        //assertNull(it.bst.find("Duplicate"));
     }
 
 }
