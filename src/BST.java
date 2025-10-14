@@ -52,12 +52,12 @@ public class BST {
      * @return The City object of the removed node, or null if not found.
      */
      public City remove(String name) {
-     City temp = find(name);
-     if (temp != null) {
-     root = removeHelp(root, name);
-     nodeCount--;
-     }
-     return temp;
+         City temp = find(name);
+         if (temp != null) {
+             root = removeHelp(root, name);
+             nodeCount--;
+         }
+         return temp;
      }
 
 

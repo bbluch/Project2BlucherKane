@@ -125,6 +125,7 @@ public class GISDB implements GIS {
             strFinal = strFinal + cities[i].getName() + " ";
             strFinal = strFinal + "(" + cities[i].getX();
             strFinal = strFinal + ", " + cities[i].getY() + ")\n";
+            bst.remove(cities[i].getName());        
         }
         return strFinal.trim();
     }
