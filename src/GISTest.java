@@ -1730,7 +1730,8 @@ public class GISTest extends TestCase {
      * like info, search, and delete to ensure they function correctly.
      */
     public void testDeepRightTreeOperations() {
-        // 1. Insert cities to create a right-skewed KD-Tree with a depth of at
+        // 1. Insert cities to create a right-skewed KD-Tree with a
+        // depth of at
         // least 5.
         it.insert("Root", 1000, 1000); // Level 0 (x-split)
         it.insert("R1", 1500, 500); // Level 1 (y-split) -> Right of Root
@@ -1751,10 +1752,11 @@ public class GISTest extends TestCase {
 
         // 3. Test info() to find the deepest leaf node.
         assertEquals(
-            "Should be able to find the deepest node in the right-skewed tree.",
+            "Should be able to find the deepest in the right-skewed tree.",
             "DeepestNode", it.info(1970, 200));
 
-        // 4. Test search() in a region that includes nodes at various depths on
+        // 4. Test search() in a region that includes nodes at
+        // various depths on
         // the right.
         // This search should find R3, R4, and DeepestNode.
         String searchResult = it.search(1900, 300, 150);
@@ -1785,8 +1787,10 @@ public class GISTest extends TestCase {
 
 
     /**
-     * Verifies that the debug() output has strictly correct indentation, which
-     * depends on incrementing the level in its recursive helper. This test will
+     * Verifies that the debug() output has strictly correct indentation, 
+     * which
+     * depends on incrementing the level in its recursive helper. 
+     * This test will
      * fail if 'level + 1' is mutated to 'level'.
      */
     public void testDebugIndentationStrict() {
@@ -1887,41 +1891,50 @@ public class GISTest extends TestCase {
         assertEquals("Should find city C by its coordinates.", "C", it.info(70,
             30));
     }
-    
+
+
     /**
-     * A comprehensive test that runs through all the capabilities of the `findMinNode` helper method
+     * A comprehensive test that runs through all the capabilities of the
+     * `findMinNode` helper method
      * during a deletion operation.
-     * * This test sets up a complex KD-tree structure and a specific deletion scenario that forces
+     * * This test sets up a complex KD-tree structure and a specific deletion
+     * scenario that forces
      * `findMinNode` to exercise its different branches:
-     * - The case where `currentAxis != axis`, forcing a search of both subtrees.
+     * - The case where `currentAxis != axis`, forcing a search of both
+     * subtrees.
      * - The recursive search that leads to a node where `currentAxis == axis`.
-     * - The discovery of the minimum node at a leaf, triggering the `rt.getLeft() == null` branch.
-     * - The comparison logic to determine the overall minimum from multiple sub-branches.
+     * - The discovery of the minimum node at a leaf, triggering the
+     * `rt.getLeft() == null` branch.
+     * - The comparison logic to determine the overall minimum from multiple
+     * sub-branches.
      * This ensures the integrity of the KD-tree is maintained.
      */
     public void testFindMinNodeComprehensiveDeletionScenario() {
         // 1. Setup: Build a multi-level KD-tree with a specific structure.
-        // The node to be deleted, `CityC (150, 50)`, is at a y-split level (level 1).
+        // The node to be deleted, `CityC (150, 50)`, is at a y-split level
+        // (level 1).
         // Its right subtree is at `CityD (125, 25)`.
-        // The `findMinNode` search will be for the minimum y-value in this subtree.
+        // The `findMinNode` search will be for the minimum y-value in this
+        // subtree.
         //
         // Tree structure (by coordinates):
         //
-        //                 (100, 100) - Root (x-split)
-        //                /          \
-        //      (50, 150) - B (y-split)    (150, 50) - C (y-split) -> NODE TO DELETE
-        //                               /          \
-        //                         (125, 25) - D (x-split) (175, 75) - E (x-split)
-        //                          /
-        //                   (110, 10) - F (y-split) -> THE TRUE MIN NODE
-        
+        // (100, 100) - Root (x-split)
+        // / \
+        // (50, 150) - B (y-split) (150, 50) - C (y-split) -> NODE TO DELETE
+        // / \
+        // (125, 25) - D (x-split) (175, 75) - E (x-split)
+        // /
+        // (110, 10) - F (y-split) -> THE TRUE MIN NODE
+
         // Insert cities to create the complex tree structure.
         assertTrue(it.insert("RootCity", 100, 100));
         assertTrue(it.insert("CityB", 50, 150));
         assertTrue(it.insert("CityC", 150, 50)); // Node to be deleted
         assertTrue(it.insert("CityD", 125, 25)); // Left of CityC
         assertTrue(it.insert("CityE", 175, 75)); // Right of CityC
-        assertTrue(it.insert("CityF", 110, 10)); // Left of CityD (y-value is lowest)
+        assertTrue(it.insert("CityF", 110, 10)); // Left of CityD (y-value is
+                                                 // lowest)
 
         // Verify initial state.
         assertEquals("RootCity", it.info(100, 100));
@@ -1930,64 +1943,87 @@ public class GISTest extends TestCase {
         assertEquals("CityD", it.info(125, 25));
         assertEquals("CityE", it.info(175, 75));
         assertEquals("CityF", it.info(110, 10));
-        
+
         // Perform deletion on CityC (150, 50).
-        // This will force the `removeHelp` method to find a successor using `findMinNode`.
-        // The successor should be CityF (110, 10), as it has the minimum y-value in the right subtree of CityC.
+        // This will force the `removeHelp` method to find a successor using
+        // `findMinNode`.
+        // The successor should be CityF (110, 10), as it has the minimum
+        // y-value in the right subtree of CityC.
         String result = it.delete(150, 50);
 
         // The output should report the deletion of CityC.
-        assertTrue("Deletion output should contain the name of the deleted city.",
+        assertTrue(
+            "Deletion output should contain the name of the deleted city.",
             result.contains("CityC"));
-        
-        // Verify the deleted city is gone.
-        assertEquals("Deleted city should no longer be in the tree.", "", it.info(150, 50));
 
-        // Verify that CityF (the successor) is still present and correctly re-linked.
+        // Verify the deleted city is gone.
+        assertEquals("Deleted city should no longer be in the tree.", "", it
+            .info(150, 50));
+
+        // Verify that CityF (the successor) is still present and correctly
+        // re-linked.
         assertEquals("CityF should still exist.", "CityF", it.info(110, 10));
-        
-        // Verify that the other cities are still present, confirming tree integrity.
-        assertEquals("RootCity should not have been affected.", "RootCity", it.info(100, 100));
+
+        // Verify that the other cities are still present, confirming tree
+        // integrity.
+        assertEquals("RootCity should not have been affected.", "RootCity", it
+            .info(100, 100));
         assertEquals("CityB should still exist.", "CityB", it.info(50, 150));
         assertEquals("CityD should still exist.", "CityD", it.info(125, 25));
         assertEquals("CityE should still exist.", "CityE", it.info(175, 75));
 
-        // The test implicitly confirms that `findMinNode` correctly traversed the tree
+        // The test implicitly confirms that `findMinNode` correctly traversed
+        // the tree
         // and identified the `CityF` as the node with the minimum y-value
         // in the right subtree of the node being deleted.
     }
-    
+
+
     /**
-     * A comprehensive test that runs through all the capabilities of the `findMinNode` helper method
+     * A comprehensive test that runs through all the capabilities of the
+     * `findMinNode` helper method
      * during a deletion operation.
      *
-     * This test is designed to force `findMinNode` to exercise all its branches:
-     * - The case where `currentAxis != axis`, forcing a search of both subtrees.
+     * This test is designed to force `findMinNode` to exercise all its
+     * branches:
+     * - The case where `currentAxis != axis`, forcing a search of both
+     * subtrees.
      * - The recursive search that leads to a node where `currentAxis == axis`.
-     * - The discovery of the minimum node at a leaf, triggering the `rt.getLeft() == null` branch.
-     * - The comparison logic to determine the overall minimum from multiple sub-branches.
+     * - The discovery of the minimum node at a leaf, triggering the
+     * `rt.getLeft() == null` branch.
+     * - The comparison logic to determine the overall minimum from multiple
+     * sub-branches.
      * This ensures the integrity of the KD-tree is maintained.
      */
     public void testFindMinNodeComprehensiveDeletionScenario2() {
         // 1. Setup: Build a multi-level KD-tree with a specific structure.
-        // The goal is to delete the root, and force `findMinNode` to search its right subtree
-        // to find the minimum value node. The right subtree is structured such that the
-        // search for the minimum value has to traverse both left and right branches of the subtree.
+        // The goal is to delete the root, and force `findMinNode` to search its
+        // right subtree
+        // to find the minimum value node. The right subtree is structured such
+        // that the
+        // search for the minimum value has to traverse both left and right
+        // branches of the subtree.
         //
         // Tree structure (by coordinates):
         //
-        //                 (100, 100) - Root (level 0, x-split) -> NODE TO DELETE
-        //                               /          \
-        //      (50, 150) - L1 (y-split)    (150, 50) - R1 (y-split)
-        //         |                      /          \
-        // (50, 140) - L2 (x-split) (125, 75) - R2 (x-split) (175, 25) - R3 (x-split) -> THE TRUE MIN NODE
+        // (100, 100) - Root (level 0, x-split) -> NODE TO DELETE
+        // / \
+        // (50, 150) - L1 (y-split) (150, 50) - R1 (y-split)
+        // | / \
+        // (50, 140) - L2 (x-split) (125, 75) - R2 (x-split) (175, 25) - R3
+        // (x-split) -> THE TRUE MIN NODE
         //
-        // The `findMinNode` call will start on R1 (150, 50) with `axis=0` (x-split).
+        // The `findMinNode` call will start on R1 (150, 50) with `axis=0`
+        // (x-split).
         // - R1 is a y-split (`currentAxis=1`), so the `else` block runs.
-        // - `findMinNode` is called on R1's left child (R2 at (125, 75)) and right child (R3 at (175, 25)).
-        // - The call on R2 `(125, 75)` has `currentAxis=0`, which matches the target `axis`. It has no left child, so it returns itself.
-        // - The call on R3 `(175, 25)` also has `currentAxis=0` and no left child, so it returns itself.
-        // - The `findMinNode` call at R1 then compares R2, R3, and R1's x-coordinates to find the minimum.
+        // - `findMinNode` is called on R1's left child (R2 at (125, 75)) and
+        // right child (R3 at (175, 25)).
+        // - The call on R2 `(125, 75)` has `currentAxis=0`, which matches the
+        // target `axis`. It has no left child, so it returns itself.
+        // - The call on R3 `(175, 25)` also has `currentAxis=0` and no left
+        // child, so it returns itself.
+        // - The `findMinNode` call at R1 then compares R2, R3, and R1's
+        // x-coordinates to find the minimum.
         // - The correct minimum is R2 at (125, 75).
 
         // Insert cities to create the complex tree structure.
@@ -2005,63 +2041,80 @@ public class GISTest extends TestCase {
         assertEquals("L2", it.info(50, 140));
         assertEquals("R2", it.info(125, 75));
         assertEquals("R3", it.info(175, 25));
-        
+
         // Perform deletion on the root node (100, 100).
-        // This will force `removeHelp` to find a successor in its right subtree.
+        // This will force `removeHelp` to find a successor in its right
+        // subtree.
         String result = it.delete(100, 100);
 
         // The output should report the deletion of the root city.
-        assertTrue("Deletion output should contain the name of the deleted city.",
+        assertTrue(
+            "Deletion output should contain the name of the deleted city.",
             result.contains("RootCity"));
-        
-        // Verify the deleted city is gone.
-        assertEquals("Deleted city should no longer be in the tree.", "", it.info(100, 100));
 
-        // The successor, based on the x-split at the root, should be the node with the minimum
+        // Verify the deleted city is gone.
+        assertEquals("Deleted city should no longer be in the tree.", "", it
+            .info(100, 100));
+
+        // The successor, based on the x-split at the root, should be the node
+        // with the minimum
         // x-value in the right subtree. This is R2 (125, 75).
-        assertEquals("The successor node R2 should now be at the root's location.", "R2", it.info(125, 75));
-        
-        // Verify that the other cities are still present, confirming tree integrity.
+        assertEquals(
+            "The successor node R2 should now be at the root's location.", "R2",
+            it.info(125, 75));
+
+        // Verify that the other cities are still present, confirming tree
+        // integrity.
         assertEquals("L1 should still exist.", "L1", it.info(50, 150));
         assertEquals("L2 should still exist.", "L2", it.info(50, 140));
         assertEquals("R1 should still exist.", "R1", it.info(150, 50));
         assertEquals("R3 should still exist.", "R3", it.info(175, 25));
     }
-    
+
+
     /**
-     * A comprehensive test that runs through all the capabilities of the `findMinNode` helper method
+     * A comprehensive test that runs through all the capabilities of the
+     * `findMinNode` helper method
      * during a deletion operation.
      *
-     * This test is designed to force `findMinNode` to exercise all its branches:
-     * - The case where `currentAxis != axis`, forcing a search of both subtrees.
+     * This test is designed to force `findMinNode` to exercise all its
+     * branches:
+     * - The case where `currentAxis != axis`, forcing a search of both
+     * subtrees.
      * - The recursive search that leads to a node where `currentAxis == axis`.
-     * - The discovery of the minimum node at a leaf, triggering the `rt.getLeft() == null` branch.
-     * - The comparison logic to determine the overall minimum from multiple sub-branches.
+     * - The discovery of the minimum node at a leaf, triggering the
+     * `rt.getLeft() == null` branch.
+     * - The comparison logic to determine the overall minimum from multiple
+     * sub-branches.
      * This ensures the integrity of the KD-tree is maintained.
      */
     public void testFindMinNodeComprehensiveDeletionScenario3() {
         // 1. Setup: Build a multi-level KD-tree with a specific structure.
-        // The goal is to delete a node, and force `findMinNode` to search its right subtree
-        // to find the minimum value node. The right subtree is structured such that the
-        // search for the minimum value has to traverse both left and right branches of the subtree.
+        // The goal is to delete a node, and force `findMinNode` to search its
+        // right subtree
+        // to find the minimum value node. The right subtree is structured such
+        // that the
+        // search for the minimum value has to traverse both left and right
+        // branches of the subtree.
         //
         // Tree structure (by coordinates):
         //
-        //                 (100, 100) - Root (x-split)
-        //                /          \
-        //      (50, 150) - B (y-split)    (150, 50) - C (y-split) -> NODE TO DELETE
-        //                               /          \
-        //                         (125, 25) - D (x-split) (175, 75) - E (x-split)
-        //                          /
-        //                   (110, 10) - F (y-split) -> THE TRUE MIN NODE
-        
+        // (100, 100) - Root (x-split)
+        // / \
+        // (50, 150) - B (y-split) (150, 50) - C (y-split) -> NODE TO DELETE
+        // / \
+        // (125, 25) - D (x-split) (175, 75) - E (x-split)
+        // /
+        // (110, 10) - F (y-split) -> THE TRUE MIN NODE
+
         // Insert cities to create the complex tree structure.
         assertTrue(it.insert("RootCity", 100, 100));
         assertTrue(it.insert("CityB", 50, 150));
         assertTrue(it.insert("CityC", 150, 50)); // Node to be deleted
         assertTrue(it.insert("CityD", 125, 25)); // Left of CityC
         assertTrue(it.insert("CityE", 175, 75)); // Right of CityC
-        assertTrue(it.insert("CityF", 110, 10)); // Left of CityD (y-value is lowest)
+        assertTrue(it.insert("CityF", 110, 10)); // Left of CityD (y-value is
+                                                 // lowest)
 
         // Verify initial state.
         assertEquals("RootCity", it.info(100, 100));
@@ -2070,34 +2123,39 @@ public class GISTest extends TestCase {
         assertEquals("CityD", it.info(125, 25));
         assertEquals("CityE", it.info(175, 75));
         assertEquals("CityF", it.info(110, 10));
-        
+
         // Perform deletion on CityC (150, 50).
-        // This will force the `removeHelp` method to find a successor using `findMinNode`.
-        // The successor should be CityF (110, 10), as it has the minimum y-value in the right subtree of CityC.
+        // This will force the `removeHelp` method to find a successor using
+        // `findMinNode`.
+        // The successor should be CityF (110, 10), as it has the minimum
+        // y-value in the right subtree of CityC.
         String result = it.delete(150, 50);
 
         // The output should report the deletion of CityC.
-        assertTrue("Deletion output should contain the name of the deleted city.",
+        assertTrue(
+            "Deletion output should contain the name of the deleted city.",
             result.contains("CityC"));
-        
-        // Verify the deleted city is gone.
-        assertEquals("Deleted city should no longer be in the tree.", "", it.info(150, 50));
 
-        // Verify that CityF (the successor) is still present and correctly re-linked.
+        // Verify the deleted city is gone.
+        assertEquals("Deleted city should no longer be in the tree.", "", it
+            .info(150, 50));
+
+        // Verify that CityF (the successor) is still present and correctly
+        // re-linked.
         assertEquals("CityF should still exist.", "CityF", it.info(110, 10));
-        
-        // Verify that the other cities are still present, confirming tree integrity.
-        assertEquals("RootCity should not have been affected.", "RootCity", it.info(100, 100));
+
+        // Verify that the other cities are still present, confirming tree
+        // integrity.
+        assertEquals("RootCity should not have been affected.", "RootCity", it
+            .info(100, 100));
         assertEquals("CityB should still exist.", "CityB", it.info(50, 150));
         assertEquals("CityD should still exist.", "CityD", it.info(125, 25));
         assertEquals("CityE should still exist.", "CityE", it.info(175, 75));
 
-        // The test implicitly confirms that `findMinNode` correctly traversed the tree
+        // The test implicitly confirms that `findMinNode` correctly traversed
+        // the tree
         // and identified the `CityF` as the node with the minimum y-value
         // in the right subtree of the node being deleted.
     }
-    
-    
-    
 
 }
