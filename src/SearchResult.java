@@ -35,12 +35,10 @@ public class SearchResult {
      *            city being added.
      */
     void add(City city) {
-        if (count == cities.length) {
-            // Resize the array if it's full
-            City[] newCities = new City[cities.length * 2];
-            System.arraycopy(cities, 0, newCities, 0, cities.length);
-            cities = newCities;
-        }
+        // Resize the array if it's full
+        City[] newCities = new City[cities.length + 1];
+        System.arraycopy(cities, 0, newCities, 0, cities.length);
+        cities = newCities;
         cities[count++] = city;
     }
 

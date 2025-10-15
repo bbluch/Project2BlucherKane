@@ -72,6 +72,7 @@ public class GISTest extends TestCase {
      * Tests the case where coordinates are 0.
      */
     public void testInsertAtOrigin() {
+        assertEquals(it.delete("jack"), "");
         assertTrue(it.insert("Origin City", 0, 0));
     }
 
@@ -1782,4 +1783,108 @@ public class GISTest extends TestCase {
             200));
     }
 
+
+    /**
+     * Verifies that the debug() output has strictly correct indentation, which
+     * depends on incrementing the level in its recursive helper. This test will
+     * fail if 'level + 1' is mutated to 'level'.
+     */
+    public void testDebugIndentationStrict() {
+        it.insert("Root", 100, 100); // Level 0
+        it.insert("LeftChild", 50, 150); // Level 1
+        it.insert("GrandChild", 25, 125); // Level 2
+
+        // Expected output with 2 spaces of indentation per level.
+        String expected = "2    GrandChild (25, 125)\n"
+            + "1  LeftChild (50, 150)\n" + "0Root (100, 100)\n";
+
+        // Use assertEquals, not assertFuzzyEquals, for a strict check.
+        assertEquals("Debug output must have exact indentation.", expected, it
+            .debug());
+    }
+
+
+    /**
+     * Tests that the remove operation correctly identifies the replacement node
+     * by using the correct splitting axis. This fails if the 'level' is not
+     * incremented in findMinNode, causing it to find the minimum on the wrong
+     * axis.
+     */
+    public void testRemoveWithCorrectAxisForSuccessor() {
+        // 1. Create a specific tree structure.
+        it.insert("ToDelete", 50, 50); // Root, will be deleted.
+        it.insert("RightChild", 70, 60); // Right of root.
+
+        // Add two nodes to the RightChild's subtree.
+        // This will be the node with the minimum X value in the right subtree.
+        it.insert("X_Min", 60, 100);
+        // This will be the node with the minimum Y value in the right subtree.
+        it.insert("Y_Min", 90, 20);
+
+        /*
+         * When we delete (50, 50), the split axis for its replacement is X.
+         * The findMinNode method should be called on the right subtree (rooted
+         * at 70,60)
+         * looking for the node with the smallest X value. That is "X_Min" at
+         * (60, 100).
+         *
+         * MUTATED LOGIC: If level is not incremented in removeHelp ->
+         * findMinNode,
+         * the axis might be incorrect, and it might pick "Y_Min" as the
+         * replacement.
+         */
+
+        // 2. Delete the root node.
+        it.delete(50, 50);
+
+        // 3. Check the new root of the tree with debug(). It should be "X_Min".
+        String debugOutput = it.debug();
+        assertTrue("The new root should be 'X_Min' (60, 100) after deletion.",
+            debugOutput.startsWith("0X_Min (60, 100)"));
+
+        // 4. Verify the old root is gone and the correct replacement is now at
+        // the root.
+        assertEquals("Old root should be gone.", "", it.info(50, 50));
+        assertEquals("The node 'Y_Min' should still exist in the tree.",
+            "Y_Min", it.info(90, 20));
+    }
+
+
+    /**
+     * Tests that the KD-Tree correctly alternates the splitting axis (x then y)
+     * during insertion. This test fails if the 'level' is not incremented in
+     * the recursive insertHelp call, which would cause all splits to be on the
+     * x-axis.
+     */
+    public void testAxisAlternationOnInsertAndFind() {
+        // 1. Insert Root at (50, 50). First split is on X.
+        it.insert("Root", 50, 50);
+
+        // 2. Insert B at (60, 40). Since 60 > 50, it goes to the RIGHT of Root.
+        // The next split should be on Y.
+        it.insert("B", 60, 40);
+
+        // 3. Insert C at (70, 30).
+        // CORRECT LOGIC: At node B (60, 40), we split on Y. Since 30 < 40,
+        // C should go to the LEFT of B.
+        // MUTATED LOGIC: If level is not incremented, the split at B is on X
+        // again.
+        // Since 70 > 60, C would go to the RIGHT of B.
+        it.insert("C", 70, 30);
+
+        // 4. Verify the tree structure with debug().
+        // A correct in-order traversal would be: Root, C, B.
+        String debugOutput = it.debug();
+        String expected = "0Root (50, 50)\n" + "2    C (70, 30)\n"
+            + "1  B (60, 40)\n";
+
+        // By using a non-fuzzy equals, we can check the structure.
+        // A mutated tree would likely have the order Root, B, C.
+        assertEquals("Tree structure should reflect alternating axis splits.",
+            expected, debugOutput);
+
+        // 5. Explicitly check if C can be found. A mutated findHelp would fail.
+        assertEquals("Should find city C by its coordinates.", "C", it.info(70,
+            30));
+    }
 }
