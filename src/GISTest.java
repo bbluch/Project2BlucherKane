@@ -1615,7 +1615,7 @@ public class GISTest extends TestCase {
         // "B" will be the root.
         it.insert("B_City", 50, 50);
         // "A_City" will be the left child of "B_City".
-        it.insert("A_City", 25, 25);
+        it.insert("A_City", 50, 25);
         // "C_City" will be the right child of "B_City".
         it.insert("C_City", 75, 75);
 
@@ -1639,7 +1639,7 @@ public class GISTest extends TestCase {
          */
 
         // Define the expected output string based on the preorder traversal.
-        String expectedOutput = "A_City (25, 25)\n" + "A_City (10, 10)\n"
+        String expectedOutput = "A_City (50, 25)\n" + "A_City (10, 10)\n"
             + "A_City (5, 5)";
 
         // Call the delete method for the duplicate name.
