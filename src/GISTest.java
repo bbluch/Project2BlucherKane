@@ -932,18 +932,21 @@ public class GISTest extends TestCase {
             "Search result should contain city 'C' from the right subtree.",
             result.contains("C (55, 50)"));
     }
-    
+
+
     /**
      * Tests deleting a node that has a left child and a right child, where the
      * right child is the immediate successor.
-     * This tests a specific case within the `if (rt.getRight() != null)` branch.
+     * This tests a specific case within the `if (rt.getRight() != null)`
+     * branch.
      */
     public void testDeleteNodeWithRightChildAsSuccessor() {
         it.insert("Root", 50, 50);
         it.insert("Left", 25, 75);
         it.insert("NodeWithSuccessor", 75, 25);
-        it.insert("Successor", 80, 20); // This should be the successor and the right child
-        
+        it.insert("Successor", 80, 20); // This should be the successor and the
+                                        // right child
+
         String result = it.delete(75, 25);
         assertTrue(result.contains("NodeWithSuccessor"));
         assertEquals("", it.info(75, 25));
@@ -953,7 +956,8 @@ public class GISTest extends TestCase {
         assertEquals("Left", it.info(25, 75));
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
+
 
     /**
      * Tests deleting a node that has a left child but no right child,
@@ -965,15 +969,18 @@ public class GISTest extends TestCase {
         it.insert("LeftChild", 25, 75);
         it.insert("LeftGrandchild", 20, 80);
         it.delete(25, 75);
-        
-        // The intended behavior is for the LeftChild to be removed and the LeftGrandchild
-        // to take its place. The provided implementation, however, has a bug that
+
+        // The intended behavior is for the LeftChild to be removed and the
+        // LeftGrandchild
+        // to take its place. The provided implementation, however, has a bug
+        // that
         // can lead to a corrupted tree. This test will verify the outcome.
         assertEquals("", it.info(25, 75));
         assertEquals("LeftGrandchild", it.info(20, 80));
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
+
 
     /**
      * Tests deleting the root node when it is a leaf node in the KD-tree.
@@ -987,11 +994,13 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(100, 100));
     }
 
-    //--------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
+
 
     /**
      * Tests deleting a node with both a left and right child, where the
-     * replacement node has a different axis split. This checks that `findMinNode`
+     * replacement node has a different axis split. This checks that
+     * `findMinNode`
      * correctly handles different split axes.
      */
     public void testDeleteNodeWithComplexSuccessor() {
@@ -1001,7 +1010,7 @@ public class GISTest extends TestCase {
         it.insert("LeftChild", 20, 30); // Left of NodeToDelete (y)
         it.insert("RightChild", 30, 20); // Right of NodeToDelete (y)
         it.insert("Successor", 35, 15); // Successor is in RightChild's subtree
-        
+
         String result = it.delete(25, 25);
         assertTrue(result.contains("NodeToDelete"));
         assertEquals("", it.info(25, 25));
