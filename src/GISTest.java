@@ -1424,5 +1424,67 @@ public class GISTest extends TestCase {
         assertEquals("CityC", it.info(30, 30));
     }
     
+    /**
+     * Tests the integrity of the `delete(String name)` method for pre-order deletion
+     * by inserting multiple cities with the same name in a way that forces a
+     * non-standard traversal order for deletion.
+     *
+     * This test verifies that the deletion output strictly adheres to a pre-order
+     * traversal, confirming the `findAll` helper method correctly finds cities
+     * in the required order for deletion.
+     */
+    public void testComplexPreOrderDeletion() {
+        // Setup a complex BST that will be traversed in pre-order
+        // The insertion order is:
+        // 1. Alpha
+        // 2. Gamma
+        // 3. Alpha
+        // 4. Beta
+        // 5. Delta
+        //
+        // The BST structure (by name) would be:
+        //      Gamma
+        //     /     \
+        //  Alpha     Delta
+        //  /
+        // Alpha
+        //
+        // The pre-order traversal for cities named "Alpha" should be:
+        // Alpha (25, 25), then Alpha (10, 10).
+        
+        // Insert cities in a non-pre-order sequence to ensure the test is robust
+        assertTrue(it.insert("Gamma", 50, 50));
+        assertTrue(it.insert("Alpha", 25, 25));
+        assertTrue(it.insert("Delta", 75, 75));
+        assertTrue(it.insert("Beta", 40, 40));
+        assertTrue(it.insert("Alpha", 10, 10));
+        
+        // Verify initial state
+        assertEquals("Gamma", it.info(50, 50));
+        assertEquals("Alpha", it.info(25, 25));
+        assertEquals("Alpha", it.info(10, 10));
+
+        // Perform the deletion on all cities named "Alpha".
+        // This will trigger a pre-order traversal by `findAll`
+        String result = it.delete("Alpha");
+        
+        // The output string should contain the deleted cities in pre-order.
+        // The `findAllHelp` method's logic processes the current node, then the left
+        // subtree, then the right subtree. The first Alpha is the child of Gamma.
+        // The second Alpha is the child of the first Alpha. The traversal starts at
+        // the first Alpha and correctly processes the second Alpha before any other
+        // nodes in its right subtree.
+        String expected = "Alpha (25, 25)\n" + "Alpha (10, 10)";
+        assertFuzzyEquals(expected, result);
+
+        // Verify that the deleted cities are no longer in the database.
+        assertEquals("", it.info(25, 25));
+        assertEquals("", it.info(10, 10));
+        
+        // Verify that the other cities remain untouched.
+        assertEquals("Gamma", it.info(50, 50));
+        assertEquals("Beta", it.info(40, 40));
+        assertEquals("Delta", it.info(75, 75));
+    }
 
 }
