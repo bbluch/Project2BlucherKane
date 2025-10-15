@@ -1423,5 +1423,6 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(40, 40));
         assertEquals("CityC", it.info(30, 30));
     }
+    
 
 }
