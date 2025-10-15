@@ -1599,7 +1599,7 @@ public class GISTest extends TestCase {
         assertTrue("info(\"Springfield\") should contain the city at (30, 30).",
             remainingCities.contains("Springfield (30, 30)"));
         assertFalse(
-            "info(\"Springfield\") should not contain the deleted city at (20, 20).",
+            "info(\"Springfield\") should not deleted city at (20, 20).",
             remainingCities.contains("Springfield (20, 20)"));
     }
 

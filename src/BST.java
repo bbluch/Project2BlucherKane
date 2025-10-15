@@ -43,11 +43,15 @@ public class BST {
 
     // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Remove method to remove a specific city based on names and
+     * coordinates
      * 
      * @param city
+     *            City being removed
      * @param x
+     *            X coordinate of city
      * @param y
+     *            Y coordinate of city
      * @return city being removed
      */
     public City remove(City city, int x, int y) {
@@ -62,9 +66,13 @@ public class BST {
      * Helper method when deleting a specific city.
      * 
      * @param rt
+     *            root node
      * @param name
+     *            Name of city
      * @param x
+     *            X coordinate of city
      * @param y
+     *            Y coordinate of city
      * @return
      */
     private BSTNode removeHelp(BSTNode rt, String name, int x, int y) {
