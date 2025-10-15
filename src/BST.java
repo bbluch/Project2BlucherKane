@@ -212,6 +212,8 @@ public class BST {
             // Since duplicates are inserted to the left, we must
             // continue searching the left subtree for more matches.
             findAllHelp(rt.getLeft(), name, results);
+            findAllHelp(rt.getRight(), name, results);
+            
         }
         else if (compare < 0) {
             // The name we are looking for is smaller than the current node's
