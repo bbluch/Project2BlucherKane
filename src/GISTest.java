@@ -2235,4 +2235,52 @@ public class GISTest extends TestCase {
             "Target", it.info(50, 50));
     }
 
+
+    /**
+     * Verifies that the print() method produces a correctly indented string for
+     * a
+     * BST with a depth greater than 3. This test uses a strict string
+     * comparison
+     * to catch any mutations affecting the indentation logic (level * 2) or the
+     * recursive level increment.
+     */
+    public void testPrintIndentationWithDeepTree() {
+        // 1. Insert cities in an order that creates a deep, left-skewed BST.
+        // The names are chosen to force a specific structure.
+        it.insert("D_City", 40, 40); // Level 0 (Root)
+        it.insert("C_City", 30, 30); // Level 1
+        it.insert("B_City", 20, 20); // Level 2
+        it.insert("A_City", 10, 10); // Level 3 (Deepest node)
+
+        /*
+         * The BST structure will be:
+         * D
+         * /
+         * C
+         * /
+         * B
+         * /
+         * A
+         *
+         * An in-order traversal will print A, B, C, D.
+         */
+
+        // 2. Construct the expected output string with precise indentation.
+        // Level 3: 3 * 2 = 6 spaces
+        // Level 2: 2 * 2 = 4 spaces
+        // Level 1: 1 * 2 = 2 spaces
+        // Level 0: 0 * 2 = 0 spaces
+        String expectedOutput = "3      A_City (10, 10)\n"
+            + "2    B_City (20, 20)\n" + "1  C_City (30, 30)\n"
+            + "0D_City (40, 40)\n";
+
+        // 3. Get the actual output from the print() method.
+        String actualOutput = it.print();
+
+        // 4. Perform a strict comparison.
+        assertEquals(
+            "The print() output must have exact indentation for a deep tree.",
+            expectedOutput, actualOutput);
+    }
+
 }
