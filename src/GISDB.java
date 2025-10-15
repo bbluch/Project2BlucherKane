@@ -123,10 +123,6 @@ public class GISDB implements GIS {
      */
     public String delete(String name) {
         City[] cities = bst.findAll(name);
-        /*
-         * if (cities.length == 0)
-         * return "";
-         */
         StringBuilder sb = new StringBuilder();
         for (City city : cities) {
             // Remove from both trees
@@ -200,15 +196,10 @@ public class GISDB implements GIS {
      *         If k-d tree is empty, the number of nodes visited is zero.
      */
     public String search(int x, int y, int radius) {
-// if (radius < 0)
-// return "";
-// return kd.regionSearch(x, y, radius);
         if (radius < 0) {
             return "";
         }
-//        if (kd.size() == 0) {
-//            return "0";
-//        }
+        
         SearchResult result = kd.regionSearch(x, y, radius);
         StringBuilder sb = new StringBuilder();
         City[] cities = result.getResults();

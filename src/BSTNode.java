@@ -6,11 +6,7 @@
  * @version Oct 7, 2025
  */
 public class BSTNode {
-    // ~ Fields ................................................................
 
-    // ~ Constructors ..........................................................
-
-    // ~Public Methods ........................................................
     private City city;
     private BSTNode left;
     private BSTNode right;

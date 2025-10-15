@@ -2,6 +2,7 @@ import java.io.IOException;
 import student.TestCase;
 
 /**
+ * Tests all methods in GISDB
  * @author benblucher, austink23
  * @version 10.2.25
  */
