@@ -956,8 +956,6 @@ public class GISTest extends TestCase {
         assertEquals("Left", it.info(25, 75));
     }
 
-    // --------------------------------------------------------------------------
-
 
     /**
      * Tests deleting a node that has a left child but no right child,
@@ -979,8 +977,6 @@ public class GISTest extends TestCase {
         assertEquals("LeftGrandchild", it.info(20, 80));
     }
 
-    // --------------------------------------------------------------------------
-
 
     /**
      * Tests deleting the root node when it is a leaf node in the KD-tree.
@@ -993,8 +989,6 @@ public class GISTest extends TestCase {
         // Verify the tree is now empty.
         assertEquals("", it.info(100, 100));
     }
-
-    // --------------------------------------------------------------------------
 
 
     /**
