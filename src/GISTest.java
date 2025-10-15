@@ -1603,4 +1603,66 @@ public class GISTest extends TestCase {
             remainingCities.contains("Springfield (20, 20)"));
     }
 
+
+    /**
+     * Tests the deletion of multiple cities with the same name to ensure they
+     * are all removed and reported in the correct preorder traversal sequence
+     * from the BST.
+     */
+    public void testDeleteAllDuplicatesByNameInPreorder() {
+        // Insert cities to create a specific BST structure.
+        // "B" will be the root.
+        it.insert("B_City", 50, 50);
+        // "A_City" will be the left child of "B_City".
+        it.insert("A_City", 25, 25);
+        // "C_City" will be the right child of "B_City".
+        it.insert("C_City", 75, 75);
+
+        // Insert the duplicate cities. Due to the BST insertion logic
+        // (duplicates go left), they will form a chain to the left.
+        it.insert("A_City", 10, 10); // Becomes left child of original A_City
+        it.insert("A_City", 5, 5); // Becomes left child of the second A_City
+
+        /*
+         * The BST will look like this for the name "A_City":
+         * "A_City" (25, 25)
+         * /
+         * "A_City" (10, 10)
+         * /
+         * "A_City" (5, 5)
+         *
+         * A preorder traversal should visit them in the order:
+         * 1. (25, 25)
+         * 2. (10, 10)
+         * 3. (5, 5)
+         */
+
+        // Define the expected output string based on the preorder traversal.
+        String expectedOutput = "A_City (25, 25)\n" + "A_City (10, 10)\n"
+            + "A_City (5, 5)";
+
+        // Call the delete method for the duplicate name.
+        String actualOutput = it.delete("A_City");
+
+        // 1. Verify the output string matches the expected preorder sequence
+        // exactly.
+        assertEquals(
+            "Deleted cities should be listed in preorder traversal order.",
+            expectedOutput, actualOutput);
+
+        // 2. Verify that all cities named "A_City" are gone.
+        assertEquals("info(\"A_City\") empty", "", it.info("A_City"));
+        assertEquals("City at (25, 25) should be deleted.", "", it.info(25,
+            25));
+        assertEquals("City at (10, 10) should be deleted.", "", it.info(10,
+            10));
+        assertEquals("City at (5, 5) should be deleted.", "", it.info(5, 5));
+
+        // 3. Verify that the other cities remain untouched.
+        assertEquals("City 'B_City' not be affected.", "B_City", it.info(50,
+            50));
+        assertEquals("City 'C_City' not be affected.", "C_City", it.info(75,
+            75));
+    }
+
 }

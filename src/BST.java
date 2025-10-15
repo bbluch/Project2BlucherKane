@@ -25,22 +25,6 @@ public class BST {
     }
 
 
-    /**
-     * Removes a specific city from the BST. This is more precise than
-     * removing by name, as it targets an exact city object.
-     *
-     * @param city
-     *            The city to remove.
-     * @return The removed City object, or null if not found.
-     */
-    public City remove(City city) {
-        root = removeHelp(root, city.getName());
-        if (root == null)
-            return null;
-        return root.getCity();
-    }
-
-
     // ----------------------------------------------------------
     /**
      * Remove method to remove a specific city based on names and
@@ -77,10 +61,10 @@ public class BST {
      */
     private BSTNode removeHelp(BSTNode rt, String name, int x, int y) {
         if (rt.getCity().getName().compareTo(name) > 0) {
-            rt.setLeft(removeHelp(rt.getLeft(), name));
+            rt.setLeft(removeHelp(rt.getLeft(), name, x, y));
         }
         else if (rt.getCity().getName().compareTo(name) < 0) {
-            rt.setRight(removeHelp(rt.getRight(), name));
+            rt.setRight(removeHelp(rt.getRight(), name, x, y));
         }
         else if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
             // Found it
@@ -101,41 +85,6 @@ public class BST {
             // Names match, but coordinates don't.
             // Keep searching down the left.
             rt.setLeft(removeHelp(rt.getLeft(), name, x, y));
-        }
-        return rt;
-    }
-
-
-    /**
-     * Private helper method for remove.
-     *
-     * @param rt
-     *            root node
-     * @param name
-     *            name of city being removed
-     * @return node returned
-     */
-    private BSTNode removeHelp(BSTNode rt, String name) {
-        if (rt.getCity().getName().compareTo(name) > 0) {
-            rt.setLeft(removeHelp(rt.getLeft(), name));
-        }
-        else if (rt.getCity().getName().compareTo(name) < 0) {
-            rt.setRight(removeHelp(rt.getRight(), name));
-        }
-        else {
-            // Found it
-
-            if (rt.getLeft() == null) {
-                return rt.getRight();
-            }
-            else if (rt.getRight() == null) {
-                return rt.getLeft();
-            }
-            else { // Two children
-                BSTNode temp = getMax(rt.getLeft());
-                rt.setCity(temp.getCity());
-                rt.setLeft(deleteMax(rt.getLeft()));
-            }
         }
         return rt;
     }

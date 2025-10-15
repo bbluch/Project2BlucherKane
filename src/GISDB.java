@@ -128,7 +128,7 @@ public class GISDB implements GIS {
         StringBuilder sb = new StringBuilder();
         for (City city : cities) {
             // Remove from both trees
-            bst.remove(city);
+            bst.remove(city, city.getX(), city.getY());
             kd.remove(city.getX(), city.getY());
             sb.append(city.toString()).append("\n");
         }
