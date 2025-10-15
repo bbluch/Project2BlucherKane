@@ -328,14 +328,14 @@ public class KDTree {
                     minNode.getCity().getY(), level + 1, result));
             }
             else if (rt.getLeft() != null) {
-//                BSTNode minNode = findMinNode(rt.getLeft(), axis, level + 1,
-//                    result);
-//                rt.setCity(minNode.getCity());
-//                rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
-//                    minNode.getCity().getY(), level + 1, result));
-//                rt.setLeft(null);
+                BSTNode minNode = findMinNode(rt.getLeft(), axis, level + 1,
+                    result);
+                rt.setCity(minNode.getCity());
+                rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
+                    minNode.getCity().getY(), level + 1, result));
+                rt.setLeft(null);
              // Corrected logic: Replace the current node with its left child
-                return rt.getLeft();
+                //return rt.getLeft();
             }
             else {
                 return null;
