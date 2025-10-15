@@ -1225,7 +1225,6 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(500, 500));
     }
 
-    // --------------------------------------------------------------------------
 
 
     /**
@@ -1254,7 +1253,6 @@ public class GISTest extends TestCase {
         assertEquals("RightChild", it.info(750, 250));
     }
 
-    // --------------------------------------------------------------------------
 
 
     /**
@@ -1296,7 +1294,6 @@ public class GISTest extends TestCase {
         assertEquals("OtherCity", it.info(500, 500));
     }
 
-    // --------------------------------------------------------------------------
 
 
     /**
@@ -1382,7 +1379,6 @@ public class GISTest extends TestCase {
         assertEquals("Chicago", it.info(200, 200));
     }
 
-    // --------------------------------------------------------------------------
 
 
     /**
@@ -1442,9 +1438,10 @@ public class GISTest extends TestCase {
         assertEquals("Delta", it.info(125, 125));
     }
 
-    // --------------------------------------------------------------------------
 
-
+    /**
+     * Tests Sequential Deletions
+     */
     public void testSequentialDeletions() {
         // Setup: a complex tree with multiple cities and duplicates.
         it.insert("CityA", 10, 10);
