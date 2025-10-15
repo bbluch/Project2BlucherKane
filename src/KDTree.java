@@ -12,14 +12,14 @@ public class KDTree {
 
     // ~Public Methods ........................................................
     private BSTNode root;
-    private int nodeCount;
+    //private int nodeCount;
 
     /**
      * Constructs an empty KDTree.
      */
     public KDTree() {
         root = null;
-        setNodeCount(0);
+        //setNodeCount(0);
     }
 
 
@@ -28,7 +28,7 @@ public class KDTree {
      */
     public void clear() {
         root = null;
-        setNodeCount(0);
+        //setNodeCount(0);
     }
 
 
@@ -40,7 +40,7 @@ public class KDTree {
      */
     public void insert(City city) {
         root = insertHelp(root, city, 0);
-        setNodeCount(size() + 1);
+        //setNodeCount(size() + 1);
     }
 
 
@@ -56,9 +56,9 @@ public class KDTree {
     public SearchResult remove(int x, int y) {
         SearchResult sr = new SearchResult();
         root = removeHelp(root, x, y, 0, sr);
-        if (sr.getResults().length > 0) {
-            nodeCount--;
-        }
+//        if (sr.getResults().length > 0) {
+//            nodeCount--;
+//        }
 // City temp = find(x, y);
 // if (temp != null) {
 // root = removeHelp(root, x, y, 0);
@@ -646,9 +646,9 @@ public class KDTree {
      * 
      * @return The value of nodeCount for this object.
      */
-    public int size() {
-        return nodeCount;
-    }
+//    public int size() {
+//        return nodeCount;
+//    }
 
 
     // ----------------------------------------------------------
@@ -658,7 +658,7 @@ public class KDTree {
      * @param nodeCount
      *            The new value for nodeCount.
      */
-    public void setNodeCount(int nodeCount) {
-        this.nodeCount = nodeCount;
-    }
+//    public void setNodeCount(int nodeCount) {
+//        this.nodeCount = nodeCount;
+//    }
 }

@@ -206,9 +206,9 @@ public class GISDB implements GIS {
         if (radius < 0) {
             return "";
         }
-        if (kd.size() == 0) {
-            return "0";
-        }
+//        if (kd.size() == 0) {
+//            return "0";
+//        }
         SearchResult result = kd.regionSearch(x, y, radius);
         StringBuilder sb = new StringBuilder();
         City[] cities = result.getResults();
