@@ -1787,9 +1787,9 @@ public class GISTest extends TestCase {
 
 
     /**
-     * Verifies that the debug() output has strictly correct indentation, 
+     * Verifies that the debug() output has strictly correct indentation,
      * which
-     * depends on incrementing the level in its recursive helper. 
+     * depends on incrementing the level in its recursive helper.
      * This test will
      * fail if 'level + 1' is mutated to 'level'.
      */
@@ -2156,6 +2156,83 @@ public class GISTest extends TestCase {
         // the tree
         // and identified the `CityF` as the node with the minimum y-value
         // in the right subtree of the node being deleted.
+    }
+
+
+    /**
+     * Tests the TRUE && TRUE case: The coordinates match exactly.
+     * The city should be successfully deleted.
+     */
+    public void testRemove_CoordinatesMatch() {
+        it.insert("Target", 50, 50);
+        it.insert("Other", 100, 100);
+
+        // Action
+        String result = it.delete(50, 50);
+
+        // Verification
+        assertTrue("Deletion report should contain the target city's name.",
+            result.contains("\nTarget"));
+        assertEquals("The city at (50, 50) should be deleted.", "", it.info(50,
+            50));
+        assertEquals("The other city should remain.", "Other", it.info(100,
+            100));
+    }
+
+
+    /**
+     * Tests the TRUE && FALSE case: X matches, but Y does not.
+     * The city should NOT be deleted, and the search should continue,
+     * eventually finding nothing and leaving the tree unchanged.
+     */
+    public void testRemove_XMatchYFails() {
+        it.insert("Target", 50, 50); // The city that should NOT be deleted
+
+        // Action: Attempt to delete with correct X but incorrect Y
+        String result = it.delete(50, 99);
+
+        // Verification
+        assertEquals("The result should be empty as no city was found.", "",
+            result);
+        assertEquals("The city at (50, 50) should not have been deleted.",
+            "Target", it.info(50, 50));
+    }
+
+
+    /**
+     * Tests the FALSE && TRUE case: Y matches, but X does not.
+     * The city should NOT be deleted. This is crucial for catching a mutant
+     * that changes '&&' to '||'.
+     */
+    public void testRemove_YMatchXFails() {
+        it.insert("Target", 50, 50); // The city that should NOT be deleted
+
+        // Action: Attempt to delete with correct Y but incorrect X
+        String result = it.delete(99, 50);
+
+        // Verification
+        assertEquals("The result should be empty as no city was found.", "",
+            result);
+        assertEquals("The city at (50, 50) should not have been deleted.",
+            "Target", it.info(50, 50));
+    }
+
+
+    /**
+     * Tests the FALSE && FALSE case: Neither coordinate matches.
+     * The city should NOT be deleted.
+     */
+    public void testRemove_CoordinatesMismatch() {
+        it.insert("Target", 50, 50);
+
+        // Action: Attempt to delete with completely wrong coordinates
+        String result = it.delete(99, 99);
+
+        // Verification
+        assertEquals("The result should be empty as no city was found.", "",
+            result);
+        assertEquals("The city at (50, 50) should not have been deleted.",
+            "Target", it.info(50, 50));
     }
 
 }
