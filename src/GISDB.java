@@ -97,8 +97,10 @@ public class GISDB implements GIS {
         City[] removedCities = result.getResults();
 
         // This check prevents the NullPointerException
+
         if (removedCities.length > 0) {
-            bst.remove(removedCities[0]);
+            bst.remove(removedCities[0], removedCities[0].getX(),
+                removedCities[0].getY());
             return result.nodesVisited + "\n" + removedCities[0].getName();
         }
 
@@ -199,7 +201,7 @@ public class GISDB implements GIS {
         if (radius < 0) {
             return "";
         }
-        
+
         SearchResult result = kd.regionSearch(x, y, radius);
         StringBuilder sb = new StringBuilder();
         City[] cities = result.getResults();

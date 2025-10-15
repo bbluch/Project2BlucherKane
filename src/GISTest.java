@@ -3,6 +3,7 @@ import student.TestCase;
 
 /**
  * Tests all methods in GISDB
+ * 
  * @author benblucher, austink23
  * @version 10.2.25
  */
@@ -1227,7 +1228,6 @@ public class GISTest extends TestCase {
     }
 
 
-
     /**
      * Test case for deleting a city that is a non-leaf node in both trees, with
      * children.
@@ -1253,7 +1253,6 @@ public class GISTest extends TestCase {
         assertEquals("LeftChild", it.info(250, 750));
         assertEquals("RightChild", it.info(750, 250));
     }
-
 
 
     /**
@@ -1294,7 +1293,6 @@ public class GISTest extends TestCase {
         assertEquals("", it.info(50, 50));
         assertEquals("OtherCity", it.info(500, 500));
     }
-
 
 
     /**
@@ -1379,7 +1377,6 @@ public class GISTest extends TestCase {
         assertEquals("Boston", it.info(50, 50));
         assertEquals("Chicago", it.info(200, 200));
     }
-
 
 
     /**
@@ -1560,6 +1557,50 @@ public class GISTest extends TestCase {
         assertEquals("Gamma", it.info(50, 50));
         assertEquals("Beta", it.info(40, 40));
         assertEquals("Delta", it.info(75, 75));
+    }
+
+
+    /**
+     * Tests the deletion of one specific city when multiple cities have the
+     * same
+     * name. It verifies that only the city with the matching coordinates is
+     * removed from both the KD-Tree and the BST.
+     */
+    public void testDeleteSpecificCityWithDuplicateName() {
+        // Insert three cities with the same name "Springfield"
+        assertTrue(it.insert("Springfield", 10, 10));
+        assertTrue(it.insert("Springfield", 20, 20));
+        assertTrue(it.insert("Springfield", 30, 30));
+
+        // Delete only the "Springfield" at (20, 20)
+        String result = it.delete(20, 20);
+
+        // 1. Verify that the delete method reports deleting "Springfield"
+        // The node count will vary based on insertion order, so we just check
+        // the name.
+        assertTrue("The delete result should contain the name 'Springfield'.",
+            result.contains("\nSpringfield"));
+
+        // 2. Verify that the city at (20, 20) is truly gone
+        assertEquals("City at (20, 20) should be deleted.", "", it.info(20,
+            20));
+
+        // 3. Verify that the other two "Springfield" cities still exist
+        assertEquals("City at (10, 10) should still exist.", "Springfield", it
+            .info(10, 10));
+        assertEquals("City at (30, 30) should still exist.", "Springfield", it
+            .info(30, 30));
+
+        // 4. Verify that a search by name "Springfield" now returns only two
+        // cities
+        String remainingCities = it.info("Springfield");
+        assertTrue("info(\"Springfield\") should contain the city at (10, 10).",
+            remainingCities.contains("Springfield (10, 10)"));
+        assertTrue("info(\"Springfield\") should contain the city at (30, 30).",
+            remainingCities.contains("Springfield (30, 30)"));
+        assertFalse(
+            "info(\"Springfield\") should not contain the deleted city at (20, 20).",
+            remainingCities.contains("Springfield (20, 20)"));
     }
 
 }

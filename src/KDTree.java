@@ -221,7 +221,8 @@ public class KDTree {
                 rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
                     minNode.getCity().getY(), level + 1, result));
                 rt.setLeft(null);
-                // Corrected logic: Replace the current node with its left child
+                // Corrected logic: Replace the
+                // current node with its left child
                 // return rt.getLeft();
             }
             else {
@@ -325,8 +326,6 @@ public class KDTree {
      *            The level of the tree
      * @param results
      *            The results of the region search
-     * @return int
-     *         number of nodes visited
      */
 
     private void regionSearchHelp(

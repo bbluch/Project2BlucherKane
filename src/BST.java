@@ -24,6 +24,7 @@ public class BST {
         root = null;
     }
 
+
     /**
      * Removes a specific city from the BST. This is more precise than
      * removing by name, as it targets an exact city object.
@@ -38,7 +39,65 @@ public class BST {
             return null;
         return root.getCity();
     }
-    
+
+
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     * 
+     * @param city
+     * @param x
+     * @param y
+     * @return city being removed
+     */
+    public City remove(City city, int x, int y) {
+        root = removeHelp(root, city.getName(), city.getX(), city.getY());
+        if (root == null)
+            return null;
+        return root.getCity();
+    }
+
+
+    /**
+     * Helper method when deleting a specific city.
+     * 
+     * @param rt
+     * @param name
+     * @param x
+     * @param y
+     * @return
+     */
+    private BSTNode removeHelp(BSTNode rt, String name, int x, int y) {
+        if (rt.getCity().getName().compareTo(name) > 0) {
+            rt.setLeft(removeHelp(rt.getLeft(), name));
+        }
+        else if (rt.getCity().getName().compareTo(name) < 0) {
+            rt.setRight(removeHelp(rt.getRight(), name));
+        }
+        else if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
+            // Found it
+
+            if (rt.getLeft() == null) {
+                return rt.getRight();
+            }
+            else if (rt.getRight() == null) {
+                return rt.getLeft();
+            }
+            else { // Two children
+                BSTNode temp = getMax(rt.getLeft());
+                rt.setCity(temp.getCity());
+                rt.setLeft(deleteMax(rt.getLeft()));
+            }
+        }
+        else {
+            // Names match, but coordinates don't.
+            // Keep searching down the left.
+            rt.setLeft(removeHelp(rt.getLeft(), name, x, y));
+        }
+        return rt;
+    }
+
+
     /**
      * Private helper method for remove.
      *
@@ -55,7 +114,9 @@ public class BST {
         else if (rt.getCity().getName().compareTo(name) < 0) {
             rt.setRight(removeHelp(rt.getRight(), name));
         }
-        else { // Found it
+        else {
+            // Found it
+
             if (rt.getLeft() == null) {
                 return rt.getRight();
             }
@@ -83,6 +144,7 @@ public class BST {
     public void insert(City city) {
         root = insertHelp(root, city);
     }
+
 
     /**
      * Returns a string representation of the BST via an in-order traversal.
@@ -125,6 +187,7 @@ public class BST {
         inOrderHelp(rt.getRight(), level + 1, sb);
     }
 
+
     /**
      * Finds all cities with the given name.
      *
@@ -165,7 +228,7 @@ public class BST {
             // continue searching the left subtree for more matches.
             findAllHelp(rt.getLeft(), name, results);
             findAllHelp(rt.getRight(), name, results);
-            
+
         }
         else if (compare < 0) {
             // The name we are looking for is smaller than the current node's
@@ -181,7 +244,7 @@ public class BST {
         }
     }
 
-    
+
     /**
      * Private helper method for the insert method.
      * 
