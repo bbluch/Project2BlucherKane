@@ -68,9 +68,11 @@ public class BST {
      * @return The removed City object, or null if not found.
      */
     public City remove(City city) {
-        if (city == null) {
-            return null;
-        }
+        /*
+         * if (city == null) {
+         * return null;
+         * }
+         */
         City[] removed = new City[1];
         root = removeHelp(root, city.getName());
         return removed[0];
@@ -129,13 +131,15 @@ public class BST {
      *            The name of the city to remove.
      * @return The City object of the removed node, or null if not found.
      */
-    public City remove(String name) {
-        City temp = find(name);
-        if (temp != null) {
-            root = removeHelp(root, name);
-        }
-        return temp;
-    }
+    /*
+     * public City remove(String name) {
+     * City temp = find(name);
+     * // if (temp != null) {
+     * // root = removeHelp(root, name);
+     * // }
+     * return temp;
+     * }
+     */
 
 
     /**
@@ -187,9 +191,11 @@ public class BST {
      *            The name of the city to find.
      * @return The City object if found, otherwise null.
      */
-    public City find(String name) {
-        return findHelp(root, name);
-    }
+    /*
+     * public City find(String name) {
+     * return findHelp(root, name);
+     * }
+     */
 
 
 
@@ -257,21 +263,19 @@ public class BST {
      *            name of city
      * @return city found
      */
-    private City findHelp(BSTNode rt, String name) {
-        if (rt == null) {
-            return null;
-        }
-        if (rt.getCity().getName().compareTo(name) > 0) {
-            return findHelp(rt.getLeft(), name);
-        }
-        else if (rt.getCity().getName().equals(name)) {
-            return rt.getCity();
-        }
-        else {
-            return findHelp(rt.getRight(), name);
-        }
-    }
-
+    /*
+     * private City findHelp(BSTNode rt, String name) {
+     * if (rt.getCity().getName().compareTo(name) > 0) {
+     * return findHelp(rt.getLeft(), name);
+     * }
+     * else if (rt.getCity().getName().equals(name)) {
+     * return rt.getCity();
+     * }
+     * else {
+     * return findHelp(rt.getRight(), name);
+     * }
+     * }
+     */
 
     /**
      * Private helper method for the insert method.
@@ -307,9 +311,11 @@ public class BST {
      * @return node returned
      */
     private BSTNode removeHelp(BSTNode rt, String name) {
-        if (rt == null) {
-            return null;
-        }
+        /*
+         * if (rt == null) {
+         * return null;
+         * }
+         */
         if (rt.getCity().getName().compareTo(name) > 0) {
             rt.setLeft(removeHelp(rt.getLeft(), name));
         }

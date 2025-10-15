@@ -376,11 +376,13 @@ public class KDTree {
         result.nodesVisited++; // Count node visit in findMin as well
 
         int currentAxis = level % 2;
-        if (currentAxis == axis) {
-            return (rt.getLeft() == null)
-                ? rt
-                : findMinNode(rt.getLeft(), axis, level + 1, result);
-        }
+        /*
+         * if (currentAxis == axis) {
+         * return (rt.getLeft() == null)
+         * ? rt
+         * : findMinNode(rt.getLeft(), axis, level + 1, result);
+         * }
+         */
 
         BSTNode leftMin = findMinNode(rt.getLeft(), axis, level + 1, result);
         BSTNode rightMin = findMinNode(rt.getRight(), axis, level + 1, result);
@@ -634,62 +636,6 @@ public class KDTree {
 
         inOrderHelp(rt.getRight(), level + 1, sb);
     }
-
-    /**
-     * Recursive helper method to search the KDTree.
-     * * @param rt
-     * The current root node of the subtree.
-     * 
-     * @param x
-     *            The x-coordinate of the search center.
-     * @param y
-     *            The y-coordinate of the search center.
-     * @param radius
-     *            The radius of the search circle.
-     * @param level
-     *            The current level in the tree.
-     * @param results
-     *            The SearchResult object to store found cities.
-     * @param visitedCount
-     *            An array holding the count of visited nodes.
-     */
-// private void regionSearchHelp(
-// BSTNode rt,
-// int x,
-// int y,
-// int radius,
-// int level,
-// SearchResult results,
-// int[] visitedCount) {
-// if (rt == null) {
-// return; // A null node is not "visited".
-// }
-//
-// // A node is considered "visited" as soon as we start processing it.
-// visitedCount[0]++;
-//
-// // Check if the city at the current node is within the search circle.
-// double distance = Math.sqrt(Math.pow(rt.getCity().getX() - x, 2) + Math
-// .pow(rt.getCity().getY() - y, 2));
-// if (distance <= radius) {
-// results.add(rt.getCity());
-// }
-//
-// int axis = level % 2;
-// int pointValue = (axis == 0) ? x : y;
-// int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
-//
-// // Recursively search the subtrees. The key is to only search a subtree
-// // if the search circle intersects with that subtree's region.
-// if (pointValue < axisValue + radius) {
-// regionSearchHelp(rt.getLeft(), x, y, radius, level + 1, results,
-// visitedCount);
-// }
-// if (pointValue > axisValue - radius) {
-// regionSearchHelp(rt.getRight(), x, y, radius, level + 1, results,
-// visitedCount);
-// }
-// }
 
 
     // ----------------------------------------------------------

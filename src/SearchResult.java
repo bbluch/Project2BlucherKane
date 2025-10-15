@@ -22,7 +22,7 @@ public class SearchResult {
      * Initializes necessary array.
      */
     SearchResult() {
-        cities = new City[10]; // Initial capacity
+        cities = new City[2]; // Initial capacity
         count = 0;
         nodesVisited = 0;
     }

@@ -348,7 +348,9 @@ public class GISTest extends TestCase {
      * Tests a bad radius input.
      */
     public void testSearchBadRadius() {
-        assertEquals("", it.search(0, 0, -1));
+        it.insert("Christiansburg", 65, 15);
+        assertEquals("", it.search(65, 15, -1));
+        assertFuzzyEquals("Christiansburg (65, 15)\n1",it.search(65, 15, 1));
     }
 
 
@@ -674,6 +676,261 @@ public class GISTest extends TestCase {
 
         // Verify no cities named "Duplicate" remain in the BST.
         // assertNull(it.bst.find("Duplicate"));
+    }
+
+    /**
+     * Tests a complex deletion from the KD-tree. This scenario is designed to
+     * stress the recursive nature of the remove and findMin methods. It deletes
+     * a
+     * node ("B") whose replacement ("F") is not an immediate child, forcing a
+     * deeper recursion for both finding the minimum and for the subsequent
+     * removal
+     * of that minimum node from its original position.
+     */
+// public void testComplexKDRemove() {
+// // Build a specific tree structure:
+// // Level 0 (x): B(50,50)
+// // Level 1 (y): / \
+// // A(25,75) C(75,25)
+// // Level 2 (x): / \
+// // F(60,10) D(90,40)
+// // Level 3 (y): \
+// // G(60,15)
+// it.insert("B", 50, 50); // Root
+// it.insert("A", 25, 75);
+// it.insert("C", 75, 25);
+// it.insert("D", 90, 40);
+// it.insert("F", 60, 10); // This will be the replacement for C, then B
+// it.insert("G", 60, 15);
+//
+// // First, delete "C". Its replacement should be "F".
+// // This tests a non-trivial findMin and remove.
+// String result1 = it.delete(75, 25);
+// assertTrue("Node count for deleting C should be reported.", result1
+// .startsWith("3"));
+// assertTrue("Name of deleted city C should be reported.", result1
+// .contains("C"));
+//
+// // Now, delete the original root "B". The new replacement should be "G".
+// // This is a more complex test because the replacement "G" is found
+// // after multiple recursive steps in findMin.
+// String result2 = it.delete(50, 50);
+// assertTrue("Node count for deleting B should be reported.", result2
+// .startsWith("4"));
+// assertTrue("Name of deleted city B should be reported.", result2
+// .contains("B"));
+//
+// // Verify the final state of the tree
+// assertEquals("", it.info(50, 50)); // Original root is gone
+// assertEquals("", it.info(75, 25)); // C is gone
+// assertEquals("G", it.info(60, 15)); // G should now be the root
+// assertEquals("A", it.info(25, 75)); // A should still exist
+// assertEquals("D", it.info(90, 40)); // D should still exist
+// assertEquals("F", it.info(60, 10)); // F should still exist
+// }
+
+
+    /**
+     * Tests the region search pruning logic with a search circle whose edge
+     * lies exactly on a splitting plane. This is designed to kill mutants that
+     * might incorrectly use '<=' instead of '<' for pruning, which would cause
+     * them to visit an extra, unnecessary subtree.
+     */
+    public void testRegionSearchPruningOnBoundary() {
+        // Tree: A(50,50) is the root. C(75,25) is in the right subtree.
+        it.insert("A", 50, 50);
+        it.insert("B", 25, 75);
+        it.insert("C", 75, 25);
+
+        // Search from (65, 25) with radius 10.
+        // The distance to the splitting plane at A (x=50) is 15.
+        // Since 15 > 10, the left subtree of A should be pruned.
+        // The search circle's right edge is at x=75, exactly touching C.
+        // The distance to C is 10, so it should be included.
+        // A correct implementation visits A and C. A mutant might also visit B.
+        String result = it.search(65, 25, 10);
+        assertTrue("The search should find city C.", result.contains(
+            "C (75, 25)"));
+        assertFalse("The search should NOT find city B.", result.contains(
+            "B (25, 75)"));
+        assertTrue("Should only visit 2 nodes (A and C), pruning B's subtree.",
+            result.endsWith("\n2"));
+    }
+
+
+    /**
+     * Tests the `delete(String name)` method by removing multiple cities that
+     * share the same name ("Duplicate"). This ensures that `findAll` in the BST
+     * correctly identifies all instances and that each one is subsequently
+     * removed from both the BST and the KD-tree.
+     */
+    public void testDeleteAllByNameWithDuplicates() {
+        it.insert("Duplicate", 10, 10);
+        it.insert("Keeper", 99, 99);
+        it.insert("Duplicate", 20, 20);
+        it.insert("AnotherKeeper", 1, 1);
+        it.insert("Duplicate", 30, 30);
+
+        // Delete all cities named "Duplicate"
+        String result = it.delete("Duplicate");
+
+        // Verify that the output string contains all deleted cities.
+        // The order can vary, so we check for containment.
+        assertTrue(result.contains("Duplicate (10, 10)"));
+        assertTrue(result.contains("Duplicate (20, 20)"));
+        assertTrue(result.contains("Duplicate (30, 30)"));
+
+        // Verify all "Duplicate" cities are gone from both data structures.
+        // assertNull(it.bst.find("Duplicate"));
+        assertEquals("", it.info(10, 10));
+        assertEquals("", it.info(20, 20));
+        assertEquals("", it.info(30, 30));
+
+        // Verify that the other cities were not affected.
+        assertEquals("Keeper", it.info(99, 99));
+        assertEquals("AnotherKeeper", it.info(1, 1));
+        // assertNotNull(it.bst.find("Keeper"));
+    }
+
+
+    /**
+     * Tests deleting a node with only a left child.
+     */
+    public void testDeleteByCoordWithOnlyLeftChild() {
+        it.insert("Root", 50, 50);
+        it.insert("LeftChild", 25, 75);
+        it.insert("ToDelete", 10, 80); // Child of LeftChild
+        it.delete(25, 75); // Delete LeftChild
+        assertEquals("", it.info(25, 75)); // Verify deletion
+        assertEquals("ToDelete", it.info(10, 80)); // Verify child is still
+                                                   // there
+    }
+
+
+    /**
+     * Tests deleting a node with only a right child.
+     */
+    public void testDeleteByCoordWithOnlyRightChild() {
+        it.insert("Root", 50, 50);
+        it.insert("RightChild", 75, 25);
+        it.insert("ToDelete", 80, 10); // Child of RightChild
+        it.delete(75, 25); // Delete RightChild
+        assertEquals("", it.info(75, 25)); // Verify deletion
+        assertEquals("ToDelete", it.info(80, 10)); // Verify child is still
+                                                   // there
+    }
+
+
+    /**
+     * Tests a region search with a radius of zero on an empty tree.
+     */
+    public void testRegionSearchWithZeroRadiusOnEmptyTree() {
+        assertFuzzyEquals("0", it.search(100, 100, 0));
+    }
+
+
+    /**
+     * Tests a region search that should find no cities.
+     */
+    public void testRegionSearchWithNoCitiesFound() {
+        it.insert("A", 10, 10);
+        it.insert("B", 20, 20);
+        assertFuzzyEquals("2", it.search(100, 100, 5)); // Search far away from
+                                                        // A and B
+    }
+
+
+    /**
+     * Tests deleting a node with two children from the BST.
+     */
+    public void testDeleteByNameWithTwoChildren() {
+        it.insert("B", 20, 20);
+        it.insert("A", 10, 10);
+        it.insert("C", 30, 30);
+        it.delete("B");
+        assertEquals("", it.info(20, 20)); // Verify B is deleted
+        assertEquals("A", it.info(10, 10)); // Verify children are still
+                                            // accessible
+        assertEquals("C", it.info(30, 30));
+    }
+
+
+    /**
+     * Tests deleting the root node from the BST.
+     */
+    public void testDeleteRootByName() {
+        it.insert("Root", 50, 50);
+        it.insert("A", 10, 10);
+        it.delete("Root");
+        assertEquals("", it.info(50, 50));
+        assertEquals("A", it.info(10, 10));
+    }
+
+
+    /**
+     * Tests attempting to remove a city that does not exist in the tree.
+     */
+    public void testRemoveNonExistentCity() {
+        it.insert("A", 10, 10);
+        it.insert("B", 20, 20);
+        String result = it.delete(30, 30);
+        assertEquals("", result);
+    }
+
+
+    /**
+     * Tests the region search pruning logic to ensure the left subtree is
+     * correctly searched even when the search center is to the right of the
+     * splitting axis. This test will fail if the condition
+     * `pointValue < axisValue + radius` is mutated to `pointValue < axisValue`.
+     */
+    public void testRegionSearchPruningLeftSubtree() {
+        // A is the root (x-split)
+        it.insert("A", 50, 50);
+        // B is in the left subtree of A
+        it.insert("B", 45, 50);
+
+        // Search from a point (52, 50) that is to the right of A.
+        // The radius of 10 should be large enough to include B.
+        // Distance from (52, 50) to B(45, 50) is 7.
+        String result = it.search(52, 50, 10);
+
+        // The correct implementation should search the left subtree because the
+        // circle (center at x=52, radius 10) overlaps with the left plane (x <
+        // 50).
+        // A mutated version might incorrectly skip the left subtree.
+        assertTrue(
+            "Search result should contain city 'B' from the left subtree.",
+            result.contains("B (45, 50)"));
+    }
+
+
+    /**
+     * Tests the region search pruning logic to ensure the right subtree is
+     * correctly searched even when the search center is to the left of the
+     * splitting axis. This test will fail if the condition
+     * `pointValue >= axisValue - radius` is mutated to `pointValue >=
+     * axisValue`.
+     */
+    public void testRegionSearchPruningRightSubtree() {
+        // A is the root (x-split)
+        it.insert("A", 50, 50);
+        // C is in the right subtree of A
+        it.insert("C", 55, 50);
+
+        // Search from a point (48, 50) that is to the left of A.
+        // The radius of 10 should be large enough to include C.
+        // Distance from (48, 50) to C(55, 50) is 7.
+        String result = it.search(48, 50, 10);
+
+        // The correct implementation should search the right subtree because
+        // the
+        // circle (center at x=48, radius 10) overlaps with the right plane (x
+        // >= 50).
+        // A mutated version might incorrectly skip the right subtree.
+        assertTrue(
+            "Search result should contain city 'C' from the right subtree.",
+            result.contains("C (55, 50)"));
     }
 
 }

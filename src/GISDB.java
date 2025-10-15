@@ -93,26 +93,6 @@ public class GISDB implements GIS {
      *         was deleted).
      */
     public String delete(int x, int y) {
-// City found = kd.find(x, y);
-// if (found == null)
-// return "";
-// String str = kd.regionSearch2(x, y);
-// bst.remove(found.getName());
-// kd.remove(x, y);
-// return str;
-// if (x < 0 || x > MAXCOORD || y < 0 || y > MAXCOORD) {
-// return "";
-// }
-// SearchResult result = kd.remove(x, y);
-// if (result != null) {
-// City[] removedCities = result.getResults();
-// bst.remove(removedCities[0].getName());
-// return result.count + "\n" + removedCities[0].getName();
-// }
-// return "";
-// if (x < 0 || x > MAXCOORD || y < 0 || y > MAXCOORD) {
-// return "";
-// }
         SearchResult result = kd.remove(x, y);
         City[] removedCities = result.getResults();
 
@@ -143,19 +123,10 @@ public class GISDB implements GIS {
      */
     public String delete(String name) {
         City[] cities = bst.findAll(name);
-        if (cities.length == 0)
-            return "";
-
-// String strFinal = "";
-//
-// for (int i = 0; i < cities.length; i++) {
-// strFinal = strFinal + cities[i].getName() + " ";
-// strFinal = strFinal + "(" + cities[i].getX();
-// strFinal = strFinal + ", " + cities[i].getY() + ")\n";
-// bst.remove(cities[i].getName());
-// kd.remove(cities[i].getX(), cities[i].getY());
-// }
-// return strFinal.trim();
+        /*
+         * if (cities.length == 0)
+         * return "";
+         */
         StringBuilder sb = new StringBuilder();
         for (City city : cities) {
             // Remove from both trees
