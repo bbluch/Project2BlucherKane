@@ -1014,5 +1014,61 @@ public class GISTest extends TestCase {
         assertEquals("LeftChild", it.info(20, 30));
         assertEquals("RightChild", it.info(30, 20));
     }
+    
+    /**
+     * Tests the `findMinNode` logic when the node has no left child at the current axis.
+     * This covers the `return (rt.getLeft() == null) ? rt` branch.
+     */
+    public void testFindMinNodeOnLeafSubtree() {
+        // Tree structure:
+        // Root (50, 50) - x-split
+        //   \
+        //   RightChild (75, 25) - y-split (the "leaf" for this axis)
+        // When we delete the root, findMinNode is called on the right subtree.
+        // The call starts at (75, 25) on a y-split. It has no left child, so it should
+        // return itself as the minimum.
+        it.insert("Root", 50, 50);
+        it.insert("RightChild", 75, 25);
+        
+        String result = it.delete(50, 50);
+        
+        // The node to be deleted is 'Root'. The minimum node found in the right subtree
+        // for the x-axis (since the root is an x-split) is 'RightChild'.
+        // The root should be replaced by the city from the right child.
+        assertEquals("", it.info(50, 50));
+        assertEquals("RightChild", it.info(75, 25));
+    }
+    
+    /**
+     * Tests the `findMinNode` logic when the node has a left child.
+     * This covers the `return findMinNode(rt.getLeft(), axis, level + 1, result)` branch.
+     */
+    public void testFindMinNodeOnLeftSubtree() {
+        // Tree structure for deletion:
+        // Root (50, 50) - x-split
+        //   \
+        //   RightChild (75, 25) - y-split
+        //     /
+        //     LeftGrandchild (60, 20) - x-split
+        //       /
+        //       MinNode (55, 10) - y-split (This is the expected minimum node)
+        it.insert("Root", 50, 50);
+        it.insert("RightChild", 75, 25);
+        it.insert("LeftGrandchild", 60, 20);
+        it.insert("MinNode", 55, 10);
+        
+        String result = it.delete(50, 50);
+        
+        // The deletion of the root (50, 50) should cause the findMinNode method to be called
+        // on its right subtree (starting at 75, 25).
+        // The method should recurse left from (75, 25) to (60, 20), and then left again
+        // to find the minimum value node at (55, 10).
+        // The original root should be replaced by 'MinNode's city.
+        assertEquals("", it.info(50, 50));
+        assertEquals("MinNode", it.info(55, 10));
+        // The other nodes should still exist in the tree.
+        assertEquals("RightChild", it.info(75, 25));
+        assertEquals("LeftGrandchild", it.info(60, 20));
+    }
 
 }
