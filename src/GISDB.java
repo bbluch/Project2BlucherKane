@@ -101,7 +101,7 @@ public class GISDB implements GIS {
             bst.remove(removedCities[0]);
             return result.nodesVisited + "\n" + removedCities[0].getName();
         }
-        
+
         // Return "" if nothing was deleted, as required by the test.
         return "";
     }

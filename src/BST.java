@@ -29,42 +29,44 @@ public class BST {
         root = null;
     }
 
-
     /**
      * Inserts a city into the BST.
      *
      * @param city
      *            The city to insert.
      */
-//    public void insert(City city) {
-//        root = insertHelp(root, city);
-//        nodeCount++;
-//    }
+// public void insert(City city) {
+// root = insertHelp(root, city);
+// nodeCount++;
+// }
 
     /**
      * Removes a city with the given name from the BST.
      * Note: This will remove only the first occurrence found.
      *
-     * @param name The name of the city to remove.
+     * @param name
+     *            The name of the city to remove.
      * @return The City object of the removed node, or null if not found.
      */
-//    public City remove(String name) {
-//        City temp = find(name);
-//        if (temp != null) {
-//            City[] removed = new City[1];
-//            root = removeHelp(root, temp, removed);
-//            if (removed[0] != null) {
-//                nodeCount--;
-//            }
-//        }
-//        return temp;
-//    }
+// public City remove(String name) {
+// City temp = find(name);
+// if (temp != null) {
+// City[] removed = new City[1];
+// root = removeHelp(root, temp, removed);
+// if (removed[0] != null) {
+// nodeCount--;
+// }
+// }
+// return temp;
+// }
+
 
     /**
      * Removes a specific city from the BST. This is more precise than
      * removing by name, as it targets an exact city object.
      *
-     * @param city The city to remove.
+     * @param city
+     *            The city to remove.
      * @return The removed City object, or null if not found.
      */
     public City remove(City city) {
@@ -73,18 +75,20 @@ public class BST {
          * return null;
          * }
          */
-        //City[] removed = new City[1];
+        // City[] removed = new City[1];
         root = removeHelp(root, city.getName());
         if (root == null)
             return null;
         return root.getCity();
     }
-    
-    
+
+
     // ----------------------------------------------------------
     /**
      * Insert a city into the BST.
-     * @param city The city being inserted
+     * 
+     * @param city
+     *            The city being inserted
      */
     // Make sure your nodeCount is updated in insert()
     public void insert(City city) {
@@ -150,7 +154,6 @@ public class BST {
         inOrderHelp(rt.getRight(), level + 1, sb);
     }
 
-
     /**
      * Finds a city by its name.
      *
@@ -163,7 +166,6 @@ public class BST {
      * return findHelp(root, name);
      * }
      */
-
 
 
     /**
@@ -220,7 +222,6 @@ public class BST {
         }
     }
 
-
     /**
      * Private helper method to assist in find method.
      *
@@ -243,6 +244,7 @@ public class BST {
      * }
      * }
      */
+
 
     /**
      * Private helper method for the insert method.
