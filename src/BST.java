@@ -73,9 +73,11 @@ public class BST {
          * return null;
          * }
          */
-        City[] removed = new City[1];
+        //City[] removed = new City[1];
         root = removeHelp(root, city.getName());
-        return removed[0];
+        if (root == null)
+            return null;
+        return root.getCity();
     }
     
     
