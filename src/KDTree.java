@@ -375,15 +375,6 @@ public class KDTree {
             return null;
         result.nodesVisited++; // Count node visit in findMin as well
 
-        int currentAxis = level % 2;
-        /*
-         * if (currentAxis == axis) {
-         * return (rt.getLeft() == null)
-         * ? rt
-         * : findMinNode(rt.getLeft(), axis, level + 1, result);
-         * }
-         */
-
         BSTNode leftMin = findMinNode(rt.getLeft(), axis, level + 1, result);
         BSTNode rightMin = findMinNode(rt.getRight(), axis, level + 1, result);
         BSTNode min = rt;
