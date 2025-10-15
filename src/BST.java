@@ -78,6 +78,7 @@ public class BST {
         return removed[0];
     }
     
+    
     // ----------------------------------------------------------
     /**
      * Insert a city into the BST.
