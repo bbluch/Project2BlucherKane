@@ -78,42 +78,6 @@ public class BST {
         return removed[0];
     }
     
-    // Add this new helper method to BST.java
-//    private BSTNode removeHelp(BSTNode rt, City city, City[] removed) {
-//        if (rt == null) {
-//            return null;
-//        }
-//
-//        int compare = city.getName().compareTo(rt.getCity().getName());
-//
-//        if (compare < 0) {
-//            rt.setLeft(removeHelp(rt.getLeft(), city, removed));
-//        }
-//        else if (compare > 0) {
-//            rt.setRight(removeHelp(rt.getRight(), city, removed));
-//        }
-//        else { // Names match, now check if it's the exact city
-//            if (rt.getCity().equals(city)) {
-//                removed[0] = rt.getCity();
-//                if (rt.getLeft() == null) {
-//                    return rt.getRight();
-//                }
-//                else if (rt.getRight() == null) {
-//                    return rt.getLeft();
-//                }
-//                else {
-//                    BSTNode temp = getMax(rt.getLeft());
-//                    rt.setCity(temp.getCity());
-//                    rt.setLeft(deleteMax(rt.getLeft()));
-//                }
-//            }
-//            else {
-//                rt.setLeft(removeHelp(rt.getLeft(), city, removed));
-//            }
-//        }
-//        return rt;
-//    }
-    
     // ----------------------------------------------------------
     /**
      * Insert a city into the BST.
