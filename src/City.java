@@ -1,19 +1,20 @@
 // -------------------------------------------------------------------------
 /**
  * Contains the necessary info and implementation for each city.
+ * Each city has a name as well as X and Y coordinates. City names may be
+ * the same, but two cities cannot have the same coordinates.
  * 
  * @author benblucher, austink23
  * @version Oct 8, 2025
  */
 public class City {
     // ~ Fields ................................................................
-
-    // ~ Constructors ..........................................................
-
-    // ~Public Methods ........................................................
     private String name;
     private int x;
     private int y;
+    // ~ Constructors ..........................................................
+
+    // ~Public Methods ........................................................
 
     /**
      * Constructs a new City object.
