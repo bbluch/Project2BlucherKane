@@ -7,11 +7,6 @@
  * @version Oct 8, 2025
  */
 public class BST {
-    // ~ Fields ................................................................
-
-    // ~ Constructors ..........................................................
-
-    // ~Public Methods ........................................................
     private BSTNode root;
 
     /**
@@ -30,38 +25,6 @@ public class BST {
     }
 
     /**
-     * Inserts a city into the BST.
-     *
-     * @param city
-     *            The city to insert.
-     */
-// public void insert(City city) {
-// root = insertHelp(root, city);
-// nodeCount++;
-// }
-
-    /**
-     * Removes a city with the given name from the BST.
-     * Note: This will remove only the first occurrence found.
-     *
-     * @param name
-     *            The name of the city to remove.
-     * @return The City object of the removed node, or null if not found.
-     */
-// public City remove(String name) {
-// City temp = find(name);
-// if (temp != null) {
-// City[] removed = new City[1];
-// root = removeHelp(root, temp, removed);
-// if (removed[0] != null) {
-// nodeCount--;
-// }
-// }
-// return temp;
-// }
-
-
-    /**
      * Removes a specific city from the BST. This is more precise than
      * removing by name, as it targets an exact city object.
      *
@@ -70,12 +33,6 @@ public class BST {
      * @return The removed City object, or null if not found.
      */
     public City remove(City city) {
-        /*
-         * if (city == null) {
-         * return null;
-         * }
-         */
-        // City[] removed = new City[1];
         root = removeHelp(root, city.getName());
         if (root == null)
             return null;
@@ -92,11 +49,6 @@ public class BST {
      * @return node returned
      */
     private BSTNode removeHelp(BSTNode rt, String name) {
-        /*
-         * if (rt == null) {
-         * return null;
-         * }
-         */
         if (rt.getCity().getName().compareTo(name) > 0) {
             rt.setLeft(removeHelp(rt.getLeft(), name));
         }

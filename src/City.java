@@ -6,11 +6,7 @@
  * @version Oct 8, 2025
  */
 public class City {
-    // ~ Fields ................................................................
 
-    // ~ Constructors ..........................................................
-
-    // ~Public Methods ........................................................
     private String name;
     private int x;
     private int y;
