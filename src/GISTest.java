@@ -350,7 +350,7 @@ public class GISTest extends TestCase {
     public void testSearchBadRadius() {
         it.insert("Christiansburg", 65, 15);
         assertEquals("", it.search(65, 15, -1));
-        assertFuzzyEquals("Christiansburg (65, 15)\n1",it.search(65, 15, 1));
+        assertFuzzyEquals("Christiansburg (65, 15)\n1", it.search(65, 15, 1));
     }
 
 
@@ -932,6 +932,5 @@ public class GISTest extends TestCase {
             "Search result should contain city 'C' from the right subtree.",
             result.contains("C (55, 50)"));
     }
-    
 
 }
