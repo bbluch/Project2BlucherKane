@@ -932,5 +932,6 @@ public class GISTest extends TestCase {
             "Search result should contain city 'C' from the right subtree.",
             result.contains("C (55, 50)"));
     }
+    
 
 }
