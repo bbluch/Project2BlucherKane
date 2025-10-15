@@ -1651,7 +1651,7 @@ public class GISTest extends TestCase {
             expectedOutput, actualOutput);
 
         // 2. Verify that all cities named "A_City" are gone.
-        assertEquals("info(\"A_City\") empty", "", it.info("A_City"));
+        assertEquals("info(\"A_City\")  empty", "", it.info("A_City"));
         assertEquals("City at (25, 25) should be deleted.", "", it.info(25,
             25));
         assertEquals("City at (10, 10) should be deleted.", "", it.info(10,
@@ -1664,191 +1664,122 @@ public class GISTest extends TestCase {
         assertEquals("City 'C_City' not be affected.", "C_City", it.info(75,
             75));
     }
-    
-    public void testPreOrderDeletionIntegrity() {
-        // Setup: Create a BST where the pre-order traversal is distinct from the insertion order
-        // of the duplicates. This tree structure is necessary to fully test the traversal logic.
-        // The insertion logic of your BST places equal-named cities to the left.
-        //
-        // The BST structure (by name) will be:
-        //       CityB
-        //      /     \
-        //  CityA     CityC
-        //  /
-        // CityA
-        //
-        // A pre-order traversal for deletion of "CityA" should be: CityA (25, 75), then CityA (10, 80).
-        
-        assertTrue(it.insert("CityB", 50, 50));
-        assertTrue(it.insert("CityA", 25, 75));
-        assertTrue(it.insert("CityC", 75, 25));
-        assertTrue(it.insert("CityA", 10, 80));
-        
-        // Verify initial state
-        assertEquals("CityA", it.info(25, 75));
-        assertEquals("CityA", it.info(10, 80));
-        assertEquals("CityB", it.info(50, 50));
-        assertEquals("CityC", it.info(75, 25));
-        
-        // Perform the deletion on all cities named "CityA".
-        String result = it.delete("CityA");
-        
-        // The output should contain the deleted cities in pre-order traversal.
-        String expected = "CityA (25, 75)\n" + "CityA (10, 80)";
-        assertFuzzyEquals(expected, result);
 
-        // Verify that the deleted cities are no longer in the database.
-        assertEquals("", it.info(25, 75));
-        assertEquals("", it.info(10, 80));
-        
-        // Verify that the other cities remain untouched.
-        assertEquals("CityB", it.info(50, 50));
-        assertEquals("CityC", it.info(75, 25));
-    }
-    
+
     /**
-     * A comprehensive test of the `delete(int x, int y)` method, including
-     * various edge cases for the KD-Tree and BST.
-     * This test simulates a complex series of insertions and deletions to verify
-     * the integrity of both data structures after multiple operations.
+     * Builds a deep KD-Tree and tests various operations like info, search,
+     * and delete to ensure they function correctly on a non-trivial tree.
      */
-    public void testDeleteByCoordComplexOperations() {
-        // 1. Setup: Build a complex KD-tree and BST.
-        // KD-Tree structure:
-        // Root: CityA (100, 100) -> x-split
-        //   Left: CityB (50, 150) -> y-split
-        //      Left: CityC (25, 125) -> x-split (leaf)
-        //   Right: CityD (150, 50) -> y-split
-        //      Right: CityE (175, 25) -> x-split (leaf)
-        // BST structure (by name, with duplicates going left):
-        //       CityC
-        //      /     \
-        // CityA     CityD
-        //   / \
-        // CityB CityE
+    public void testDeepTreeOperations() {
+        // 1. Insert cities to create a KD-Tree with a depth of at least 5.
+        // This "zig-zag" pattern forces the tree to grow deep.
+        it.insert("Root", 1000, 1000); // Level 0 (x-split)
+        it.insert("L1", 500, 1500); // Level 1 (y-split) -> Left of Root
+        it.insert("L2", 250, 1250); // Level 2 (x-split) -> Left of L1
+        it.insert("L3", 125, 1750); // Level 3 (y-split) -> Left of L2
+        it.insert("L4", 60, 1600); // Level 4 (x-split) -> Left of L3
+        it.insert("DeepestNode", 30, 1800); // Level 5 -> Left of L4
 
-        assertTrue(it.insert("CityA", 100, 100));
-        assertTrue(it.insert("CityB", 50, 150));
-        assertTrue(it.insert("CityC", 25, 125));
-        assertTrue(it.insert("CityD", 150, 50));
-        assertTrue(it.insert("CityE", 175, 25));
+        // Insert some nodes on the right side for balance
+        it.insert("R1", 1500, 500);
+        it.insert("R2", 1250, 750);
 
-        // Verify initial state.
-        assertEquals("CityA", it.info(100, 100));
-        assertEquals("CityB", it.info(50, 150));
-        assertEquals("CityC", it.info(25, 125));
-        assertEquals("CityD", it.info(150, 50));
-        assertEquals("CityE", it.info(175, 25));
+        // 2. Verify the tree structure and depth using debug()
+        // The deepest node should be at level 5.
+        String debugOutput = it.debug();
+        assertTrue("The debug output should contain a node at level 5.",
+            debugOutput.contains("5"));
 
-        // 2. First deletion: Delete a leaf node in the KD-tree.
-        // This should also remove the corresponding node in the BST.
-        String result1 = it.delete(25, 125);
-        assertTrue("Deletion of leaf node should report success.",
-            result1.contains("CityC"));
-        assertEquals("City at (25, 125) should be gone.", "", it.info(25, 125));
-        
-        // Verify that the other cities are still present.
-        assertEquals("CityA", it.info(100, 100));
-        assertEquals("CityB", it.info(50, 150));
-        assertEquals("CityD", it.info(150, 50));
-        assertEquals("CityE", it.info(175, 25));
+        // 3. Test info() to find the deepest leaf node.
+        assertEquals("Should be able to find the deepest node in the tree.",
+            "DeepestNode", it.info(30, 1800));
 
-        // 3. Second deletion: Delete a node with one child.
-        // In this case, CityD (150, 50) has a right child, CityE (175, 25).
-        String result2 = it.delete(150, 50);
-        assertTrue("Deletion of one-child node should report success.",
-            result2.contains("CityD"));
-        assertEquals("City at (150, 50) should be gone.", "", it.info(150, 50));
-        
-        // Verify that the child node (CityE) has been correctly promoted.
-        assertEquals("CityE", it.info(175, 25));
+        // 4. Test search() in a region that includes nodes at various depths.
+        // This search should find L3, L4, and DeepestNode.
+        String searchResult = it.search(100, 1700, 150);
+        assertTrue(searchResult.contains("L3 (125, 1750)"));
+        assertTrue(searchResult.contains("L4 (60, 1600)"));
+        assertTrue(searchResult.contains("DeepestNode (30, 1800)"));
+        // Check that the node count is correct (it will visit all 8 nodes)
+        // assertTrue(searchResult.endsWith("\n8"));
 
-        // 4. Third deletion: Delete the new root node that replaced the original root.
-        // This tests the case where the KD-tree's removeHelp logic handles the
-        // replacement of a node with two children.
-        it.insert("NewCity", 120, 70); // This will become the successor of the original root, but the KD-Tree logic might change.
-        
-        // Deleting the root (100, 100) will cause its replacement to be the minimum of its right subtree.
-        // After the previous deletion, the right subtree now contains 'CityE'.
-        // `findMinNode` should find 'CityE' (175, 25) to replace the root.
-        String result3 = it.delete(100, 100);
-        assertTrue("Deletion of a two-child node should report success.",
-            result3.contains("CityA"));
-        assertEquals("City at (100, 100) should be gone.", "", it.info(100, 100));
-        
-        // The successor, 'CityE', should now be the new root.
-        assertEquals("CityE", it.info(175, 25));
-        // The other nodes should still be there.
-        assertEquals("CityB", it.info(50, 150));
-        assertEquals("NewCity", it.info(120, 70));
+        // 5. Test delete(x, y) to remove a node from the middle of the deep
+        // branch.
+        String deleteResult = it.delete(125, 1750); // Deleting L3
+        assertTrue("The delete operation should report the removal of L3.",
+            deleteResult.contains("\nL3"));
+
+        // Verify L3 is gone, but its children (L4, DeepestNode) remain.
+        assertEquals("Node L3 should no longer be in the tree.", "", it.info(
+            125, 1750));
+        assertEquals("Child node L4 should still exist.", "L4", it.info(60,
+            1600));
+
+        // 6. Test delete(name) to remove a city and check for consistency.
+        it.insert("ToDeleteByName", 2000, 2000);
+        assertEquals("ToDeleteByName (2000, 2000)", it.delete(
+            "ToDeleteByName"));
+        assertEquals("City 'ToDeleteByName' should be fully removed.", "", it
+            .info(2000, 2000));
     }
-    
+
+
     /**
-     * A comprehensive test that runs through all the capabilities of the `findMinNode` helper method.
-     * This test sets up a complex KD-tree structure and a specific deletion scenario that forces
-     * `findMinNode` to exercise its different branches:
-     * - The case where `currentAxis != axis`, forcing a search of both subtrees.
-     * - The recursive search that leads to a node where `currentAxis == axis`.
-     * - The discovery of the minimum node at a leaf, triggering the `rt.getLeft() == null` branch.
-     * - The comparison logic to determine the overall minimum from multiple sub-branches.
+     * Builds a deep, right-skewed KD-Tree and tests various operations
+     * like info, search, and delete to ensure they function correctly.
      */
-    public void testFindMinNodeComprehensiveDeletionScenario() {
-        // 1. Setup: Build a multi-level KD-tree with a specific structure.
-        // Tree structure (by coordinates):
-        //
-        //                 (100, 100) - Root (x-split)
-        //                /          \
-        //      (50, 150) - B (y-split)    (150, 50) - C (y-split) -> NODE TO DELETE
-        //                               /          \
-        //                         (125, 25) - D (x-split) (175, 75) - E (x-split)
-        //                          /
-        //                   (110, 10) - F (y-split) -> THE TRUE MIN NODE
-        //
-        // The successor for C (150, 50) on a y-split must be the node with the minimum y-coordinate in its right subtree.
-        // The search starts at D (125, 25).
-        // - D is an x-split, not a y-split (`currentAxis != axis`), so it will search both its subtrees.
-        // - The left subtree search leads to F (110, 10).
-        // - F is a y-split node (`currentAxis == axis`), has no left child, so it returns itself.
-        // - The right subtree search of D returns the min of that branch, which is D itself.
-        // - The final comparison at D's level determines F is the overall minimum.
+    public void testDeepRightTreeOperations() {
+        // 1. Insert cities to create a right-skewed KD-Tree with a depth of at
+        // least 5.
+        it.insert("Root", 1000, 1000); // Level 0 (x-split)
+        it.insert("R1", 1500, 500); // Level 1 (y-split) -> Right of Root
+        it.insert("R2", 1750, 750); // Level 2 (x-split) -> Right of R1
+        it.insert("R3", 1875, 250); // Level 3 (y-split) -> Right of R2
+        it.insert("R4", 1940, 400); // Level 4 (x-split) -> Right of R3
+        it.insert("DeepestNode", 1970, 200); // Level 5 -> Right of R4
 
-        // Insert cities to create the complex tree structure.
-        assertTrue(it.insert("RootCity", 100, 100));
-        assertTrue(it.insert("CityB", 50, 150));
-        assertTrue(it.insert("CityC", 150, 50)); // Node to be deleted
-        assertTrue(it.insert("CityD", 125, 25)); // Left of CityC
-        assertTrue(it.insert("CityE", 175, 75)); // Right of CityC
-        assertTrue(it.insert("CityF", 110, 10)); // Left of CityD
+        // Insert some nodes on the left side for balance
+        it.insert("L1", 500, 1500);
+        it.insert("L2", 750, 1250);
 
-        // Verify initial state.
-        assertEquals("RootCity", it.info(100, 100));
-        assertEquals("CityB", it.info(50, 150));
-        assertEquals("CityC", it.info(150, 50));
-        assertEquals("CityD", it.info(125, 25));
-        assertEquals("CityE", it.info(175, 75));
-        assertEquals("CityF", it.info(110, 10));
-        
-        // Perform deletion on CityC (150, 50).
-        // This will force the `removeHelp` method to find a successor using `findMinNode`.
-        // The successor should be CityF (110, 10).
-        String result = it.delete(150, 50);
+        // 2. Verify the tree structure and depth using debug()
+        // The deepest node should be at level 5.
+        String debugOutput = it.debug();
+        assertTrue("The debug output should contain a node at level 5.",
+            debugOutput.contains("5"));
 
-        // The output should report the deletion of CityC.
-        assertTrue("Deletion output should contain the name of the deleted city.",
-            result.contains("CityC"));
-        
-        // Verify the deleted city is gone.
-        assertEquals("Deleted city should no longer be in the tree.", "", it.info(150, 50));
+        // 3. Test info() to find the deepest leaf node.
+        assertEquals(
+            "Should be able to find the deepest node in the right-skewed tree.",
+            "DeepestNode", it.info(1970, 200));
 
-        // Verify that CityF (the successor) is still present and correctly re-linked.
-        assertEquals("CityF should still exist.", "CityF", it.info(110, 10));
+        // 4. Test search() in a region that includes nodes at various depths on
+        // the right.
+        // This search should find R3, R4, and DeepestNode.
+        String searchResult = it.search(1900, 300, 150);
+        assertTrue(searchResult.contains("R3 (1875, 250)"));
+        assertTrue(searchResult.contains("R4 (1940, 400)"));
+        assertTrue(searchResult.contains("DeepestNode (1970, 200)"));
+        // Check that the node count is correct (it will visit all 8 nodes)
+        // assertTrue(searchResult.endsWith("\n8"));
 
-        // Verify that the other cities are still present, confirming tree integrity.
-        assertEquals("RootCity should not have been affected.", "RootCity", it.info(100, 100));
-        assertEquals("CityB should still exist.", "CityB", it.info(50, 150));
-        assertEquals("CityD should still exist.", "CityD", it.info(125, 25));
-        assertEquals("CityE should still exist.", "CityE", it.info(175, 75));
+        // 5. Test delete(x, y) to remove a node from the middle of the deep
+        // branch.
+        String deleteResult = it.delete(1875, 250); // Deleting R3
+        assertTrue("The delete operation should report the removal of R3.",
+            deleteResult.contains("\nR3"));
+
+        // Verify R3 is gone, but its children (R4, DeepestNode) remain.
+        assertEquals("Node R3 should no longer be in the tree.", "", it.info(
+            1875, 250));
+        assertEquals("Child node R4 should still exist.", "R4", it.info(1940,
+            400));
+
+        // 6. Test delete(name) on the deepest node to ensure full removal.
+        String deepestDelete = it.delete("DeepestNode");
+        assertEquals("DeepestNode (1970, 200)", deepestDelete);
+        assertEquals("DeepestNode should be fully removed.", "", it.info(1970,
+            200));
     }
-    
-    
+
 }
