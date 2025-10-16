@@ -1,6 +1,8 @@
 // -------------------------------------------------------------------------
 /**
- * Contains the implementation for both BSTNode and KDNodes.
+ * Contains the implementation for both BSTNode and KDNodes. The nodes have
+ * city information as well as pointers to left and right nodes to
+ * properly implement tree logic.
  * 
  * @author benblucher, austink23
  * @version Oct 7, 2025
