@@ -60,7 +60,9 @@ public class GISDB implements GIS {
      * @return True iff the city is successfully entered into the database
      */
     public boolean insert(String name, int x, int y) {
+        // checks if x coord is in valid range
         boolean xIsValid = (x >= 0 && x <= MAXCOORD);
+        // checks if y coord is in valid range
         boolean yIsValid = (y >= 0 && y <= MAXCOORD);
         if (!xIsValid || !yIsValid) {
             return false;
@@ -69,7 +71,7 @@ public class GISDB implements GIS {
         if (kd.find(x, y) != null) {
             return false;
         }
-
+        // new city to insert
         City city = new City(name, x, y);
         bst.insert(city);
         kd.insert(city);
@@ -93,11 +95,13 @@ public class GISDB implements GIS {
      *         was deleted).
      */
     public String delete(int x, int y) {
+        //result of kd node removal
         SearchResult result = kd.remove(x, y);
+        // array of cities to be removed
         City[] removedCities = result.getResults();
 
+        
         // This check prevents the NullPointerException
-
         if (removedCities.length > 0) {
             bst.remove(removedCities[0], removedCities[0].getX(),
                 removedCities[0].getY());
@@ -124,7 +128,9 @@ public class GISDB implements GIS {
      *         Print the empty string if no cites match.
      */
     public String delete(String name) {
+        // all cities that have name, name
         City[] cities = bst.findAll(name);
+        // string to return
         StringBuilder sb = new StringBuilder();
         for (City city : cities) {
             // Remove from both trees
@@ -147,6 +153,7 @@ public class GISDB implements GIS {
      * @return The city name if there is such a city, empty otherwise
      */
     public String info(int x, int y) {
+        // city with coord x,y
         City found = kd.find(x, y);
         if (found != null) {
             return found.getName();
@@ -165,8 +172,9 @@ public class GISDB implements GIS {
      *         empty if there are none.
      */
     public String info(String name) {
+        // array of cities with name, name
         City[] cities = bst.findAll(name);
-
+        // string to return
         String strFinal = "";
 
         for (int i = 0; i < cities.length; i++) {
@@ -201,9 +209,11 @@ public class GISDB implements GIS {
         if (radius < 0) {
             return "";
         }
-
+        // object of cities in radius
         SearchResult result = kd.regionSearch(x, y, radius);
+        // string to return
         StringBuilder sb = new StringBuilder();
+        // array of cities in radius
         City[] cities = result.getResults();
         for (City city : cities) {
             sb.append(city.toString()).append("\n");
