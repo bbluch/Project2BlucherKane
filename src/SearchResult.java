@@ -1,8 +1,10 @@
 // -------------------------------------------------------------------------
 /**
- * Class which handles necessary logic for extensive searching.
+ * Class which handles necessary logic for extensive searching. This
+ * mainly handles the task of storing the nodes visited information when
+ * it is needed.
  * 
- * @author bluch
+ * @author benblucher, austink23
  * @version Oct 9, 2025
  */
 public class SearchResult {
@@ -39,6 +41,8 @@ public class SearchResult {
         City[] newCities = new City[cities.length + 1];
         System.arraycopy(cities, 0, newCities, 0, cities.length);
         cities = newCities;
+        
+        //add the city
         cities[count++] = city;
     }
 
