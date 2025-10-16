@@ -17,7 +17,6 @@ public class KDTree {
 
     // ~Public Methods ........................................................
     private BSTNode root;
-    // private int nodeCount;
 
     /**
      * Constructs an empty KDTree.
@@ -97,30 +96,6 @@ public class KDTree {
 
 
     /**
-     * Performs a region search to find all cities within a given radius of a
-     * point.
-     *
-     * @param x
-     *            The x-coordinate of the center of the search circle.
-     * @param y
-     *            The y-coordinate of the center of the search circle.
-     * @return An array of cities within the specified region.
-     */
-    public String regionSearch2(int x, int y) {
-        SearchResult results = new SearchResult();
-        regionSearchHelp(root, x, y, 0, 0, results);
-        String strFinal = "";
-        City[] cities = results.getResults();
-        // count++;
-
-        strFinal += results.nodesVisited + "\n" + cities[0].getName() + "\n";
-
-        return strFinal;
-
-    }
-
-
-    /**
      * Helper method for insert logic.
      * 
      * @param rt
@@ -135,8 +110,11 @@ public class KDTree {
     private BSTNode insertHelp(BSTNode rt, City city, int level) {
         if (rt == null)
             return new BSTNode(city);
+        // axis calculations
         int axis = level++ % 2;
+        // picks which city coord to compare
         int cityCoord = (axis == 0) ? city.getX() : city.getY();
+        // picks which current city coord to compare
         int nodeCoord = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
         if (cityCoord < nodeCoord) {
             rt.setLeft(insertHelp(rt.getLeft(), city, level));
@@ -166,8 +144,11 @@ public class KDTree {
             return null;
         if (rt.getCity().getX() == x && rt.getCity().getY() == y)
             return rt.getCity();
+        // axis calculations
         int axis = level++ % 2;
+        // picks which city coord to compare
         int pointCoord = (axis == 0) ? x : y;
+        // picks which current city coord to compare
         int nodeCoord = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
         if (pointCoord < nodeCoord) {
             return findHelp(rt.getLeft(), x, y, level);
@@ -199,7 +180,8 @@ public class KDTree {
         if (rt == null)
             return null;
         result.nodesVisited++;
-
+        
+        // axis calculations
         int axis = level++ % 2;
 
         if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
@@ -218,16 +200,15 @@ public class KDTree {
                 rt.setRight(removeHelp(rt.getLeft(), minNode.getCity().getX(),
                     minNode.getCity().getY(), level, result));
                 rt.setLeft(null);
-                // Corrected logic: Replace the
-                // current node with its left child
-                // return rt.getLeft();
             }
             else {
                 return null;
             }
         }
         else {
+            // picks which city coord to compare
             int pointCoord = (axis == 0) ? x : y;
+            // picks which current city coord to compare
             int nodeCoord = (axis == 0)
                 ? rt.getCity().getX()
                 : rt.getCity().getY();
@@ -261,7 +242,7 @@ public class KDTree {
         if (rt == null)
             return null;
         result.nodesVisited++; // Count node visit in findMin as well
-
+        // axis calculations
         int currentAxis = level++ % 2;
 
         if (currentAxis == axis) {
@@ -269,9 +250,11 @@ public class KDTree {
                 ? rt
                 : findMinNode(rt.getLeft(), axis, level, result);
         }
-
+        // left minimum node
         BSTNode leftMin = findMinNode(rt.getLeft(), axis, level, result);
+        // right minimum node
         BSTNode rightMin = findMinNode(rt.getRight(), axis, level, result);
+        // current node
         BSTNode min = rt;
 
         if (leftMin != null && compareCities(leftMin.getCity(), min.getCity(),
@@ -337,8 +320,11 @@ public class KDTree {
             .pow(rt.getCity().getY() - y, 2));
         if (distance <= radius)
             result.add(rt.getCity());
+        // axis calculations
         int axis = level++ % 2;
+        //picks which city coord to compare
         int pointValue = (axis == 0) ? x : y;
+        // picks which current city coord to compare
         int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();
         if (pointValue < axisValue + radius)
             regionSearchHelp(rt.getLeft(), x, y, radius, level, result);
