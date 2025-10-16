@@ -25,15 +25,6 @@ public class KDTree {
         root = null;
     }
 
-
-    /**
-     * Clears the tree.
-     */
-    public void clear() {
-        root = null;
-    }
-
-
     /**
      * Inserts a city into the KD Tree.
      *
