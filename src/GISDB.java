@@ -132,7 +132,7 @@ public class GISDB implements GIS {
             kd.remove(city.getX(), city.getY());
             sb.append(city.toString()).append("\n");
         }
-        return sb.toString().trim();
+        return sb.toString();
     }
 
 

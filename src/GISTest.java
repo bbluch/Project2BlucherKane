@@ -1640,7 +1640,7 @@ public class GISTest extends TestCase {
 
         // Define the expected output string based on the preorder traversal.
         String expectedOutput = "A_City (50, 25)\n" + "A_City (10, 10)\n"
-            + "A_City (5, 5)";
+            + "A_City (5, 5)\n";
 
         // Call the delete method for the duplicate name.
         String actualOutput = it.delete("A_City");
@@ -1718,7 +1718,7 @@ public class GISTest extends TestCase {
 
         // 6. Test delete(name) to remove a city and check for consistency.
         it.insert("ToDeleteByName", 2000, 2000);
-        assertEquals("ToDeleteByName (2000, 2000)", it.delete(
+        assertEquals("ToDeleteByName (2000, 2000)\n", it.delete(
             "ToDeleteByName"));
         assertEquals("City 'ToDeleteByName' should be fully removed.", "", it
             .info(2000, 2000));
@@ -1780,7 +1780,7 @@ public class GISTest extends TestCase {
 
         // 6. Test delete(name) on the deepest node to ensure full removal.
         String deepestDelete = it.delete("DeepestNode");
-        assertEquals("DeepestNode (1970, 200)", deepestDelete);
+        assertEquals("DeepestNode (1970, 200)\n", deepestDelete);
         assertEquals("DeepestNode should be fully removed.", "", it.info(1970,
             200));
     }
