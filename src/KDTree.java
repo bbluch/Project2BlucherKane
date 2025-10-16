@@ -24,7 +24,6 @@ public class KDTree {
      */
     public KDTree() {
         root = null;
-        // setNodeCount(0);
     }
 
 
@@ -33,7 +32,6 @@ public class KDTree {
      */
     public void clear() {
         root = null;
-        // setNodeCount(0);
     }
 
 
@@ -45,7 +43,6 @@ public class KDTree {
      */
     public void insert(City city) {
         root = insertHelp(root, city, 0);
-        // setNodeCount(size() + 1);
     }
 
 
@@ -273,7 +270,6 @@ public class KDTree {
                 : findMinNode(rt.getLeft(), axis, level, result);
         }
 
-        // int axis = level % 2;
         BSTNode leftMin = findMinNode(rt.getLeft(), axis, level, result);
         BSTNode rightMin = findMinNode(rt.getRight(), axis, level, result);
         BSTNode min = rt;
@@ -305,9 +301,7 @@ public class KDTree {
         if (axis == 0) {
             return Integer.compare(c1.getX(), c2.getX());
         }
-        else {
-            return Integer.compare(c1.getY(), c2.getY());
-        }
+        return Integer.compare(c1.getY(), c2.getY());
 
     }
 
