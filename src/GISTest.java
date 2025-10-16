@@ -2278,9 +2278,47 @@ public class GISTest extends TestCase {
         String actualOutput = it.print();
 
         // 4. Perform a strict comparison.
-        assertEquals(
-            "The print() output must have exact indentation for a deep tree.",
+        assertEquals("The print() output indentation for a deep tree.",
             expectedOutput, actualOutput);
+    }
+
+
+    /**
+     * Tests the deletion of a node ('E') that has one left child ('B')
+     * from the specific BST structure provided in the drawing. It verifies
+     * that the child node ('B') correctly replaces the deleted node.
+     */
+    public void testDeleteNodeWithOneLeftChildFromDrawing() {
+        // 1. Setup: Insert cities to create the BST from the drawing.
+        // The insertion order (M, E, T, B, Q) creates the desired tree.
+        // Coordinates are arbitrary but unique.
+        it.insert("M", 50, 50); // Root
+        it.insert("E", 20, 20); // Left of M
+        it.insert("T", 80, 80); // Right of M
+        it.insert("B", 10, 10); // Left of E
+        it.insert("Q", 70, 70); // Left of T
+
+        // 2. Action: Delete the node "E".
+        String deleteResult = it.delete("E");
+
+        // 3. Verification:
+
+        // First, verify that the delete method correctly reported what it
+        // removed.
+        assertEquals("E (20, 20)\n", deleteResult);
+
+        // Second, verify that "E" is truly gone from both data structures.
+        assertEquals("shouldnt be found by name.", "", it.info("E"));
+        assertEquals("coordinates empty.", "", it.info(20, 20));
+
+        // Third, verify the new structure of the BST is correct.
+        // After deleting 'E', 'B' should become the left child of 'M'.
+        // The new in-order traversal should be: B, M, Q, T.
+        String expectedPrintOutput = "1  B (10, 10)\n" + "0M (50, 50)\n"
+            + "2    Q (70, 70)\n" + "1  T (80, 80)\n";
+
+        assertEquals("The BST structure should be correct.",
+            expectedPrintOutput, it.print());
     }
 
 }
