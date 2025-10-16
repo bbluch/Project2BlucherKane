@@ -21,15 +21,6 @@ public class BST {
         root = null;
     }
 
-
-    /**
-     * Clears the tree.
-     */
-    public void clear() {
-        root = null;
-    }
-
-
     // ----------------------------------------------------------
     /**
      * Remove method to remove a specific city based on names and
