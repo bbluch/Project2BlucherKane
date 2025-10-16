@@ -21,6 +21,7 @@ public class BST {
         root = null;
     }
 
+
     // ----------------------------------------------------------
     /**
      * Remove method to remove a specific city based on names and

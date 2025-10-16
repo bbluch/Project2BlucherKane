@@ -8,7 +8,7 @@
  * @version Oct 9, 2025
  */
 public class SearchResult {
-    // ~ Fields ................................................................
+    // ~ Fields ..................................
     private City[] cities;
     private int count;
     /**
@@ -16,9 +16,9 @@ public class SearchResult {
      */
     public int nodesVisited;
 
-    // ~ Constructors ..........................................................
+    // ~ Constructors ............................
 
-    // ~Public Methods ........................................................
+    // ~Public Methods ...........................
 
     /**
      * Initializes necessary array.
@@ -41,8 +41,8 @@ public class SearchResult {
         City[] newCities = new City[cities.length + 1];
         System.arraycopy(cities, 0, newCities, 0, cities.length);
         cities = newCities;
-        
-        //add the city
+
+        // add the city
         cities[count++] = city;
     }
 

@@ -25,6 +25,7 @@ public class KDTree {
         root = null;
     }
 
+
     /**
      * Inserts a city into the KD Tree.
      *
@@ -171,7 +172,7 @@ public class KDTree {
         if (rt == null)
             return null;
         result.nodesVisited++;
-        
+
         // axis calculations
         int axis = level++ % 2;
 
@@ -313,7 +314,7 @@ public class KDTree {
             result.add(rt.getCity());
         // axis calculations
         int axis = level++ % 2;
-        //picks which city coord to compare
+        // picks which city coord to compare
         int pointValue = (axis == 0) ? x : y;
         // picks which current city coord to compare
         int axisValue = (axis == 0) ? rt.getCity().getX() : rt.getCity().getY();

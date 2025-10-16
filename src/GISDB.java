@@ -95,12 +95,11 @@ public class GISDB implements GIS {
      *         was deleted).
      */
     public String delete(int x, int y) {
-        //result of kd node removal
+        // result of kd node removal
         SearchResult result = kd.remove(x, y);
         // array of cities to be removed
         City[] removedCities = result.getResults();
 
-        
         // This check prevents the NullPointerException
         if (removedCities.length > 0) {
             bst.remove(removedCities[0], removedCities[0].getX(),
