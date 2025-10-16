@@ -1,7 +1,12 @@
 // -------------------------------------------------------------------------
 
 /**
- * Contains the logic and implementation for the binary search tree.
+ * Contains the logic and implementation for the binary search tree.A binary
+ * search tree (BST) is a binary tree that conforms to the following condition,
+ * known as the binary search tree property. All nodes stored in the left
+ * subtree of a node whose key value is K
+ * have key values less than or equal to K.
+ * 
  * 
  * @author benblucher, austink23
  * @version Oct 8, 2025
@@ -39,9 +44,12 @@ public class BST {
      * @return city being removed
      */
     public City remove(City city, int x, int y) {
+        // Retrieve the node that is being removed
         root = removeHelp(root, city.getName(), city.getX(), city.getY());
+        // ensure it is not null
         if (root == null)
             return null;
+        // return city for node
         return root.getCity();
     }
 
@@ -57,25 +65,32 @@ public class BST {
      *            X coordinate of city
      * @param y
      *            Y coordinate of city
-     * @return
+     * @return node that is going to be removed
      */
     private BSTNode removeHelp(BSTNode rt, String name, int x, int y) {
+        // compare the cities' name to decide where to go
         if (rt.getCity().getName().compareTo(name) > 0) {
             rt.setLeft(removeHelp(rt.getLeft(), name, x, y));
         }
+
+        // go right if the name of the rt city is before the parameter city
         else if (rt.getCity().getName().compareTo(name) < 0) {
             rt.setRight(removeHelp(rt.getRight(), name, x, y));
         }
+        // if they have same name, check coordinates for potential match
         else if (rt.getCity().getX() == x && rt.getCity().getY() == y) {
-            // Found it
 
+            // replace with right node if left is null
             if (rt.getLeft() == null) {
                 return rt.getRight();
             }
+            // replace with left node if right is null
             else if (rt.getRight() == null) {
                 return rt.getLeft();
             }
-            else { // Two children
+            // Two children
+            else {
+                // find max of two to replace it
                 BSTNode temp = getMax(rt.getLeft());
                 rt.setCity(temp.getCity());
                 rt.setLeft(deleteMax(rt.getLeft()));
@@ -109,8 +124,11 @@ public class BST {
      * @return The formatted string.
      */
     public String getInOrderTraversal() {
+        // stringbuilder for easy format
         StringBuilder sb = new StringBuilder();
+        // call helper method for logic
         inOrderHelp(root, 0, sb);
+        // return stringbuilder contents
         return sb.toString();
     }
 
@@ -126,6 +144,7 @@ public class BST {
      *            The StringBuilder to append to.
      */
     private void inOrderHelp(BSTNode rt, int level, StringBuilder sb) {
+        // null check
         if (rt == null) {
             return;
         }
@@ -154,8 +173,13 @@ public class BST {
      *         no matches are found.
      */
     public City[] findAll(String name) {
+        // Object to hold necessary cities and nodes visited
         SearchResult results = new SearchResult();
+
+        // helper method call
         findAllHelp(root, name, results);
+
+        // return results from SearchResult method
         return results.getResults();
     }
 
@@ -175,7 +199,9 @@ public class BST {
             return; // Base case: end of a branch
         }
 
+        // retrieve name of city
         String currentName = rt.getCity().getName();
+        // compare the cities, store result
         int compare = name.compareTo(currentName);
 
         if (compare == 0) {
@@ -212,14 +238,17 @@ public class BST {
      * @return node returned
      */
     private BSTNode insertHelp(BSTNode rt, City city) {
+        // null check
         if (rt == null) {
             return new BSTNode(city);
         }
+        // explore left subtree
         if (rt.getCity().getName().compareTo(city.getName()) >= 0) {
             // Equal values go to the left
             rt.setLeft(insertHelp(rt.getLeft(), city));
         }
         else {
+            // explore right subtree
             rt.setRight(insertHelp(rt.getRight(), city));
         }
         return rt;
@@ -234,9 +263,11 @@ public class BST {
      * @return node with max
      */
     private BSTNode getMax(BSTNode rt) {
+        // null check
         if (rt.getRight() == null) {
             return rt;
         }
+        // recursive call to find the max node using BST logic
         return getMax(rt.getRight());
     }
 
@@ -249,9 +280,11 @@ public class BST {
      * @return node with max
      */
     private BSTNode deleteMax(BSTNode rt) {
+        // null check
         if (rt.getRight() == null) {
             return rt.getLeft();
         }
+        // deletes max node using BST logic (going down right subtrees)
         rt.setRight(deleteMax(rt.getRight()));
         return rt;
     }
