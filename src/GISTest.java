@@ -2163,7 +2163,7 @@ public class GISTest extends TestCase {
      * Tests the TRUE && TRUE case: The coordinates match exactly.
      * The city should be successfully deleted.
      */
-    public void testRemove_CoordinatesMatch() {
+    public void testRemoveCoordinatesMatch() {
         it.insert("Target", 50, 50);
         it.insert("Other", 100, 100);
 
@@ -2185,7 +2185,7 @@ public class GISTest extends TestCase {
      * The city should NOT be deleted, and the search should continue,
      * eventually finding nothing and leaving the tree unchanged.
      */
-    public void testRemove_XMatchYFails() {
+    public void testRemoveXMatchYFails() {
         it.insert("Target", 50, 50); // The city that should NOT be deleted
 
         // Action: Attempt to delete with correct X but incorrect Y
@@ -2204,7 +2204,7 @@ public class GISTest extends TestCase {
      * The city should NOT be deleted. This is crucial for catching a mutant
      * that changes '&&' to '||'.
      */
-    public void testRemove_YMatchXFails() {
+    public void testRemoveYMatchXFails() {
         it.insert("Target", 50, 50); // The city that should NOT be deleted
 
         // Action: Attempt to delete with correct Y but incorrect X
@@ -2222,7 +2222,7 @@ public class GISTest extends TestCase {
      * Tests the FALSE && FALSE case: Neither coordinate matches.
      * The city should NOT be deleted.
      */
-    public void testRemove_CoordinatesMismatch() {
+    public void testRemoveCoordinatesMismatch() {
         it.insert("Target", 50, 50);
 
         // Action: Attempt to delete with completely wrong coordinates

@@ -309,7 +309,6 @@ public class KDTree {
             return Integer.compare(c1.getY(), c2.getY());
         }
 
-
     }
 
 
